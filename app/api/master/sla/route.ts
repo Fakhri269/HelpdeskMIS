@@ -4,27 +4,28 @@ import prisma from "@/lib/prisma"
 
 export async function GET() {
   const session = await auth()
-  if (session?.user?.role !== "superadmin" && session?.user?.role !== "helpdesk_manager") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-  }
+  if (session?.user?.role !== "superadmin") return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-  const data = await prisma.masterSLA.findMany({
-    orderBy: { hours: 'asc' }
+  const sla = await prisma.masterSLA.findMany({
+    orderBy: { priority: "asc" }
   })
-  return NextResponse.json(data)
+  return NextResponse.json(sla)
 }
 
 export async function POST(req: Request) {
   const session = await auth()
-  if (session?.user?.role !== "superadmin") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-  }
+  if (session?.user?.role !== "superadmin") return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-  const { priority, hours } = await req.json()
+  const body = await req.json()
+  const { priority, hours } = body
   
-  const created = await prisma.masterSLA.create({
-    data: { priority, hours: parseInt(hours) }
-  })
+  if (!priority || typeof hours !== 'number') return NextResponse.json({ error: "Prioritas dan target jam SLA wajib diisi" }, { status: 400 })
   
-  return NextResponse.json(created)
+  try {
+    const sla = await prisma.masterSLA.create({ data: { priority, hours } })
+    return NextResponse.json(sla)
+  } catch (error: any) {
+    if (error.code === 'P2002') return NextResponse.json({ error: "SLA untuk prioritas tersebut sudah ada" }, { status: 400 })
+    return NextResponse.json({ error: "Gagal membuat SLA" }, { status: 500 })
+  }
 }

@@ -8,19 +8,19 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 
   const { id } = await params
   const body = await req.json()
-  const { priority, hours } = body
+  const { name, description } = body
   
-  if (!priority || typeof hours !== 'number') return NextResponse.json({ error: "Prioritas dan jam wajib diisi" }, { status: 400 })
+  if (!name) return NextResponse.json({ error: "Nama role wajib diisi" }, { status: 400 })
 
   try {
-    const sla = await prisma.masterSLA.update({
+    const role = await prisma.role.update({
       where: { id },
-      data: { priority, hours }
+      data: { name, description }
     })
-    return NextResponse.json(sla)
+    return NextResponse.json(role)
   } catch (error: any) {
-    if (error.code === 'P2002') return NextResponse.json({ error: "SLA untuk prioritas ini sudah ada" }, { status: 400 })
-    return NextResponse.json({ error: "Gagal mengupdate SLA" }, { status: 500 })
+    if (error.code === 'P2002') return NextResponse.json({ error: "Role sudah ada" }, { status: 400 })
+    return NextResponse.json({ error: "Gagal mengupdate role" }, { status: 500 })
   }
 }
 
@@ -30,9 +30,10 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
 
   const { id } = await params
   try {
-    await prisma.masterSLA.delete({ where: { id } })
+    await prisma.role.delete({ where: { id } })
     return NextResponse.json({ success: true })
   } catch (error: any) {
-    return NextResponse.json({ error: "Gagal menghapus SLA" }, { status: 500 })
+    if (error.code === 'P2003') return NextResponse.json({ error: "Role tidak bisa dihapus karena sedang digunakan oleh pengguna" }, { status: 400 })
+    return NextResponse.json({ error: "Gagal menghapus role" }, { status: 500 })
   }
 }

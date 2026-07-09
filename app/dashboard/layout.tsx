@@ -16,7 +16,9 @@ import {
   Database,
   Bell,
   Search,
-  ChevronDown
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -39,7 +41,27 @@ export default function DashboardLayout({
   const pathname = usePathname()
   const { data: session } = useSession()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [desktopCollapsed, setDesktopCollapsed] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [activeChatCount, setActiveChatCount] = useState<number | null>(null)
+
+  useEffect(() => {
+    // Fetch initial chat count
+    const fetchChatCount = () => {
+      fetch("/api/tickets/active-count")
+        .then(res => res.json())
+        .then(data => {
+          if (typeof data.count === 'number') {
+            setActiveChatCount(data.count > 0 ? data.count : null)
+          }
+        }).catch(() => {})
+    }
+    
+    fetchChatCount()
+    // Poll every 10 seconds
+    const interval = setInterval(fetchChatCount, 10000)
+    return () => clearInterval(interval)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,85 +74,132 @@ export default function DashboardLayout({
   const isSuperadmin = session?.user?.role === "superadmin"
   const isHelpdesk = session?.user?.role?.startsWith("helpdesk_") || isSuperadmin
 
-  const routes = [
+  const mainRoutes = [
     { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { name: "Tiket", path: "/dashboard/tickets", icon: Ticket },
-    { name: "Live Chat", path: "/dashboard/chat", icon: MessageSquare, badge: "3" },
+    { name: "Live Chat", path: "/dashboard/chat", icon: MessageSquare, badge: activeChatCount?.toString() },
     { name: "Knowledge Base", path: "/dashboard/faq", icon: HelpCircle },
-    ...(isSuperadmin ? [
-      { name: "Master Data", path: "/dashboard/master", icon: Database },
-    ] : []),
   ]
 
+  const adminRoutes = isSuperadmin ? [
+    { name: "Master Data", path: "/dashboard/master", icon: Database },
+    { name: "Pengaturan", path: "/dashboard/settings", icon: Settings },
+  ] : []
+
   const SidebarContent = () => (
-    <div className="flex h-full flex-col bg-white dark:bg-zinc-950 border-r shadow-sm relative">
+    <div className="flex h-full flex-col bg-white dark:bg-zinc-950 border-r shadow-sm relative transition-all duration-300">
       <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-blue-50/50 to-transparent dark:from-blue-900/10 pointer-events-none" />
       
-      <div className="flex h-20 items-center px-6 font-bold text-2xl tracking-tight z-10">
-        <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center mr-3 shadow-lg shadow-blue-500/30">
+      <div className={`flex h-20 items-center px-6 font-bold text-2xl tracking-tight z-10 transition-all ${desktopCollapsed ? "justify-center px-0" : ""}`}>
+        <div className={`w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/30 transition-all ${desktopCollapsed ? "mr-0" : "mr-3"}`}>
           <span className="text-sm">TK</span>
         </div>
-        <span className="text-slate-900 dark:text-white">Helpdesk</span>
-        <span className="text-blue-600 ml-1">.</span>
+        {!desktopCollapsed && (
+          <div className="flex items-center overflow-hidden whitespace-nowrap animate-in fade-in zoom-in duration-300">
+            <span className="text-slate-900 dark:text-white">Helpdesk</span>
+            <span className="text-blue-600 ml-1">.</span>
+          </div>
+        )}
       </div>
       
-      <div className="flex-1 overflow-y-auto py-6 px-4 z-10 scrollbar-hide">
-        <div className="text-xs font-semibold text-slate-400 mb-4 uppercase tracking-wider px-2">Menu Utama</div>
-        <nav className="space-y-1.5">
-          {routes.map((route) => {
-            const active = pathname === route.path || pathname.startsWith(`${route.path}/`)
-            return (
-              <Link
-                key={route.path}
-                href={route.path}
-                className={`group flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
-                  active
-                    ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
-                    : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-900 hover:text-slate-900 dark:hover:text-white"
-                }`}
-              >
-                <div className="flex items-center">
-                  <route.icon
-                    className={`mr-3 h-5 w-5 transition-transform duration-200 group-hover:scale-110 ${
-                      active ? "text-white" : "text-slate-400 group-hover:text-blue-500"
+      <div className="flex-1 overflow-y-auto py-6 px-3 z-10 scrollbar-hide space-y-6">
+        <div>
+          {!desktopCollapsed && <div className="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider px-3 whitespace-nowrap overflow-hidden transition-all duration-300">Menu Utama</div>}
+          <nav className="space-y-1.5">
+            {mainRoutes.map((route) => {
+              const active = route.path === "/dashboard"
+                ? pathname === "/dashboard"
+                : pathname === route.path || pathname.startsWith(`${route.path}/`)
+              return (
+                <Link
+                  key={route.path}
+                  href={route.path}
+                  title={desktopCollapsed ? route.name : undefined}
+                  className={`group flex items-center ${desktopCollapsed ? "justify-center" : "justify-between"} rounded-xl p-2.5 text-sm font-medium transition-all duration-200 ${
+                    active
+                      ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
+                      : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-900 hover:text-slate-900 dark:hover:text-white"
+                  }`}
+                >
+                  <div className="flex items-center">
+                    <route.icon
+                      className={`${desktopCollapsed ? "" : "mr-3"} h-5 w-5 transition-transform duration-200 group-hover:scale-110 ${
+                        active ? "text-white" : "text-slate-400 group-hover:text-blue-500"
+                      }`}
+                    />
+                    {!desktopCollapsed && <span className="whitespace-nowrap overflow-hidden transition-all duration-300">{route.name}</span>}
+                  </div>
+                  {!desktopCollapsed && route.badge && (
+                    <Badge variant="secondary" className={`${active ? "bg-white/20 text-white hover:bg-white/30" : "bg-blue-100 text-blue-700"}`}>
+                      {route.badge}
+                    </Badge>
+                  )}
+                </Link>
+              )
+            })}
+          </nav>
+        </div>
+
+        {adminRoutes.length > 0 && (
+          <div>
+            {!desktopCollapsed && <div className="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider px-3 whitespace-nowrap overflow-hidden transition-all duration-300">Administrasi</div>}
+            <nav className="space-y-1.5">
+              {adminRoutes.map((route) => {
+                const active = route.path === "/dashboard"
+                  ? pathname === "/dashboard"
+                  : pathname === route.path || pathname.startsWith(`${route.path}/`)
+                return (
+                  <Link
+                    key={route.path}
+                    href={route.path}
+                    title={desktopCollapsed ? route.name : undefined}
+                    className={`group flex items-center ${desktopCollapsed ? "justify-center" : "justify-between"} rounded-xl p-2.5 text-sm font-medium transition-all duration-200 ${
+                      active
+                        ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
+                        : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-900 hover:text-slate-900 dark:hover:text-white"
                     }`}
-                  />
-                  {route.name}
-                </div>
-                {route.badge && (
-                  <Badge variant="secondary" className={`${active ? "bg-white/20 text-white hover:bg-white/30" : "bg-blue-100 text-blue-700"}`}>
-                    {route.badge}
-                  </Badge>
-                )}
-              </Link>
-            )
-          })}
-        </nav>
+                  >
+                    <div className="flex items-center">
+                      <route.icon
+                        className={`${desktopCollapsed ? "" : "mr-3"} h-5 w-5 transition-transform duration-200 group-hover:scale-110 ${
+                          active ? "text-white" : "text-slate-400 group-hover:text-blue-500"
+                        }`}
+                      />
+                      {!desktopCollapsed && <span className="whitespace-nowrap overflow-hidden transition-all duration-300">{route.name}</span>}
+                    </div>
+                  </Link>
+                )
+              })}
+            </nav>
+          </div>
+        )}
       </div>
       
-      <div className="p-4 z-10">
-        <div className="bg-slate-50 dark:bg-zinc-900 rounded-2xl p-4 border border-slate-100 dark:border-zinc-800">
-          <div className="flex items-center space-x-3 mb-3">
-            <div className="relative">
-              <Avatar className="h-10 w-10 border-2 border-white dark:border-zinc-800 shadow-sm">
+      <div className="p-3 z-10 border-t border-slate-100 dark:border-zinc-800">
+        <div className={`bg-slate-50 dark:bg-zinc-900 rounded-2xl ${desktopCollapsed ? "p-2" : "p-3"} border border-slate-100 dark:border-zinc-800 transition-all duration-300`}>
+          <div className={`flex items-center ${desktopCollapsed ? "justify-center" : "space-x-3"} mb-3`}>
+            <div className="relative shrink-0">
+              <Avatar className="h-9 w-9 border-2 border-white dark:border-zinc-800 shadow-sm">
                 <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-700 text-white font-medium">
                   {session?.user?.name?.charAt(0) || "U"}
                 </AvatarFallback>
               </Avatar>
-              <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-zinc-900"></div>
+              <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white dark:border-zinc-900"></div>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-slate-900 dark:text-white truncate">
-                {session?.user?.name}
-              </p>
-              <p className="text-xs font-medium text-slate-500 dark:text-slate-400 capitalize truncate">
-                {session?.user?.role?.replace('_', ' ')}
-              </p>
-            </div>
+            {!desktopCollapsed && (
+              <div className="flex-1 min-w-0 animate-in fade-in zoom-in duration-300">
+                <p className="text-sm font-bold text-slate-900 dark:text-white truncate">
+                  {session?.user?.name}
+                </p>
+                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 capitalize truncate">
+                  {session?.user?.role?.replace('_', ' ')}
+                </p>
+              </div>
+            )}
           </div>
-          <Button variant="outline" className="w-full text-xs h-8 text-slate-600" onClick={() => signOut()}>
-            <LogOut className="w-3 h-3 mr-2" />
-            Keluar
+          <Button variant="outline" className={`w-full text-xs h-8 text-slate-600 ${desktopCollapsed ? "px-0" : ""}`} onClick={() => signOut()} title="Keluar">
+            <LogOut className={`w-3.5 h-3.5 ${desktopCollapsed ? "" : "mr-2"}`} />
+            {!desktopCollapsed && "Keluar"}
           </Button>
         </div>
       </div>
@@ -147,8 +216,14 @@ export default function DashboardLayout({
       </Sheet>
 
       {/* Desktop sidebar */}
-      <div className="hidden lg:flex lg:w-[280px] lg:flex-shrink-0">
+      <div className={`hidden lg:flex flex-col flex-shrink-0 transition-all duration-300 ease-in-out ${desktopCollapsed ? "w-[88px]" : "w-[280px]"} relative`}>
         <SidebarContent />
+        <button
+          onClick={() => setDesktopCollapsed(!desktopCollapsed)}
+          className="absolute -right-3 top-24 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm hover:bg-slate-50 hover:text-slate-900 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-900 transition-colors"
+        >
+          {desktopCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+        </button>
       </div>
 
       <div className="flex w-0 flex-1 flex-col overflow-hidden relative">
