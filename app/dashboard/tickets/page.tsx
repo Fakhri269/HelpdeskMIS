@@ -4,10 +4,10 @@ import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import {
-  Ticket, Plus, Search,
+  Ticket, Plus, Search, Map,
   Clock, CheckCircle2, AlertCircle, Circle,
   Eye, Loader2, X, FileText, Send,
-  Cpu, Wifi, KeyRound, Printer, Server, MonitorSmartphone, Zap, HelpCircle,
+  Cpu, Wifi, KeyRound, Printer, Server, MonitorSmartphone, Zap, HelpCircle, AppWindow,
   AlertTriangle, ArrowUp, Minus, ArrowDown, Building2, Network
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -15,7 +15,7 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Sheet, SheetContent } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetClose } from "@/components/ui/sheet"
 
 // ─── Configs ──────────────────────────────────────────────────────────────────
 const STATUS_CONFIG: Record<string, { label: string; className: string; icon: React.ElementType }> = {
@@ -39,11 +39,11 @@ const STATUS_TABS = ["Semua", "Open", "In Progress", "Pending", "Resolved", "Clo
 const CATEGORY_META: Record<string, { icon: React.ElementType; color: string; bg: string }> = {
   "Perbaikan Komputer":     { icon: Cpu,               color: "text-blue-600",   bg: "bg-blue-50" },
   "Jaringan/Internet":      { icon: Wifi,              color: "text-green-600",  bg: "bg-green-50" },
-  "Akun & Password":        { icon: KeyRound,          color: "text-purple-600", bg: "bg-purple-50" },
-  "Perbaikan Printer":      { icon: Printer,           color: "text-orange-600", bg: "bg-orange-50" },
-  "Server & Infrastruktur": { icon: Server,            color: "text-red-600",    bg: "bg-red-50" },
-  "Software & Aplikasi":    { icon: MonitorSmartphone, color: "text-indigo-600", bg: "bg-indigo-50" },
-  "Hardware Lainnya":       { icon: Zap,               color: "text-yellow-600", bg: "bg-yellow-50" },
+  "Data/Akses/Password":    { icon: KeyRound,          color: "text-purple-600", bg: "bg-purple-50" },
+  "Printer/Scanner":        { icon: Printer,           color: "text-orange-600", bg: "bg-orange-50" },
+  "GIS/Peta":               { icon: Map,               color: "text-emerald-600",bg: "bg-emerald-50" },
+  "Software/Aplikasi":      { icon: AppWindow,         color: "text-indigo-600", bg: "bg-indigo-50" },
+  "Hardware Peripheral":    { icon: Zap,               color: "text-yellow-600", bg: "bg-yellow-50" },
   "Lainnya":                { icon: HelpCircle,        color: "text-slate-500",  bg: "bg-slate-100" },
 }
 
@@ -249,7 +249,7 @@ export default function TicketsPage() {
           PREMIUM TICKET FORM — Slide-over Sheet
       ══════════════════════════════════════════════════════════════════ */}
       <Sheet open={createOpen} onOpenChange={setCreateOpen}>
-        <SheetContent side="right" className="w-full sm:max-w-[560px] p-0 flex flex-col overflow-hidden border-l border-slate-200 dark:border-zinc-800">
+        <SheetContent side="right" showCloseButton={false} className="w-full sm:max-w-[560px] p-0 flex flex-col overflow-hidden border-l border-slate-200 dark:border-zinc-800">
 
           {/* Header */}
           <div className="shrink-0 bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-5">
@@ -263,9 +263,9 @@ export default function TicketsPage() {
                   <p className="text-blue-200 text-xs mt-0.5">Laporkan masalah IT Anda</p>
                 </div>
               </div>
-              <button onClick={() => setCreateOpen(false)} className="w-8 h-8 rounded-lg bg-white/15 hover:bg-white/25 flex items-center justify-center transition-colors shrink-0">
-                <X className="w-4 h-4 text-white" />
-              </button>
+              <SheetClose className="w-10 h-10 sm:w-8 sm:h-8 rounded-lg bg-white/15 hover:bg-white/25 flex items-center justify-center transition-colors shrink-0">
+                <X className="w-5 h-5 sm:w-4 sm:h-4 text-white" />
+              </SheetClose>
             </div>
 
             {/* Step indicators */}
@@ -337,17 +337,18 @@ export default function TicketsPage() {
                       <button
                         type="button"
                         key={catName}
+                        title={catName}
                         onClick={() => setForm({ ...form, category: catName })}
-                        className={`flex items-center gap-3 p-3 rounded-xl border-2 text-left transition-all duration-150 ${
+                        className={`flex items-center gap-2 p-2.5 sm:gap-3 sm:p-3 rounded-xl border-2 text-left transition-all duration-150 min-w-0 ${
                           isSelected
                             ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30"
                             : "border-slate-200 dark:border-zinc-700 hover:border-blue-300 hover:bg-slate-50 dark:hover:bg-zinc-800/60"
                         }`}
                       >
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${isSelected ? "bg-blue-100" : meta.bg}`}>
-                          <IconComp className={`w-4 h-4 ${isSelected ? "text-blue-600" : meta.color}`} />
+                        <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shrink-0 ${isSelected ? "bg-blue-100" : meta.bg}`}>
+                          <IconComp className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isSelected ? "text-blue-600" : meta.color}`} />
                         </div>
-                        <span className={`text-xs font-medium leading-snug ${isSelected ? "text-blue-700 dark:text-blue-400" : "text-slate-600 dark:text-slate-300"}`}>
+                        <span className={`text-[11px] sm:text-xs font-medium leading-snug truncate flex-1 min-w-0 ${isSelected ? "text-blue-700 dark:text-blue-400" : "text-slate-600 dark:text-slate-300"}`}>
                           {catName}
                         </span>
                         {isSelected && <CheckCircle2 className="w-3.5 h-3.5 text-blue-500 ml-auto shrink-0" />}
@@ -398,43 +399,63 @@ export default function TicketsPage() {
                     <Label className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
                       <Building2 className="w-3.5 h-3.5" /> Unit Kerja <span className="text-red-500">*</span>
                     </Label>
-                    <Select
-                      value={form.unitKerjaId}
-                      onValueChange={v => setForm({ ...form, unitKerjaId: v, subUnitKerjaId: "" })}
-                    >
-                      <SelectTrigger className="h-10 rounded-xl">
-                        <SelectValue placeholder={refsLoaded ? "Pilih unit kerja" : "Memuat..."} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {refs.units.map(u => (
-                          <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    {refsLoaded ? (
+                      <Select
+                        value={form.unitKerjaId || ""}
+                        onValueChange={v => setForm({ ...form, unitKerjaId: v, subUnitKerjaId: "" })}
+                      >
+                        <SelectTrigger className="w-full h-10 rounded-xl overflow-hidden">
+                          <SelectValue placeholder="Pilih unit kerja">
+                            {form.unitKerjaId ? refs.units.find(u => u.id === form.unitKerjaId)?.name : undefined}
+                          </SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {refs.units.map(u => (
+                            <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <Select disabled>
+                        <SelectTrigger className="h-10 rounded-xl bg-slate-50 opacity-70">
+                          <SelectValue placeholder="Memuat data..." />
+                        </SelectTrigger>
+                      </Select>
+                    )}
                   </div>
 
                   <div className="space-y-1.5">
                     <Label className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
                       <Network className="w-3.5 h-3.5" /> Sub Unit <span className="text-slate-400 font-normal">(opsional)</span>
                     </Label>
-                    <Select
-                      value={form.subUnitKerjaId}
-                      onValueChange={v => setForm({ ...form, subUnitKerjaId: v })}
-                      disabled={!form.unitKerjaId || subUnitsForUnit.length === 0}
-                    >
-                      <SelectTrigger className="h-10 rounded-xl">
-                        <SelectValue placeholder={
-                          !form.unitKerjaId ? "Pilih unit dulu"
-                          : subUnitsForUnit.length === 0 ? "Tidak tersedia"
-                          : "Pilih sub unit"
-                        } />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {subUnitsForUnit.map(su => (
-                          <SelectItem key={su.id} value={su.id}>{su.name}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    {refsLoaded ? (
+                      <Select
+                        value={form.subUnitKerjaId || ""}
+                        onValueChange={v => setForm({ ...form, subUnitKerjaId: v })}
+                        disabled={!form.unitKerjaId || subUnitsForUnit.length === 0}
+                      >
+                        <SelectTrigger className="w-full h-10 rounded-xl overflow-hidden">
+                          <SelectValue placeholder={
+                            !form.unitKerjaId ? "Pilih unit dulu"
+                            : subUnitsForUnit.length === 0 ? "Tidak ada sub unit"
+                            : "Pilih sub unit"
+                          }>
+                            {form.subUnitKerjaId ? subUnitsForUnit.find(su => su.id === form.subUnitKerjaId)?.name : undefined}
+                          </SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {subUnitsForUnit.map(su => (
+                            <SelectItem key={su.id} value={su.id}>{su.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <Select disabled>
+                        <SelectTrigger className="h-10 rounded-xl bg-slate-50 opacity-70">
+                          <SelectValue placeholder="Memuat data..." />
+                        </SelectTrigger>
+                      </Select>
+                    )}
                   </div>
                 </div>
               </div>

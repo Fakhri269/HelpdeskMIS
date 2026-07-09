@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { signOut, useSession } from "next-auth/react"
 import { 
@@ -91,8 +92,8 @@ export default function DashboardLayout({
       <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-blue-50/50 to-transparent dark:from-blue-900/10 pointer-events-none" />
       
       <div className={`flex h-20 items-center px-6 font-bold text-2xl tracking-tight z-10 transition-all ${desktopCollapsed ? "justify-center px-0" : ""}`}>
-        <div className={`w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/30 transition-all ${desktopCollapsed ? "mr-0" : "mr-3"}`}>
-          <span className="text-sm">TK</span>
+        <div className={`transition-all flex items-center justify-center ${desktopCollapsed ? "mr-0" : "mr-3"}`}>
+          <Image src="../../PdamLogo.svg" alt="PDAM Logo" width={36} height={36} className="drop-shadow-md" />
         </div>
         {!desktopCollapsed && (
           <div className="flex items-center overflow-hidden whitespace-nowrap animate-in fade-in zoom-in duration-300">

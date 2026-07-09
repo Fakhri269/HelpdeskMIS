@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
@@ -54,8 +55,8 @@ export default function LoginPage() {
         <div className="relative z-20 flex flex-col justify-between h-full p-16 text-white w-full">
           <div>
             <div className="flex items-center space-x-3 mb-12">
-              <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/30 shadow-xl">
-                <span className="font-bold text-xl tracking-tight text-white">TK</span>
+              <div className="flex items-center justify-center">
+                <Image src="/PdamLogo.svg" alt="PDAM Logo" width={48} height={48} className="drop-shadow-xl" />
               </div>
               <span className="font-semibold text-2xl tracking-tight">Perumda Tirta Kahuripan</span>
             </div>
@@ -86,8 +87,8 @@ export default function LoginPage() {
         
         {/* Mobile Logo */}
         <div className="lg:hidden absolute top-8 left-8 flex items-center space-x-2">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg">
-            <span className="font-bold text-xs text-white">TK</span>
+          <div className="flex items-center justify-center shadow-lg rounded-lg bg-white/50 p-1 backdrop-blur-md">
+            <Image src="/PdamLogo.svg" alt="PDAM Logo" width={32} height={32} />
           </div>
           <span className="font-semibold text-slate-800 dark:text-white">Helpdesk MIS</span>
         </div>
