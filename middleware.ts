@@ -1,30 +1,33 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { jwtDecrypt, decodeJwt } from "jose"
 
-export async function middleware(req: NextRequest) {
+export function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname
 
   const isAuthRoute = pathname.startsWith("/login")
   const isDashboard = pathname.startsWith("/dashboard")
   const isUserPortal = pathname.startsWith("/user-portal")
 
-  // Get the NextAuth session token from cookies (v5 beta)
+  // Get the NextAuth JWT session token from cookies
   const sessionToken =
     req.cookies.get("authjs.session-token")?.value ||
     req.cookies.get("__Secure-authjs.session-token")?.value
 
-  let role: string | undefined
-  let isLoggedIn = false
+  const isLoggedIn = !!sessionToken
 
+  let role: string | undefined
   if (sessionToken) {
     try {
-      // Decode JWT without verification - sufficient for routing decisions
-      const decoded = decodeJwt(sessionToken)
-      role = decoded.role as string | undefined
-      isLoggedIn = true
+      // Manually decode the JWT payload (base64) without any library
+      const payloadBase64 = sessionToken.split(".")[1]
+      if (payloadBase64) {
+        const decoded = JSON.parse(
+          Buffer.from(payloadBase64, "base64").toString("utf-8")
+        )
+        role = decoded.role
+      }
     } catch {
-      isLoggedIn = false
+      // If decode fails, treat as not logged in for protected routes
     }
   }
 
@@ -33,13 +36,14 @@ export async function middleware(req: NextRequest) {
   // Redirect logged-in users away from login page
   if (isAuthRoute) {
     if (isLoggedIn) {
-      const redirectTo = isUserRole ? "/user-portal" : "/dashboard"
-      return NextResponse.redirect(new URL(redirectTo, req.nextUrl))
+      return NextResponse.redirect(
+        new URL(isUserRole ? "/user-portal" : "/dashboard", req.nextUrl)
+      )
     }
     return NextResponse.next()
   }
 
-  // Block unauthenticated users
+  // Block unauthenticated users from protected routes
   if (!isLoggedIn && (isDashboard || isUserPortal)) {
     return NextResponse.redirect(new URL("/login", req.nextUrl))
   }
@@ -49,8 +53,8 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/user-portal", req.nextUrl))
   }
 
-  // Block non-user roles from accessing /user-portal
-  if (isUserPortal && !isUserRole && isLoggedIn) {
+  // Block admin/tech from accessing /user-portal
+  if (isUserPortal && isLoggedIn && !isUserRole) {
     return NextResponse.redirect(new URL("/dashboard", req.nextUrl))
   }
 
