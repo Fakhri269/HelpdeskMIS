@@ -198,7 +198,7 @@ export default function DashboardLayout({
               </div>
             )}
           </div>
-          <Button variant="outline" className={`w-full text-xs h-8 text-slate-600 ${desktopCollapsed ? "px-0" : ""}`} onClick={() => signOut()} title="Keluar">
+          <Button variant="outline" className={`w-full text-xs h-8 text-slate-600 ${desktopCollapsed ? "px-0" : ""}`} onClick={() => signOut({ callbackUrl: "/login" })} title="Keluar">
             <LogOut className={`w-3.5 h-3.5 ${desktopCollapsed ? "" : "mr-2"}`} />
             {!desktopCollapsed && "Keluar"}
           </Button>
@@ -282,7 +282,7 @@ export default function DashboardLayout({
                   <Settings className="mr-2 h-4 w-4 text-slate-500" />
                   <span>Pengaturan</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer text-red-600 focus:text-red-600" onClick={() => signOut()}>
+                <DropdownMenuItem className="cursor-pointer text-red-600 focus:text-red-600" onClick={() => signOut({ callbackUrl: "/login" })}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Keluar</span>
                 </DropdownMenuItem>

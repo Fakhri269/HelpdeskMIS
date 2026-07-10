@@ -230,7 +230,7 @@ export default function UserPortalPage() {
               <Button
                 variant="ghost" size="icon"
                 className="text-slate-400 hover:text-red-500 rounded-full"
-                onClick={() => signOut()}
+                onClick={() => signOut({ callbackUrl: "/login" })}
                 title="Keluar"
               >
                 <LogOut className="h-4 w-4" />
