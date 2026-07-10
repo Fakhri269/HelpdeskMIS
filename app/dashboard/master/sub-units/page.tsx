@@ -160,7 +160,7 @@ export default function SubUnitsPage() {
             </div>
             <div className="space-y-2">
               <Label>Induk Unit Kerja *</Label>
-              <Select value={form.unitKerjaId} onValueChange={v => setForm({...form, unitKerjaId: v})} required>
+              <Select value={form.unitKerjaId} onValueChange={v => setForm({...form, unitKerjaId: v as string})} required>
                 <SelectTrigger><SelectValue placeholder="Pilih unit kerja" /></SelectTrigger>
                 <SelectContent>
                   {units.map(u => <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>)}

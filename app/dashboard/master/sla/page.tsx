@@ -156,7 +156,7 @@ export default function SLAPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label>Tingkat Prioritas *</Label>
-              <Select value={form.priority} onValueChange={v => setForm({...form, priority: v})} required>
+              <Select value={form.priority} onValueChange={v => setForm({...form, priority: v as string})} required>
                 <SelectTrigger><SelectValue placeholder="Pilih prioritas" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Low">Low</SelectItem>

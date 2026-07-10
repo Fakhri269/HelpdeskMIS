@@ -107,7 +107,7 @@ export default function UsersPage() {
           </p>
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
+          <DialogTrigger>
             <Button className="bg-blue-600 hover:bg-blue-700">
               <Plus className="w-4 h-4 mr-2" />
               Tambah Pengguna
@@ -137,7 +137,7 @@ export default function UsersPage() {
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="role" className="text-right">Role</Label>
                   <div className="col-span-3">
-                    <Select value={formData.roleId} onValueChange={v => setFormData({...formData, roleId: v})} required>
+                    <Select value={formData.roleId} onValueChange={v => setFormData({...formData, roleId: v as string})} required>
                       <SelectTrigger><SelectValue placeholder="Pilih role" /></SelectTrigger>
                       <SelectContent>
                         {refs.roles.map(r => <SelectItem key={r.id} value={r.id}>{r.description || r.name}</SelectItem>)}
@@ -148,7 +148,7 @@ export default function UsersPage() {
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="unit" className="text-right">Unit Kerja</Label>
                   <div className="col-span-3">
-                    <Select value={formData.unitKerjaId} onValueChange={v => setFormData({...formData, unitKerjaId: v, subUnitKerjaId: ""})}>
+                    <Select value={formData.unitKerjaId} onValueChange={v => setFormData({...formData, unitKerjaId: v as string, subUnitKerjaId: ""})}>
                       <SelectTrigger><SelectValue placeholder="Pilih unit kerja (opsional)" /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="none">Kosongkan</SelectItem>
@@ -161,7 +161,7 @@ export default function UsersPage() {
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="subunit" className="text-right">Sub Unit</Label>
                     <div className="col-span-3">
-                      <Select value={formData.subUnitKerjaId} onValueChange={v => setFormData({...formData, subUnitKerjaId: v})}>
+                      <Select value={formData.subUnitKerjaId} onValueChange={v => setFormData({...formData, subUnitKerjaId: v as string})}>
                         <SelectTrigger><SelectValue placeholder="Pilih sub unit (opsional)" /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="none">Kosongkan</SelectItem>
@@ -233,7 +233,7 @@ export default function UsersPage() {
                   <TableCell className="text-slate-500">{user.position || "-"}</TableCell>
                   <TableCell className="text-right pr-6">
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                      <DropdownMenuTrigger>
                         <Button variant="ghost" size="icon" className="h-8 w-8">
                           <MoreVertical className="h-4 w-4" />
                         </Button>

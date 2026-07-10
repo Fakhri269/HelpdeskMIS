@@ -402,7 +402,7 @@ export default function TicketsPage() {
                     {refsLoaded ? (
                       <Select
                         value={form.unitKerjaId || ""}
-                        onValueChange={v => setForm({ ...form, unitKerjaId: v, subUnitKerjaId: "" })}
+                        onValueChange={v => setForm({ ...form, unitKerjaId: v as string, subUnitKerjaId: "" })}
                       >
                         <SelectTrigger className="w-full h-10 rounded-xl overflow-hidden">
                           <SelectValue placeholder="Pilih unit kerja">
@@ -431,7 +431,7 @@ export default function TicketsPage() {
                     {refsLoaded ? (
                       <Select
                         value={form.subUnitKerjaId || ""}
-                        onValueChange={v => setForm({ ...form, subUnitKerjaId: v })}
+                        onValueChange={v => setForm({ ...form, subUnitKerjaId: v as string })}
                         disabled={!form.unitKerjaId || subUnitsForUnit.length === 0}
                       >
                         <SelectTrigger className="w-full h-10 rounded-xl overflow-hidden">

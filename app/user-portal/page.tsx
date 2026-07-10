@@ -557,7 +557,7 @@ export default function UserPortalPage() {
               {unitKerjaList.length > 0 && (
                 <div>
                   <Label className="text-sm font-semibold text-slate-700 mb-1.5 block">Unit Kerja</Label>
-                  <Select value={unitKerjaId} onValueChange={setUnitKerjaId}>
+                  <Select value={unitKerjaId} onValueChange={v => setUnitKerjaId(v as string)}>
                     <SelectTrigger className="rounded-xl border-slate-200 focus:ring-blue-500">
                       <SelectValue placeholder="Pilih unit kerja..." />
                     </SelectTrigger>
