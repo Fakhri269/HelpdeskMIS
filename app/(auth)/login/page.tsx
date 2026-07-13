@@ -191,7 +191,7 @@ export default function LoginPage() {
           Desktop (lg+): tetap seperti semula, foto besar di sisi kanan dengan ukuran tetap. */}
       <div
         className="absolute inset-0 overflow-hidden bg-no-repeat bg-cover bg-[position:top_center] lg:bg-[length:60vw_53.2vw] lg:bg-[position:right_center] animate-in fade-in duration-1000"
-        style={{ backgroundImage: "url(/PdamBg.jpg)" }}
+        style={{ backgroundImage: "url(/PdamBG.jpg)" }}
       >
         {/* wash tipis khusus mobile supaya foto tidak terlalu kontras/silau di bawah kartu form */}
         <div
