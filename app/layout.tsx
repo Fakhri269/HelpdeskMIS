@@ -9,9 +9,10 @@ const fontSans = Plus_Jakarta_Sans({
   variable: "--font-sans",
 });
 
+
 export const metadata: Metadata = {
   title: "Helpdesk MIS",
-  description: "Helpdesk MIS Perumda Tirta Kahuripan",
+  description: "Helpdesk MIS Perumda Tirta Kahuripan, Management Information System, Tirta Kahuripan, Helpdesk, MIS, Perumda Tirta Kahuripan, ",
 };
 
 export default function RootLayout({
