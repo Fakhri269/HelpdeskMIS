@@ -3,6 +3,7 @@
 import { useState, useRef } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import Image from "next/image"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -419,9 +420,9 @@ export default function LoginPage() {
                           <Label htmlFor="password" className="text-[10px] sm:text-xs uppercase tracking-wider text-[#2F4F8F] dark:text-zinc-400 font-semibold transition-colors group-focus-within:text-[#1A56A0]">
                             Password
                           </Label>
-                          <a href="#" className="text-[10px] sm:text-xs font-medium text-[#000080] hover:text-[#0E8A9E] transition-colors relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-[#0E8A9E] after:transition-all after:duration-300 hover:after:w-full">
+                          <Link href="/forgot-password" className="text-[10px] sm:text-xs font-medium text-[#000080] hover:text-[#0E8A9E] transition-colors relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-[#0E8A9E] after:transition-all after:duration-300 hover:after:w-full">
                             Lupa password?
-                          </a>
+                          </Link>
                         </div>
                         <div className="relative">
                           <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-[#7FAFC7] group-focus-within:text-[#1A56A0] group-focus-within:scale-110 transition-all duration-200">
