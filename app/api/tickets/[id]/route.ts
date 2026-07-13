@@ -36,11 +36,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const { id } = await params
   const body = await req.json()
 
-  const isHelpdesk =
-    session.user.role === "superadmin" ||
-    session.user.role === "helpdesk_manager" ||
-    session.user.role === "helpdesk_staff" ||
-    session.user.role === "helpdesk_asmen"
+  const isHelpdesk = session.user.role && session.user.role !== "user"
 
   // Only helpdesk can update status / assignee
   if (!isHelpdesk && (body.status || body.assigneeId)) {

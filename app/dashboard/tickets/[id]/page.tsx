@@ -85,7 +85,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
     }
   }
 
-  const isHelpdesk = session?.user?.role === "superadmin" || session?.user?.role?.startsWith("helpdesk_")
+  const isHelpdesk = session?.user?.role && session.user.role !== "user"
 
   if (loading) return (
     <div className="flex items-center justify-center h-64">
