@@ -10,111 +10,101 @@ datasource db {
 
 model Role {
   id          String   @id @default(cuid())
-  name        String   @unique // e.g., "superadmin", "user", "helpdesk_manager", "helpdesk_asmen", "helpdesk_staff"
+  name        String   @unique
   description String?
-  users       User[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  users       User[]
 }
 
 model UnitKerja {
-  id           String         @id @default(cuid())
-  name         String         @unique // e.g., "Cabang", "Pusat"
-  subUnits     SubUnitKerja[]
-  users        User[]
-  tickets      Ticket[]       @relation("TicketUnitKerja")
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  id        String         @id @default(cuid())
+  name      String         @unique
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  subUnits  SubUnitKerja[]
+  tickets   Ticket[]       @relation("TicketUnitKerja")
+  users     User[]
 }
 
 model SubUnitKerja {
   id          String    @id @default(cuid())
-  name        String // e.g., "Sub Unit Hardware dan Jaringan"
+  name        String
   unitKerjaId String
-  unitKerja   UnitKerja @relation(fields: [unitKerjaId], references: [id], onDelete: Cascade)
-  users       User[]
-  tickets     Ticket[]  @relation("TicketSubUnitKerja")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  unitKerja   UnitKerja @relation(fields: [unitKerjaId], references: [id], onDelete: Cascade)
+  tickets     Ticket[]  @relation("TicketSubUnitKerja")
+  users       User[]
 
   @@unique([name, unitKerjaId])
 }
 
 model User {
-  id             String    @id @default(cuid())
-  name           String
-  email          String    @unique
-  password       String
-  roleId         String
-  role           Role      @relation(fields: [roleId], references: [id])
-  unitKerjaId    String?
-  unitKerja      UnitKerja? @relation(fields: [unitKerjaId], references: [id])
-  subUnitKerjaId String?
-  subUnitKerja   SubUnitKerja? @relation(fields: [subUnitKerjaId], references: [id])
-  position       String? // e.g., "Manajer Cabang", "Admin Cabang"
-
-  createdTickets  Ticket[] @relation("TicketCreator")
-  assignedTickets Ticket[] @relation("TicketAssignee")
+  id              String          @id @default(cuid())
+  name            String
+  email           String          @unique
+  password        String
+  roleId          String
+  unitKerjaId     String?
+  subUnitKerjaId  String?
+  position        String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  assignedTickets Ticket[]        @relation("TicketAssignee")
+  createdTickets  Ticket[]        @relation("TicketCreator")
   comments        TicketComment[]
+  role            Role            @relation(fields: [roleId], references: [id])
+  subUnitKerja    SubUnitKerja?   @relation(fields: [subUnitKerjaId], references: [id])
+  unitKerja       UnitKerja?      @relation(fields: [unitKerjaId], references: [id])
+}
 
+model MasterSLA {
+  id        String   @id @default(cuid())
+  priority  String   @unique
+  hours     Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model MasterSLA {
-  id          String   @id @default(cuid())
-  priority    String   @unique // "Low", "Medium", "High", "Critical"
-  hours       Int      // e.g., 72, 24, 4, 1
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
 model MasterKategori {
-  id          String   @id @default(cuid())
-  name        String   @unique // e.g., "Perbaikan Komputer", "Jaringan/Internet"
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Ticket {
-  id             String    @id @default(cuid())
-  ticketNumber   String    @unique // e.g., TKT-20260529-001
+  id             String          @id @default(cuid())
+  ticketNumber   String          @unique
   title          String
   description    String
-  
-  status         String    @default("Open") // "Open", "In Progress", "Pending", "Resolved", "Closed"
-  priority       String    // "Low", "Medium", "High", "Critical"
-  category       String    // from MasterKategori
-  
+  status         String          @default("Open")
+  priority       String
+  category       String
   creatorId      String
-  creator        User      @relation("TicketCreator", fields: [creatorId], references: [id])
-  
   assigneeId     String?
-  assignee       User?     @relation("TicketAssignee", fields: [assigneeId], references: [id])
-
   unitKerjaId    String
-  unitKerja      UnitKerja @relation("TicketUnitKerja", fields: [unitKerjaId], references: [id])
-  
   subUnitKerjaId String?
-  subUnitKerja   SubUnitKerja? @relation("TicketSubUnitKerja", fields: [subUnitKerjaId], references: [id])
-
   slaDeadline    DateTime?
-  
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  assignee       User?           @relation("TicketAssignee", fields: [assigneeId], references: [id])
+  creator        User            @relation("TicketCreator", fields: [creatorId], references: [id])
+  subUnitKerja   SubUnitKerja?   @relation("TicketSubUnitKerja", fields: [subUnitKerjaId], references: [id])
+  unitKerja      UnitKerja       @relation("TicketUnitKerja", fields: [unitKerjaId], references: [id])
   comments       TicketComment[]
-  
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
 }
 
 model TicketComment {
   id        String   @id @default(cuid())
   ticketId  String
-  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
   content   String
   isSystem  Boolean  @default(false)
   createdAt DateTime @default(now())
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model FAQ {
