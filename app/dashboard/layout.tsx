@@ -354,14 +354,6 @@ export default function DashboardLayout({
             >
               <Menu className="h-6 w-6" />
             </Button>
-            <div className="hidden md:flex items-center bg-white dark:bg-zinc-900 rounded-full px-4 py-2 border shadow-sm w-64 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition-all">
-              <Search className="w-4 h-4 text-slate-400 mr-2" />
-              <input 
-                type="text" 
-                placeholder="Cari tiket, artikel..." 
-                className="bg-transparent border-none outline-none text-sm w-full text-slate-700 dark:text-slate-200 placeholder:text-slate-400"
-              />
-            </div>
           </div>
           
           <div className="flex flex-1 justify-end items-center space-x-2 sm:space-x-4">

@@ -10,7 +10,7 @@ export default function MasterDataPage() {
     { title: "Sub Unit Kerja", description: "Departemen spesifik (khusus MIS).", icon: Layers, href: "/dashboard/master/sub-units" },
     { title: "Kategori Tiket", description: "Klasifikasi masalah IT.", icon: Settings2, href: "/dashboard/master/categories" },
     { title: "SLA (Service Level)", description: "Batas waktu penyelesaian prioritas.", icon: Clock, href: "/dashboard/master/sla" },
-    { title: "FAQ / Knowledge Base", description: "Data pertanyaan yang sering diajukan.", icon: FileQuestion, href: "/dashboard/master/faq" },
+    { title: "FAQ / Knowledge Base", description: "Data pertanyaan yang sering diajukan.", icon: FileQuestion, href: "/dashboard/faq" },
   ]
 
   return (
