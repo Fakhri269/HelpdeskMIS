@@ -49,29 +49,66 @@ export default function DashboardLayout({
   const [desktopCollapsed, setDesktopCollapsed] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [activeChatCount, setActiveChatCount] = useState<number | null>(null)
-  const [notifications, setNotifications] = useState<{id: string, title: string, status: string, createdAt: string}[]>([])
-  const [notifRead, setNotifRead] = useState(false)
+  const [notifications, setNotifications] = useState<{id: string, title: string, status: string, createdAt: string, isNew: boolean}[]>([])
+  const [newCount, setNewCount] = useState(0)
+  const [notifOpen, setNotifOpen] = useState(false)
+
+  const isAdminOrStaff = session?.user?.role !== 'user'
 
   useEffect(() => {
+    if (!session?.user) return
+
+    const STORAGE_KEY = `seen_tickets_${session.user.id}`
+
     const fetchTickets = () => {
       fetch("/api/tickets")
         .then(res => res.json())
         .then(data => {
           const tickets = Array.isArray(data) ? data : (data.tickets ?? [])
-          const open = tickets.filter((t: {status: string}) => t.status === 'open' || t.status === 'in_progress')
-          setActiveChatCount(open.length > 0 ? open.length : null)
-          setNotifications(open.slice(0, 5).map((t: {id: string, title: string, status: string, createdAt: string}) => ({
+          // For admin/staff: all open+in_progress; for user: their own open tickets
+          const relevant = tickets.filter((t: {status: string}) => t.status === 'open' || t.status === 'in_progress')
+
+          // Load seen IDs from localStorage
+          let seenIds: string[] = []
+          try {
+            seenIds = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+          } catch {}
+
+          const mapped = relevant.map((t: {id: string, title: string, status: string, createdAt: string}) => ({
             id: t.id,
             title: t.title,
             status: t.status,
-            createdAt: t.createdAt
-          })))
+            createdAt: t.createdAt,
+            isNew: !seenIds.includes(t.id)
+          }))
+
+          const unseen = mapped.filter((n: {isNew: boolean}) => n.isNew).length
+          setActiveChatCount(relevant.length > 0 ? relevant.length : null)
+          setNewCount(unseen)
+          setNotifications(mapped.slice(0, 8))
         }).catch(() => {})
     }
+
     fetchTickets()
-    const interval = setInterval(fetchTickets, 15000)
+    const interval = setInterval(fetchTickets, 10000)
     return () => clearInterval(interval)
-  }, [])
+  }, [session?.user])
+
+  // Mark all as read when dropdown opens
+  const handleNotifOpen = (open: boolean) => {
+    setNotifOpen(open)
+    if (open && session?.user) {
+      const STORAGE_KEY = `seen_tickets_${session.user.id}`
+      const allIds = notifications.map(n => n.id)
+      try {
+        const existing: string[] = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+        const merged = Array.from(new Set([...existing, ...allIds]))
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(merged))
+      } catch {}
+      setNewCount(0)
+      setNotifications(prev => prev.map(n => ({ ...n, isNew: false })))
+    }
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -328,50 +365,59 @@ export default function DashboardLayout({
           <div className="flex flex-1 justify-end items-center space-x-2 sm:space-x-4">
 
             {/* Notification Bell */}
-            <DropdownMenu onOpenChange={(open) => { if (open) setNotifRead(true) }}>
+            <DropdownMenu onOpenChange={handleNotifOpen}>
               <DropdownMenuTrigger className="relative flex h-10 w-10 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 focus:outline-none transition-colors">
                 <Bell className="h-5 w-5" />
-                {activeChatCount && !notifRead && (
-                  <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white ring-2 ring-white dark:ring-zinc-900">
-                    {activeChatCount > 9 ? '9+' : activeChatCount}
+                {newCount > 0 && (
+                  <span className="absolute top-0.5 right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white ring-2 ring-white dark:ring-zinc-900 animate-pulse">
+                    {newCount > 9 ? '9+' : newCount}
                   </span>
                 )}
-                {activeChatCount && notifRead && (
-                  <span className="absolute top-1 right-1 flex h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-zinc-900"></span>
+                {activeChatCount && newCount === 0 && (
+                  <span className="absolute top-1 right-1 flex h-2 w-2 rounded-full bg-slate-400 ring-2 ring-white dark:ring-zinc-900"></span>
                 )}
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-80" align="end">
-                <div className="flex items-center justify-between px-3 py-2 text-xs font-medium text-muted-foreground">
-                  <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">Notifikasi</span>
-                  {activeChatCount && <span className="text-xs font-normal px-2 py-0.5 rounded-full text-white" style={{background: 'linear-gradient(135deg,#2166B3,#1AA0AC)'}}>{activeChatCount} aktif</span>}
+                <div className="flex items-center justify-between px-3 py-2.5 border-b border-slate-100 dark:border-zinc-800">
+                  <span className="text-sm font-bold text-slate-700 dark:text-slate-200">Notifikasi Tiket</span>
+                  <div className="flex items-center gap-2">
+                    {newCount > 0 && <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-red-500 text-white">{newCount} baru</span>}
+                    {activeChatCount && <span className="text-xs font-normal px-2 py-0.5 rounded-full text-white" style={{background: 'linear-gradient(135deg,#2166B3,#1AA0AC)'}}>{activeChatCount} aktif</span>}
+                  </div>
                 </div>
-                <DropdownMenuSeparator />
                 {notifications.length === 0 ? (
-                  <div className="py-6 text-center text-sm text-slate-400">
-                    <CheckCircle2 className="w-8 h-8 mx-auto mb-2 text-slate-200" />
-                    Tidak ada tiket aktif
+                  <div className="py-8 text-center text-sm text-slate-400">
+                    <CheckCircle2 className="w-10 h-10 mx-auto mb-2 text-slate-200" />
+                    <p className="font-medium">Semua tiket selesai!</p>
+                    <p className="text-xs mt-0.5">Tidak ada tiket yang perlu ditangani</p>
                   </div>
                 ) : (
-                  notifications.map(n => (
-                    <DropdownMenuItem key={n.id} className="cursor-pointer py-3 px-3" onClick={() => router.push(`/dashboard/tickets`)}>
-                      <div className="flex items-start gap-3 w-full">
-                        <div className={`mt-0.5 shrink-0 w-7 h-7 rounded-lg flex items-center justify-center ${
-                          n.status === 'open' ? 'bg-amber-50 text-amber-500' : 'bg-blue-50 text-blue-600'
-                        }`}>
-                          {n.status === 'open' ? <AlertCircle className="w-4 h-4" /> : <Clock className="w-4 h-4" />}
+                  <div className="max-h-72 overflow-y-auto">
+                    {notifications.map(n => (
+                      <DropdownMenuItem key={n.id} className={`cursor-pointer py-3 px-3 focus:bg-slate-50 ${n.isNew ? 'bg-blue-50/50 dark:bg-blue-950/20' : ''}`} onClick={() => router.push(`/dashboard/tickets`)}>
+                        <div className="flex items-start gap-3 w-full">
+                          <div className={`mt-0.5 shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${
+                            n.status === 'open' ? 'bg-amber-100 text-amber-600' : 'bg-blue-100 text-blue-600'
+                          }`}>
+                            {n.status === 'open' ? <AlertCircle className="w-4 h-4" /> : <Clock className="w-4 h-4" />}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-1.5">
+                              <p className="text-sm font-medium text-slate-700 dark:text-slate-200 truncate flex-1">{n.title}</p>
+                              {n.isNew && <span className="shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-red-500 text-white">Baru</span>}
+                            </div>
+                            <p className="text-xs text-slate-400 mt-0.5">{n.status === 'open' ? '🟡 Menunggu ditangani' : '🔵 Sedang diproses'}</p>
+                          </div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-slate-700 dark:text-slate-200 truncate">{n.title}</p>
-                          <p className="text-xs text-slate-400 mt-0.5 capitalize">{n.status === 'open' ? 'Menunggu' : 'Dalam Proses'}</p>
-                        </div>
-                      </div>
-                    </DropdownMenuItem>
-                  ))
+                      </DropdownMenuItem>
+                    ))}
+                  </div>
                 )}
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer justify-center text-sm font-medium" style={{color: '#2166B3'}} onClick={() => router.push('/dashboard/tickets')}>
-                  Lihat Semua Tiket
-                </DropdownMenuItem>
+                <div className="border-t border-slate-100 dark:border-zinc-800 p-1">
+                  <DropdownMenuItem className="cursor-pointer justify-center text-sm font-semibold rounded-lg py-2" style={{color: '#2166B3'}} onClick={() => router.push('/dashboard/tickets')}>
+                    Lihat Semua Tiket →
+                  </DropdownMenuItem>
+                </div>
               </DropdownMenuContent>
             </DropdownMenu>
 
