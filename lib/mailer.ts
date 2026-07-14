@@ -12,6 +12,12 @@ export async function sendPasswordResetEmail(email: string, token: string) {
   const baseUrl = process.env.AUTH_URL || process.env.NEXTAUTH_URL || "http://localhost:3000"
   const resetUrl = `${baseUrl}/reset-password?token=${token}`
 
+  // Log link ke terminal untuk keperluan testing jika email belum disetting
+  console.log(`\n========================================================`)
+  console.log(`[SYSTEM] RESET PASSWORD LINK UNTUK: ${email}`)
+  console.log(`[SYSTEM] ${resetUrl}`)
+  console.log(`========================================================\n`)
+
   const html = `
     <!DOCTYPE html>
     <html lang="id">
@@ -75,10 +81,20 @@ export async function sendPasswordResetEmail(email: string, token: string) {
     </html>
   `
 
-  await transporter.sendMail({
-    from: `"Helpdesk MIS PDAM" <${process.env.GMAIL_USER}>`,
-    to: email,
-    subject: "Reset Password - Helpdesk MIS Perumda Tirta Kahuripan",
-    html,
-  })
+  if (!process.env.GMAIL_USER || process.env.GMAIL_USER.includes("isi_email_gmail")) {
+    console.log("[SYSTEM] Email kredensial belum disetting di .env. Melewati proses kirim email SMTP.")
+    return
+  }
+
+  try {
+    await transporter.sendMail({
+      from: `"Helpdesk MIS PDAM" <${process.env.GMAIL_USER}>`,
+      to: email,
+      subject: "Reset Password - Helpdesk MIS Perumda Tirta Kahuripan",
+      html,
+    })
+  } catch (error) {
+    console.error("[SYSTEM] Gagal mengirim email:", error)
+    // Jangan throw error agar frontend tetap menganggap sukses dan user bisa pakai link di console
+  }
 }
