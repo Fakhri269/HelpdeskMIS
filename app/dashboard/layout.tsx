@@ -294,7 +294,7 @@ export default function DashboardLayout({
         </button>
       </div>
 
-      <div className="flex w-0 flex-1 flex-col overflow-hidden relative bg-[#F0F6FC] dark:bg-zinc-950">
+      <div className="flex w-0 flex-1 flex-col overflow-hidden relative bg-[#F0F6FC] dark:bg-zinc-950 lg:pl-6">
         {/* Header */}
         <header className={`flex h-16 flex-shrink-0 items-center justify-between px-4 sm:px-8 transition-all duration-200 z-20 ${scrolled ? 'bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-slate-200/60 shadow-sm' : 'bg-transparent'}`}>
           <div className="flex items-center">

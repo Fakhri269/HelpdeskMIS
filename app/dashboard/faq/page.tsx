@@ -235,7 +235,7 @@ export default function FAQPage() {
       )}
 
       {/* Bottom CTA */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-6 text-white flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="rounded-2xl p-6 text-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg shadow-[#2166B3]/20" style={{ background: "linear-gradient(135deg, #2166B3 0%, #1AA0AC 100%)" }}>
         <div>
           <p className="font-bold text-lg">Tidak menemukan jawaban?</p>
           <p className="text-blue-100 text-sm mt-1">Tim MIS siap membantu Anda melalui sistem tiket</p>

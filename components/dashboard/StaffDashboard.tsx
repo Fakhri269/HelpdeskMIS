@@ -62,7 +62,7 @@ export async function StaffDashboard() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-6 rounded-2xl shadow-lg shadow-blue-500/20 text-white flex items-center gap-4 relative overflow-hidden">
+        <div className="p-6 rounded-2xl shadow-lg shadow-[#2166B3]/20 text-white flex items-center gap-4 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #2166B3 0%, #1AA0AC 100%)" }}>
           <div className="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full translate-x-12 -translate-y-8 pointer-events-none"></div>
           <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center shrink-0 backdrop-blur-sm">
             <Clock className="w-6 h-6 text-white" />

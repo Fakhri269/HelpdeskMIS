@@ -254,7 +254,7 @@ export default function TicketsPage() {
         <SheetContent side="right" showCloseButton={false} className="w-full sm:max-w-[560px] p-0 flex flex-col overflow-hidden border-l border-slate-200 dark:border-zinc-800">
 
           {/* Header */}
-          <div className="shrink-0 bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-5">
+          <div className="shrink-0 px-6 py-5 shadow-lg shadow-[#2166B3]/20" style={{ background: "linear-gradient(135deg, #2166B3 0%, #1AA0AC 100%)" }}>
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0">

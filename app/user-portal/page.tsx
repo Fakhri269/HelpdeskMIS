@@ -276,7 +276,7 @@ export default function UserPortalPage() {
           <div className="space-y-6">
 
             {/* Welcome Banner */}
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-6 text-white shadow-xl shadow-blue-500/20">
+            <div className="relative overflow-hidden rounded-2xl p-6 text-white shadow-xl shadow-[#2166B3]/20" style={{ background: "linear-gradient(135deg, #2166B3 0%, #1AA0AC 100%)" }}>
               <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -translate-y-12 translate-x-12 pointer-events-none" />
               <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full translate-y-8 -translate-x-8 pointer-events-none" />
               <div className="relative">
@@ -366,7 +366,7 @@ export default function UserPortalPage() {
         {activeView === "chat" && (
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col" style={{ height: "calc(100vh - 160px)" }}>
             {/* Chat Header */}
-            <div className="px-5 py-4 border-b border-slate-100 bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center gap-3">
+            <div className="px-5 py-4 border-b border-slate-100 flex items-center gap-3 text-white" style={{ background: "linear-gradient(135deg, #2166B3 0%, #1AA0AC 100%)" }}>
               <div className="relative">
                 <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
                   <MessageSquare className="h-5 w-5 text-white" />
