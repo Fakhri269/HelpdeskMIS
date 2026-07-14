@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { signOut, useSession } from "next-auth/react"
 import { 
   LayoutDashboard, 
@@ -19,7 +19,10 @@ import {
   Search,
   ChevronDown,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Clock,
+  CheckCircle2,
+  AlertCircle
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -40,27 +43,33 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
+  const router = useRouter()
   const { data: session } = useSession()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [desktopCollapsed, setDesktopCollapsed] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [activeChatCount, setActiveChatCount] = useState<number | null>(null)
+  const [notifications, setNotifications] = useState<{id: string, title: string, status: string, createdAt: string}[]>([])
+  const [notifRead, setNotifRead] = useState(false)
 
   useEffect(() => {
-    // Fetch initial chat count
-    const fetchChatCount = () => {
-      fetch("/api/tickets/active-count")
+    const fetchTickets = () => {
+      fetch("/api/tickets")
         .then(res => res.json())
         .then(data => {
-          if (typeof data.count === 'number') {
-            setActiveChatCount(data.count > 0 ? data.count : null)
-          }
+          const tickets = Array.isArray(data) ? data : (data.tickets ?? [])
+          const open = tickets.filter((t: {status: string}) => t.status === 'open' || t.status === 'in_progress')
+          setActiveChatCount(open.length > 0 ? open.length : null)
+          setNotifications(open.slice(0, 5).map((t: {id: string, title: string, status: string, createdAt: string}) => ({
+            id: t.id,
+            title: t.title,
+            status: t.status,
+            createdAt: t.createdAt
+          })))
         }).catch(() => {})
     }
-    
-    fetchChatCount()
-    // Poll every 10 seconds
-    const interval = setInterval(fetchChatCount, 10000)
+    fetchTickets()
+    const interval = setInterval(fetchTickets, 15000)
     return () => clearInterval(interval)
   }, [])
 
@@ -317,16 +326,60 @@ export default function DashboardLayout({
           </div>
           
           <div className="flex flex-1 justify-end items-center space-x-2 sm:space-x-4">
-            <Button variant="ghost" size="icon" className="relative rounded-full text-slate-500 hover:bg-slate-100">
-              <Bell className="h-5 w-5" />
-              <span className="absolute top-1 right-1 flex h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-zinc-900"></span>
-            </Button>
 
+            {/* Notification Bell */}
+            <DropdownMenu onOpenChange={(open) => { if (open) setNotifRead(true) }}>
+              <DropdownMenuTrigger className="relative flex h-10 w-10 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 focus:outline-none transition-colors">
+                <Bell className="h-5 w-5" />
+                {activeChatCount && !notifRead && (
+                  <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white ring-2 ring-white dark:ring-zinc-900">
+                    {activeChatCount > 9 ? '9+' : activeChatCount}
+                  </span>
+                )}
+                {activeChatCount && notifRead && (
+                  <span className="absolute top-1 right-1 flex h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-zinc-900"></span>
+                )}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-80" align="end">
+                <DropdownMenuLabel className="flex items-center justify-between">
+                  <span>Notifikasi</span>
+                  {activeChatCount && <span className="text-xs font-normal px-2 py-0.5 rounded-full text-white" style={{background: 'linear-gradient(135deg,#2166B3,#1AA0AC)'}}>{activeChatCount} aktif</span>}
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {notifications.length === 0 ? (
+                  <div className="py-6 text-center text-sm text-slate-400">
+                    <CheckCircle2 className="w-8 h-8 mx-auto mb-2 text-slate-200" />
+                    Tidak ada tiket aktif
+                  </div>
+                ) : (
+                  notifications.map(n => (
+                    <DropdownMenuItem key={n.id} className="cursor-pointer py-3 px-3" onClick={() => router.push(`/dashboard/tickets`)}>
+                      <div className="flex items-start gap-3 w-full">
+                        <div className={`mt-0.5 shrink-0 w-7 h-7 rounded-lg flex items-center justify-center ${
+                          n.status === 'open' ? 'bg-amber-50 text-amber-500' : 'bg-blue-50 text-blue-600'
+                        }`}>
+                          {n.status === 'open' ? <AlertCircle className="w-4 h-4" /> : <Clock className="w-4 h-4" />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-slate-700 dark:text-slate-200 truncate">{n.title}</p>
+                          <p className="text-xs text-slate-400 mt-0.5 capitalize">{n.status === 'open' ? 'Menunggu' : 'Dalam Proses'}</p>
+                        </div>
+                      </div>
+                    </DropdownMenuItem>
+                  ))
+                )}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer justify-center text-sm font-medium" style={{color: '#2166B3'}} onClick={() => router.push('/dashboard/tickets')}>
+                  Lihat Semua Tiket
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Profile Dropdown */}
             <DropdownMenu>
-              {/* Using standard div inside DropdownMenuTrigger without asChild to avoid button nesting */}
               <DropdownMenuTrigger className="focus:outline-none flex items-center space-x-2 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors">
                 <Avatar className="h-9 w-9 border border-slate-200 dark:border-zinc-700">
-                  <AvatarFallback className="bg-blue-100 text-blue-700 font-semibold">
+                  <AvatarFallback className="text-white font-semibold" style={{background: 'linear-gradient(135deg,#2166B3,#1AA0AC)'}}>
                     {session?.user?.name?.charAt(0) || "U"}
                   </AvatarFallback>
                 </Avatar>
@@ -339,13 +392,11 @@ export default function DashboardLayout({
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium leading-none">{session?.user?.name}</p>
-                    <p className="text-xs leading-none text-muted-foreground">
-                      {session?.user?.email}
-                    </p>
+                    <p className="text-xs leading-none text-muted-foreground">{session?.user?.email}</p>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer">
+                <DropdownMenuItem className="cursor-pointer" onClick={() => router.push('/dashboard/settings')}>
                   <Settings className="mr-2 h-4 w-4 text-slate-500" />
                   <span>Pengaturan</span>
                 </DropdownMenuItem>
