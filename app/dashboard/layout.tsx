@@ -106,29 +106,6 @@ export default function DashboardLayout({
       {/* Top light shimmer */}
       <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
 
-      {/* Organic wave on right edge — filled with gradient matching sidebar */}
-      <svg
-        className="absolute top-0 h-full z-20 pointer-events-none"
-        style={{ right: '-36px' }}
-        width="38"
-        height="100%"
-        viewBox="0 0 38 800"
-        preserveAspectRatio="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <defs>
-          <linearGradient id="sidebarWaveGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#0B3D6B" />
-            <stop offset="50%" stopColor="#1A56A0" />
-            <stop offset="100%" stopColor="#0E8A9E" />
-          </linearGradient>
-        </defs>
-        <path
-          d="M0,0 L22,0 C34,5 38,22 36,60 C34,130 20,160 20,240 C20,320 38,355 36,430 C34,505 18,530 20,620 C22,700 34,740 38,800 L0,800 Z"
-          fill="url(#sidebarWaveGrad)"
-        />
-      </svg>
-
       {/* Logo */}
       <div className={`flex h-20 items-center px-6 font-bold text-2xl tracking-tight z-10 transition-all ${desktopCollapsed ? "justify-center px-0" : ""}`}>
         <div className={`transition-all flex items-center justify-center ${desktopCollapsed ? "mr-0" : "mr-3"}`}>
@@ -254,7 +231,7 @@ export default function DashboardLayout({
   )
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#F0F6FC] dark:bg-zinc-950">
+    <div className="flex h-screen overflow-x-hidden bg-[#F0F6FC] dark:bg-zinc-950">
       {/* Mobile sidebar */}
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
         <SheetContent side="left" className="p-0 w-[280px] border-r-0">
@@ -263,12 +240,36 @@ export default function DashboardLayout({
       </Sheet>
 
       {/* Desktop sidebar */}
-      <div className={`hidden lg:flex flex-col flex-shrink-0 transition-all duration-300 ease-in-out ${desktopCollapsed ? "w-[88px]" : "w-[280px]"} relative overflow-visible`}>
+      <div className={`hidden lg:flex flex-col flex-shrink-0 transition-all duration-300 ease-in-out ${desktopCollapsed ? "w-[88px]" : "w-[280px]"} relative`} style={{zIndex: 30}}>
         <SidebarContent />
+
+        {/* Wave SVG rendered at sidebar wrapper level so it's not clipped */}
+        <svg
+          className="absolute top-0 h-full pointer-events-none"
+          style={{ right: '-24px', zIndex: 25 }}
+          width="26"
+          height="100%"
+          viewBox="0 0 26 800"
+          preserveAspectRatio="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <linearGradient id="waveGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#0B3D6B" />
+              <stop offset="50%" stopColor="#1A56A0" />
+              <stop offset="100%" stopColor="#0E8A9E" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M0,0 L14,0 C22,3 26,16 24,45 C22,90 12,115 12,175 C12,235 26,258 24,315 C22,372 10,390 12,455 C14,515 22,538 26,600 L26,800 L0,800 Z"
+            fill="url(#waveGrad)"
+          />
+        </svg>
+
         <button
           onClick={() => setDesktopCollapsed(!desktopCollapsed)}
-          className="absolute -right-3 top-24 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-white/30 text-white shadow-sm transition-colors"
-          style={{ background: 'linear-gradient(135deg, #1A56A0, #0E8A9E)' }}
+          className="absolute top-24 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-white/30 text-white shadow-sm transition-colors"
+          style={{ right: '-12px', background: 'linear-gradient(135deg, #1A56A0, #0E8A9E)' }}
         >
           {desktopCollapsed ? <ChevronRight className="h-3.5 w-3.5" /> : <ChevronLeft className="h-3.5 w-3.5" />}
         </button>
