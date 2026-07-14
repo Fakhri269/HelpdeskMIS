@@ -231,8 +231,23 @@ export default function DashboardLayout({
     <div className="flex h-screen overflow-x-hidden bg-[#F0F6FC] dark:bg-zinc-950">
       {/* Mobile sidebar */}
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-        <SheetContent side="left" className="p-0 w-[280px] border-r-0">
+        <SheetContent side="left" className="p-0 w-[280px] border-none bg-transparent shadow-none overflow-visible">
           <SidebarContent />
+          {/* Wave SVG for mobile */}
+          <svg
+            className="absolute top-0 h-full pointer-events-none"
+            style={{ right: '-24px', zIndex: -1 }}
+            width="26"
+            height="100%"
+            viewBox="0 0 26 800"
+            preserveAspectRatio="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0,0 L14,0 C22,3 26,16 24,45 C22,90 12,115 12,175 C12,235 26,258 24,315 C22,372 10,390 12,455 C14,515 22,538 26,600 L26,800 L0,800 Z"
+              fill="url(#waveGrad)"
+            />
+          </svg>
         </SheetContent>
       </Sheet>
 
