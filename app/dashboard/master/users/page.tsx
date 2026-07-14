@@ -38,11 +38,18 @@ export default function UsersPage() {
   const [loading, setLoading] = useState(true)
   const [refs, setRefs] = useState<{roles: any[], units: any[], subUnits: any[]}>({ roles: [], units: [], subUnits: [] })
   
-  // Form State
+  // Create Form State
   const [open, setOpen] = useState(false)
   const [formData, setFormData] = useState({
     name: "", email: "", password: "", roleId: "", unitKerjaId: "", subUnitKerjaId: "", position: ""
   })
+  
+  // Edit & Delete State
+  const [editOpen, setEditOpen] = useState(false)
+  const [editData, setEditData] = useState<any>(null)
+  const [deleteOpen, setDeleteOpen] = useState(false)
+  const [userToDelete, setUserToDelete] = useState<any>(null)
+  
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const fetchData = async () => {
@@ -93,6 +100,78 @@ export default function UsersPage() {
     }
   }
 
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!editData) return
+    
+    setIsSubmitting(true)
+    try {
+      const res = await fetch(`/api/master/users/${editData.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: editData.name,
+          roleId: editData.roleId,
+          unitKerjaId: editData.unitKerjaId,
+          subUnitKerjaId: editData.subUnitKerjaId,
+          position: editData.position
+        })
+      })
+      if (res.ok) {
+        setEditOpen(false)
+        setEditData(null)
+        fetchData()
+      } else {
+        const err = await res.json()
+        alert(err.error || "Terjadi kesalahan")
+      }
+    } catch (error) {
+      alert("Terjadi kesalahan sistem")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!userToDelete) return
+    setIsSubmitting(true)
+    try {
+      const res = await fetch(`/api/master/users/${userToDelete.id}`, {
+        method: "DELETE"
+      })
+      if (res.ok) {
+        setDeleteOpen(false)
+        setUserToDelete(null)
+        fetchData()
+      } else {
+        const err = await res.json()
+        alert(err.error || "Terjadi kesalahan")
+      }
+    } catch (error) {
+      alert("Terjadi kesalahan sistem")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const openEditModal = (user: any) => {
+    setEditData({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      roleId: user.roleId || "",
+      unitKerjaId: user.unitKerjaId || "none",
+      subUnitKerjaId: user.subUnitKerjaId || "none",
+      position: user.position || ""
+    })
+    setEditOpen(true)
+  }
+
+  const openDeleteModal = (user: any) => {
+    setUserToDelete(user)
+    setDeleteOpen(true)
+  }
+
   if (loading) {
     return <HandLoader text="Memuat Data Pengguna..." />
   }
@@ -106,6 +185,7 @@ export default function UsersPage() {
             Kelola data staf dan pengguna aplikasi
           </p>
         </div>
+        
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger>
             <Button className="bg-blue-600 hover:bg-blue-700">
@@ -189,6 +269,100 @@ export default function UsersPage() {
         </Dialog>
       </div>
 
+      {/* Edit User Dialog */}
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <form onSubmit={handleEditSubmit}>
+            <DialogHeader>
+              <DialogTitle>Edit Pengguna</DialogTitle>
+              <DialogDescription>
+                Ubah role, unit kerja, atau jabatan (Email dan Password tidak dapat diubah).
+              </DialogDescription>
+            </DialogHeader>
+            {editData && (
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label className="text-right">Email</Label>
+                  <Input value={editData.email} disabled className="col-span-3 bg-slate-100 text-slate-500" />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="edit_name" className="text-right">Nama Lengkap</Label>
+                  <Input id="edit_name" value={editData.name} onChange={e => setEditData({...editData, name: e.target.value})} className="col-span-3" required />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="edit_role" className="text-right">Role</Label>
+                  <div className="col-span-3">
+                    <Select value={editData.roleId} onValueChange={v => setEditData({...editData, roleId: v as string})} required>
+                      <SelectTrigger><SelectValue placeholder="Pilih role" /></SelectTrigger>
+                      <SelectContent>
+                        {refs.roles.map(r => <SelectItem key={r.id} value={r.id}>{r.description || r.name}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="edit_unit" className="text-right">Unit Kerja</Label>
+                  <div className="col-span-3">
+                    <Select value={editData.unitKerjaId} onValueChange={v => setEditData({...editData, unitKerjaId: v as string, subUnitKerjaId: "none"})}>
+                      <SelectTrigger><SelectValue placeholder="Pilih unit kerja (opsional)" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">Kosongkan</SelectItem>
+                        {refs.units.map(u => <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                {editData.unitKerjaId && editData.unitKerjaId !== "none" && (
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="edit_subunit" className="text-right">Sub Unit</Label>
+                    <div className="col-span-3">
+                      <Select value={editData.subUnitKerjaId} onValueChange={v => setEditData({...editData, subUnitKerjaId: v as string})}>
+                        <SelectTrigger><SelectValue placeholder="Pilih sub unit (opsional)" /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="none">Kosongkan</SelectItem>
+                          {refs.subUnits
+                            .filter(su => su.unitKerjaId === editData.unitKerjaId)
+                            .map(su => <SelectItem key={su.id} value={su.id}>{su.name}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                )}
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="edit_position" className="text-right">Jabatan</Label>
+                  <Input id="edit_position" placeholder="e.g. Asisten Manajer" value={editData.position} onChange={e => setEditData({...editData, position: e.target.value})} className="col-span-3" />
+                </div>
+              </div>
+            )}
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setEditOpen(false)}>Batal</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Menyimpan..." : "Simpan Perubahan"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <DialogContent className="sm:max-w-[400px]">
+          <DialogHeader>
+            <DialogTitle>Hapus Pengguna</DialogTitle>
+            <DialogDescription>
+              Apakah Anda yakin ingin menghapus pengguna <span className="font-semibold text-foreground">{userToDelete?.name}</span>? 
+              Tindakan ini tidak dapat dibatalkan.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-4">
+            <Button type="button" variant="outline" onClick={() => setDeleteOpen(false)}>Batal</Button>
+            <Button type="button" variant="destructive" onClick={handleDelete} disabled={isSubmitting}>
+              {isSubmitting ? "Menghapus..." : "Ya, Hapus"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Card>
         <CardHeader className="py-4 px-6 border-b">
           <div className="flex items-center">
@@ -239,10 +413,10 @@ export default function UsersPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem className="cursor-pointer">
+                        <DropdownMenuItem className="cursor-pointer" onClick={() => openEditModal(user)}>
                           <Edit className="w-4 h-4 mr-2" /> Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="cursor-pointer text-red-600 focus:text-red-600">
+                        <DropdownMenuItem className="cursor-pointer text-red-600 focus:text-red-600" onClick={() => openDeleteModal(user)}>
                           <Trash2 className="w-4 h-4 mr-2" /> Hapus
                         </DropdownMenuItem>
                       </DropdownMenuContent>
