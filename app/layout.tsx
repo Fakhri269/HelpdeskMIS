@@ -13,6 +13,11 @@ const fontSans = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: "Helpdesk MIS",
   description: "Helpdesk MIS Perumda Tirta Kahuripan, Management Information System, Tirta Kahuripan, Helpdesk, MIS, Perumda Tirta Kahuripan, ",
+  icons: {
+    icon: "/PdamLogo.svg",
+    shortcut: "/PdamLogo.svg",
+    apple: "/PdamLogo.svg",
+  },
 };
 
 export default function RootLayout({
