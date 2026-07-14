@@ -1,5 +1,7 @@
 "use client"
 
+import { formatDistanceToNow } from "date-fns"
+import { id } from "date-fns/locale"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
@@ -66,7 +68,7 @@ export default function DashboardLayout({
         .then(data => {
           const tickets = Array.isArray(data) ? data : (data.tickets ?? [])
           // For admin/staff: all open+in_progress; for user: their own open tickets
-          const relevant = tickets.filter((t: {status: string}) => t.status === 'open' || t.status === 'in_progress')
+          const relevant = tickets.filter((t: {status: string}) => t.status.toLowerCase() === 'open' || t.status.toLowerCase() === 'in_progress')
 
           // Load seen IDs from localStorage
           let seenIds: string[] = []
@@ -406,7 +408,10 @@ export default function DashboardLayout({
                               <p className="text-sm font-medium text-slate-700 dark:text-slate-200 truncate flex-1">{n.title}</p>
                               {n.isNew && <span className="shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-red-500 text-white">Baru</span>}
                             </div>
-                            <p className="text-xs text-slate-400 mt-0.5">{n.status === 'open' ? '🟡 Menunggu ditangani' : '🔵 Sedang diproses'}</p>
+                            <p className="text-xs text-slate-400 mt-0.5">{n.status.toLowerCase() === 'open' ? '🟡 Menunggu ditangani' : '🔵 Sedang diproses'}</p>
+                            <p className="text-[10px] text-slate-400 mt-0.5">
+                              {formatDistanceToNow(new Date(n.createdAt), { addSuffix: true, locale: id })}
+                            </p>
                           </div>
                         </div>
                       </DropdownMenuItem>
