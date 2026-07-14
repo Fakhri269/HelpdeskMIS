@@ -243,9 +243,16 @@ export default function DashboardLayout({
             preserveAspectRatio="none"
             xmlns="http://www.w3.org/2000/svg"
           >
+            <defs>
+              <linearGradient id="waveGradMobile" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#2166B3" />
+                <stop offset="50%" stopColor="#1C82AC" />
+                <stop offset="100%" stopColor="#1AA0AC" />
+              </linearGradient>
+            </defs>
             <path
               d="M0,0 L14,0 C22,3 26,16 24,45 C22,90 12,115 12,175 C12,235 26,258 24,315 C22,372 10,390 12,455 C14,515 22,538 26,600 L26,800 L0,800 Z"
-              fill="url(#waveGrad)"
+              fill="url(#waveGradMobile)"
             />
           </svg>
         </SheetContent>

@@ -170,11 +170,13 @@ export default function TicketsPage() {
           <button key={s} onClick={() => setActiveTab(s)}
             className={`rounded-xl p-3 text-left border transition-all duration-200 ${
               activeTab === s
-                ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20"
+                ? "text-white border-transparent shadow-lg shadow-blue-500/20"
                 : "bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 hover:border-blue-300"
-            }`}>
+            }`}
+            style={activeTab === s ? { background: "linear-gradient(160deg, #2166B3 0%, #1C82AC 55%, #1AA0AC 100%)" } : {}}
+          >
             <div className={`text-2xl font-bold ${activeTab === s ? "text-white" : "text-slate-800 dark:text-white"}`}>{counts[s] ?? 0}</div>
-            <div className={`text-xs font-medium mt-0.5 truncate ${activeTab === s ? "text-blue-100" : "text-slate-500"}`}>{s}</div>
+            <div className={`text-xs font-medium mt-0.5 truncate ${activeTab === s ? "text-cyan-100" : "text-slate-500"}`}>{s}</div>
           </button>
         ))}
       </div>

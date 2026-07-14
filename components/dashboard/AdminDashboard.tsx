@@ -37,7 +37,7 @@ export async function AdminDashboard() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-slate-100 dark:border-zinc-800 shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-xl flex items-center justify-center shrink-0">
+          <div className="w-12 h-12 text-white rounded-xl flex items-center justify-center shrink-0 shadow-sm" style={{ background: "linear-gradient(135deg, #2166B3 0%, #1AA0AC 100%)" }}>
             <Users className="w-6 h-6" />
           </div>
           <div>
@@ -123,7 +123,7 @@ export async function AdminDashboard() {
               <Users className="w-5 h-5 text-slate-400" />
               Pengguna Terbaru
             </h2>
-            <Link href="/dashboard/master/users" className="text-xs text-blue-600 font-medium hover:underline flex items-center">
+            <Link href="/dashboard/master/users" className="text-xs font-medium hover:underline flex items-center" style={{ color: "#1C82AC" }}>
               Lihat Semua <ArrowRight className="w-3 h-3 ml-1" />
             </Link>
           </div>
@@ -131,7 +131,7 @@ export async function AdminDashboard() {
             {recentUsers.map(user => (
               <div key={user.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800 transition-colors">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-xs shrink-0">
+                  <div className="w-8 h-8 rounded-full text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-sm" style={{ background: "linear-gradient(135deg, #2166B3 0%, #1AA0AC 100%)" }}>
                     {user.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
