@@ -91,20 +91,17 @@ export default function DashboardLayout({
     <div
       className="flex h-full flex-col relative transition-all duration-300"
       style={{
-        background: "linear-gradient(160deg, #0B3D6B 0%, #1A56A0 45%, #0E8A9E 100%)",
-        filter: 'drop-shadow(4px 0 20px rgba(11,61,107,0.25))'
+        background: "linear-gradient(160deg, #2166B3 0%, #1C82AC 55%, #1AA0AC 100%)",
       }}
     >
       {/* Subtle dot-grid texture like login */}
       <div
-        className="absolute inset-0 opacity-[0.06] pointer-events-none"
+        className="absolute inset-0 opacity-[0.05] pointer-events-none"
         style={{
-          backgroundImage: "radial-gradient(rgba(255,255,255,0.8) 1px, transparent 1px)",
-          backgroundSize: "20px 20px",
+          backgroundImage: "radial-gradient(rgba(30,95,150,0.7) 1px, transparent 1px)",
+          backgroundSize: "22px 22px",
         }}
       />
-      {/* Top light shimmer */}
-      <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
 
       {/* Logo */}
       <div className={`flex h-20 items-center px-6 font-bold text-2xl tracking-tight z-10 transition-all ${desktopCollapsed ? "justify-center px-0" : ""}`}>
@@ -255,9 +252,9 @@ export default function DashboardLayout({
         >
           <defs>
             <linearGradient id="waveGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#0B3D6B" />
-              <stop offset="50%" stopColor="#1A56A0" />
-              <stop offset="100%" stopColor="#0E8A9E" />
+              <stop offset="0%" stopColor="#2166B3" />
+              <stop offset="50%" stopColor="#1C82AC" />
+              <stop offset="100%" stopColor="#1AA0AC" />
             </linearGradient>
           </defs>
           <path
