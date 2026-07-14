@@ -88,25 +88,65 @@ export default function DashboardLayout({
   ] : []
 
   const SidebarContent = () => (
-    <div className="flex h-full flex-col bg-white dark:bg-zinc-950 border-r shadow-sm relative transition-all duration-300">
-      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-blue-50/50 to-transparent dark:from-blue-900/10 pointer-events-none" />
-      
+    <div
+      className="flex h-full flex-col relative transition-all duration-300"
+      style={{
+        background: "linear-gradient(160deg, #0B3D6B 0%, #1A56A0 45%, #0E8A9E 100%)",
+        filter: 'drop-shadow(4px 0 20px rgba(11,61,107,0.25))'
+      }}
+    >
+      {/* Subtle dot-grid texture like login */}
+      <div
+        className="absolute inset-0 opacity-[0.06] pointer-events-none"
+        style={{
+          backgroundImage: "radial-gradient(rgba(255,255,255,0.8) 1px, transparent 1px)",
+          backgroundSize: "20px 20px",
+        }}
+      />
+      {/* Top light shimmer */}
+      <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
+
+      {/* Organic wave on right edge — filled with gradient matching sidebar */}
+      <svg
+        className="absolute top-0 h-full z-20 pointer-events-none"
+        style={{ right: '-36px' }}
+        width="38"
+        height="100%"
+        viewBox="0 0 38 800"
+        preserveAspectRatio="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <linearGradient id="sidebarWaveGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#0B3D6B" />
+            <stop offset="50%" stopColor="#1A56A0" />
+            <stop offset="100%" stopColor="#0E8A9E" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M0,0 L22,0 C34,5 38,22 36,60 C34,130 20,160 20,240 C20,320 38,355 36,430 C34,505 18,530 20,620 C22,700 34,740 38,800 L0,800 Z"
+          fill="url(#sidebarWaveGrad)"
+        />
+      </svg>
+
+      {/* Logo */}
       <div className={`flex h-20 items-center px-6 font-bold text-2xl tracking-tight z-10 transition-all ${desktopCollapsed ? "justify-center px-0" : ""}`}>
         <div className={`transition-all flex items-center justify-center ${desktopCollapsed ? "mr-0" : "mr-3"}`}>
-          <Image src="../../PdamLogo.svg" alt="PDAM Logo" width={36} height={36} className="drop-shadow-md" />
+          <Image src="../../PdamLogo.svg" alt="PDAM Logo" width={36} height={36} className="drop-shadow-md brightness-0 invert" />
         </div>
         {!desktopCollapsed && (
           <div className="flex items-center overflow-hidden whitespace-nowrap animate-in fade-in zoom-in duration-300">
-            <span className="text-slate-900 dark:text-white">Helpdesk</span>
-            <span className="text-blue-600 ml-1">.</span>
+            <span className="text-white font-bold">Helpdesk</span>
+            <span className="text-cyan-300 ml-1">.</span>
           </div>
         )}
       </div>
-      
+
+      {/* Nav */}
       <div className="flex-1 overflow-y-auto py-6 px-3 z-10 scrollbar-hide space-y-6">
         <div>
-          {!desktopCollapsed && <div className="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider px-3 whitespace-nowrap overflow-hidden transition-all duration-300">Menu Utama</div>}
-          <nav className="space-y-1.5">
+          {!desktopCollapsed && <div className="text-[10px] font-semibold text-white/40 mb-3 uppercase tracking-widest px-3 whitespace-nowrap overflow-hidden transition-all duration-300">Menu Utama</div>}
+          <nav className="space-y-1">
             {mainRoutes.map((route) => {
               const active = route.path === "/dashboard"
                 ? pathname === "/dashboard"
@@ -118,20 +158,20 @@ export default function DashboardLayout({
                   title={desktopCollapsed ? route.name : undefined}
                   className={`group flex items-center ${desktopCollapsed ? "justify-center" : "justify-between"} rounded-xl p-2.5 text-sm font-medium transition-all duration-200 ${
                     active
-                      ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
-                      : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-900 hover:text-slate-900 dark:hover:text-white"
+                      ? "bg-white/20 text-white shadow-inner backdrop-blur-sm border border-white/20"
+                      : "text-white/65 hover:bg-white/10 hover:text-white"
                   }`}
                 >
                   <div className="flex items-center">
                     <route.icon
                       className={`${desktopCollapsed ? "" : "mr-3"} h-5 w-5 transition-transform duration-200 group-hover:scale-110 ${
-                        active ? "text-white" : "text-slate-400 group-hover:text-blue-500"
+                        active ? "text-cyan-300" : "text-white/50 group-hover:text-cyan-300"
                       }`}
                     />
                     {!desktopCollapsed && <span className="whitespace-nowrap overflow-hidden transition-all duration-300">{route.name}</span>}
                   </div>
                   {!desktopCollapsed && route.badge && (
-                    <Badge variant="secondary" className={`${active ? "bg-white/20 text-white hover:bg-white/30" : "bg-blue-100 text-blue-700"}`}>
+                    <Badge className="bg-cyan-400/20 text-cyan-200 border-cyan-300/30 text-[10px]">
                       {route.badge}
                     </Badge>
                   )}
@@ -143,8 +183,8 @@ export default function DashboardLayout({
 
         {adminRoutes.length > 0 && (
           <div>
-            {!desktopCollapsed && <div className="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider px-3 whitespace-nowrap overflow-hidden transition-all duration-300">Administrasi</div>}
-            <nav className="space-y-1.5">
+            {!desktopCollapsed && <div className="text-[10px] font-semibold text-white/40 mb-3 uppercase tracking-widest px-3 whitespace-nowrap overflow-hidden transition-all duration-300">Administrasi</div>}
+            <nav className="space-y-1">
               {adminRoutes.map((route) => {
                 const active = route.path === "/dashboard"
                   ? pathname === "/dashboard"
@@ -156,14 +196,14 @@ export default function DashboardLayout({
                     title={desktopCollapsed ? route.name : undefined}
                     className={`group flex items-center ${desktopCollapsed ? "justify-center" : "justify-between"} rounded-xl p-2.5 text-sm font-medium transition-all duration-200 ${
                       active
-                        ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
-                        : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-900 hover:text-slate-900 dark:hover:text-white"
+                        ? "bg-white/20 text-white shadow-inner backdrop-blur-sm border border-white/20"
+                        : "text-white/65 hover:bg-white/10 hover:text-white"
                     }`}
                   >
                     <div className="flex items-center">
                       <route.icon
                         className={`${desktopCollapsed ? "" : "mr-3"} h-5 w-5 transition-transform duration-200 group-hover:scale-110 ${
-                          active ? "text-white" : "text-slate-400 group-hover:text-blue-500"
+                          active ? "text-cyan-300" : "text-white/50 group-hover:text-cyan-300"
                         }`}
                       />
                       {!desktopCollapsed && <span className="whitespace-nowrap overflow-hidden transition-all duration-300">{route.name}</span>}
@@ -175,30 +215,36 @@ export default function DashboardLayout({
           </div>
         )}
       </div>
-      
-      <div className="p-3 z-10 border-t border-slate-100 dark:border-zinc-800">
-        <div className={`bg-slate-50 dark:bg-zinc-900 rounded-2xl ${desktopCollapsed ? "p-2" : "p-3"} border border-slate-100 dark:border-zinc-800 transition-all duration-300`}>
+
+      {/* User card */}
+      <div className="p-3 z-10">
+        <div className={`bg-white/10 backdrop-blur-sm rounded-2xl ${desktopCollapsed ? "p-2" : "p-3"} border border-white/15 transition-all duration-300`}>
           <div className={`flex items-center ${desktopCollapsed ? "justify-center" : "space-x-3"} mb-3`}>
             <div className="relative shrink-0">
-              <Avatar className="h-9 w-9 border-2 border-white dark:border-zinc-800 shadow-sm">
-                <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-700 text-white font-medium">
+              <Avatar className="h-9 w-9 border-2 border-white/30 shadow-sm">
+                <AvatarFallback className="bg-gradient-to-br from-cyan-400 to-blue-600 text-white font-medium text-sm">
                   {session?.user?.name?.charAt(0) || "U"}
                 </AvatarFallback>
               </Avatar>
-              <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white dark:border-zinc-900"></div>
+              <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-white/20"></div>
             </div>
             {!desktopCollapsed && (
               <div className="flex-1 min-w-0 animate-in fade-in zoom-in duration-300">
-                <p className="text-sm font-bold text-slate-900 dark:text-white truncate">
+                <p className="text-sm font-bold text-white truncate">
                   {session?.user?.name}
                 </p>
-                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 capitalize truncate">
+                <p className="text-[11px] font-medium text-white/50 capitalize truncate">
                   {session?.user?.role?.replace('_', ' ')}
                 </p>
               </div>
             )}
           </div>
-          <Button variant="outline" className={`w-full text-xs h-8 text-slate-600 ${desktopCollapsed ? "px-0" : ""}`} onClick={() => signOut({ callbackUrl: "/login" })} title="Keluar">
+          <Button
+            variant="ghost"
+            className={`w-full text-xs h-8 text-white/70 hover:text-white hover:bg-white/15 border border-white/15 ${desktopCollapsed ? "px-0" : ""}`}
+            onClick={() => signOut({ callbackUrl: "/login" })}
+            title="Keluar"
+          >
             <LogOut className={`w-3.5 h-3.5 ${desktopCollapsed ? "" : "mr-2"}`} />
             {!desktopCollapsed && "Keluar"}
           </Button>
@@ -208,7 +254,7 @@ export default function DashboardLayout({
   )
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-zinc-950/50">
+    <div className="flex h-screen overflow-hidden bg-[#F0F6FC] dark:bg-zinc-950">
       {/* Mobile sidebar */}
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
         <SheetContent side="left" className="p-0 w-[280px] border-r-0">
@@ -217,19 +263,20 @@ export default function DashboardLayout({
       </Sheet>
 
       {/* Desktop sidebar */}
-      <div className={`hidden lg:flex flex-col flex-shrink-0 transition-all duration-300 ease-in-out ${desktopCollapsed ? "w-[88px]" : "w-[280px]"} relative`}>
+      <div className={`hidden lg:flex flex-col flex-shrink-0 transition-all duration-300 ease-in-out ${desktopCollapsed ? "w-[88px]" : "w-[280px]"} relative overflow-visible`}>
         <SidebarContent />
         <button
           onClick={() => setDesktopCollapsed(!desktopCollapsed)}
-          className="absolute -right-3 top-24 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm hover:bg-slate-50 hover:text-slate-900 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-900 transition-colors"
+          className="absolute -right-3 top-24 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-white/30 text-white shadow-sm transition-colors"
+          style={{ background: 'linear-gradient(135deg, #1A56A0, #0E8A9E)' }}
         >
-          {desktopCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+          {desktopCollapsed ? <ChevronRight className="h-3.5 w-3.5" /> : <ChevronLeft className="h-3.5 w-3.5" />}
         </button>
       </div>
 
-      <div className="flex w-0 flex-1 flex-col overflow-hidden relative">
+      <div className="flex w-0 flex-1 flex-col overflow-hidden relative bg-[#F0F6FC] dark:bg-zinc-950">
         {/* Header */}
-        <header className={`flex h-20 flex-shrink-0 items-center justify-between px-4 sm:px-8 transition-all duration-200 z-20 ${scrolled ? 'bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b shadow-sm' : 'bg-transparent'}`}>
+        <header className={`flex h-16 flex-shrink-0 items-center justify-between px-4 sm:px-8 transition-all duration-200 z-20 ${scrolled ? 'bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-slate-200/60 shadow-sm' : 'bg-transparent'}`}>
           <div className="flex items-center">
             <Button
               variant="ghost"
