@@ -341,10 +341,10 @@ export default function DashboardLayout({
                 )}
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-80" align="end">
-                <DropdownMenuLabel className="flex items-center justify-between">
-                  <span>Notifikasi</span>
+                <div className="flex items-center justify-between px-3 py-2 text-xs font-medium text-muted-foreground">
+                  <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">Notifikasi</span>
                   {activeChatCount && <span className="text-xs font-normal px-2 py-0.5 rounded-full text-white" style={{background: 'linear-gradient(135deg,#2166B3,#1AA0AC)'}}>{activeChatCount} aktif</span>}
-                </DropdownMenuLabel>
+                </div>
                 <DropdownMenuSeparator />
                 {notifications.length === 0 ? (
                   <div className="py-6 text-center text-sm text-slate-400">
@@ -389,13 +389,10 @@ export default function DashboardLayout({
                 <ChevronDown className="w-4 h-4 text-slate-400 hidden sm:block" />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end">
-                <DropdownMenuLabel className="font-normal">
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">{session?.user?.name}</p>
-                    <p className="text-xs leading-none text-muted-foreground">{session?.user?.email}</p>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
+                <div className="px-3 py-2 border-b border-slate-100 dark:border-zinc-800 mb-1">
+                  <p className="text-sm font-semibold leading-none text-slate-800 dark:text-slate-100">{session?.user?.name}</p>
+                  <p className="text-xs leading-none text-muted-foreground mt-1">{session?.user?.email}</p>
+                </div>
                 <DropdownMenuItem className="cursor-pointer" onClick={() => router.push('/dashboard/settings')}>
                   <Settings className="mr-2 h-4 w-4 text-slate-500" />
                   <span>Pengaturan</span>
