@@ -1,0 +1,519 @@
+[debug] [2026-07-21T00:49:38.973Z] ----------------------------------------------------------------------
+[debug] [2026-07-21T00:49:38.975Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\fakhri sidqi\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting --project helpdeskmis-v1
+[debug] [2026-07-21T00:49:38.976Z] CLI Version:   15.4.0
+[debug] [2026-07-21T00:49:38.976Z] Platform:      win32
+[debug] [2026-07-21T00:49:38.976Z] Node Version:  v22.18.0
+[debug] [2026-07-21T00:49:38.976Z] Time:          Tue Jul 21 2026 07:49:38 GMT+0700 (Western Indonesia Time)
+[debug] [2026-07-21T00:49:38.976Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-07-21T00:49:40.431Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-07-21T00:49:40.431Z] > authorizing via signed-in user (fakhrisidqin@gmail.com)
+[debug] [2026-07-21T00:49:40.431Z] [iam] checking project helpdeskmis-v1 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-07-21T00:49:40.432Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:49:40.432Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:49:40.432Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdeskmis-v1:testIamPermissions [none]
+[debug] [2026-07-21T00:49:40.432Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdeskmis-v1:testIamPermissions x-goog-quota-user=projects/helpdeskmis-v1
+[debug] [2026-07-21T00:49:40.433Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdeskmis-v1:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-07-21T00:49:40.708Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdeskmis-v1:testIamPermissions 200
+[debug] [2026-07-21T00:49:40.708Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdeskmis-v1:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-07-21T00:49:40.708Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:49:40.708Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:49:40.709Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/helpdeskmis-v1 [none]
+[debug] [2026-07-21T00:49:41.285Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/helpdeskmis-v1 200
+[debug] [2026-07-21T00:49:41.285Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/helpdeskmis-v1 {"projectId":"helpdeskmis-v1","projectNumber":"353484988985","displayName":"HelpdeskMIS","name":"projects/helpdeskmis-v1","resources":{"hostingSite":"helpdeskmis-v1"},"state":"ACTIVE","labels":{"firebase":"enabled"},"etag":"1_0fafb4a5-fedb-4cd9-ad3d-b02e55d8a82d"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-07-21T00:49:50.275Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:49:50.275Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:49:50.276Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/helpdeskmis-v1/sites/helpdeskmis-v1 [none]
+[debug] [2026-07-21T00:49:51.171Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/helpdeskmis-v1/sites/helpdeskmis-v1 200
+[debug] [2026-07-21T00:49:51.171Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/helpdeskmis-v1/sites/helpdeskmis-v1 {"name":"projects/helpdeskmis-v1/sites/helpdeskmis-v1","defaultUrl":"https://helpdeskmis-v1.web.app","type":"DEFAULT_SITE"}
+[info] ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Helpdesk_IT\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Helpdesk_IT\HelpdeskMIS\package-lock.json
+
+
+[info] ▲ Next.js 16.2.6 (Turbopack)
+
+[info] - Environments: .env.production, .env
+
+
+[info] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+[info]   Creating an optimized production build ...
+
+[info] ✓ Compiled successfully in 6.4s
+
+[info]   Running TypeScript ...
+
+[info] Failed to type check.
+
+
+[info] ./app/dashboard/tickets/spi-smartaudit/Spi-SmartAudit/src/App.tsx:21:33
+Type error: Cannot find module '@/components/ui/tooltip' or its corresponding type declarations.
+
+  19 | import { RisikoList } from "./features/masterData/RisikoList";
+  20 | import { Pengaturan } from "./features/settings/Pengaturan";
+> 21 | import { TooltipProvider } from "@/components/ui/tooltip";
+     |                                 ^
+  22 | import { Toaster } from "@/components/ui/sonner";
+  23 |
+  24 | function App() {
+
+[info] Next.js build worker exited with code: 1 and signal: null
+
+[debug] [2026-07-21T00:50:13.873Z] Error: ENOENT: no such file or directory, open 'C:\Helpdesk_IT\HelpdeskMIS\.next\export-marker.json'
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2026-07-21T00:50:36.467Z] ----------------------------------------------------------------------
+[debug] [2026-07-21T00:50:36.469Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\fakhri sidqi\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting --project helpdeskmis-v1
+[debug] [2026-07-21T00:50:36.469Z] CLI Version:   15.4.0
+[debug] [2026-07-21T00:50:36.469Z] Platform:      win32
+[debug] [2026-07-21T00:50:36.469Z] Node Version:  v22.18.0
+[debug] [2026-07-21T00:50:36.469Z] Time:          Tue Jul 21 2026 07:50:36 GMT+0700 (Western Indonesia Time)
+[debug] [2026-07-21T00:50:36.469Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-07-21T00:50:37.988Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-07-21T00:50:37.988Z] > authorizing via signed-in user (fakhrisidqin@gmail.com)
+[debug] [2026-07-21T00:50:37.988Z] [iam] checking project helpdeskmis-v1 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-07-21T00:50:37.989Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:50:37.989Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:50:37.990Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdeskmis-v1:testIamPermissions [none]
+[debug] [2026-07-21T00:50:37.990Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdeskmis-v1:testIamPermissions x-goog-quota-user=projects/helpdeskmis-v1
+[debug] [2026-07-21T00:50:37.990Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdeskmis-v1:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-07-21T00:50:38.262Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdeskmis-v1:testIamPermissions 200
+[debug] [2026-07-21T00:50:38.262Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdeskmis-v1:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-07-21T00:50:38.263Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:50:38.263Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:50:38.263Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/helpdeskmis-v1 [none]
+[debug] [2026-07-21T00:50:38.828Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/helpdeskmis-v1 200
+[debug] [2026-07-21T00:50:38.828Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/helpdeskmis-v1 {"projectId":"helpdeskmis-v1","projectNumber":"353484988985","displayName":"HelpdeskMIS","name":"projects/helpdeskmis-v1","resources":{"hostingSite":"helpdeskmis-v1"},"state":"ACTIVE","labels":{"firebase":"enabled"},"etag":"1_0fafb4a5-fedb-4cd9-ad3d-b02e55d8a82d"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-07-21T00:50:46.378Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:50:46.378Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:50:46.378Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/helpdeskmis-v1/sites/helpdeskmis-v1 [none]
+[debug] [2026-07-21T00:50:47.239Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/helpdeskmis-v1/sites/helpdeskmis-v1 200
+[debug] [2026-07-21T00:50:47.239Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/helpdeskmis-v1/sites/helpdeskmis-v1 {"name":"projects/helpdeskmis-v1/sites/helpdeskmis-v1","defaultUrl":"https://helpdeskmis-v1.web.app","type":"DEFAULT_SITE"}
+[info] ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Helpdesk_IT\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Helpdesk_IT\HelpdeskMIS\package-lock.json
+
+
+[info] ▲ Next.js 16.2.6 (Turbopack)
+
+[info] - Environments: .env.production, .env
+
+
+[info] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+[info]   Creating an optimized production build ...
+
+[info] ✓ Compiled successfully in 4.4s
+
+[info]   Running TypeScript ...
+
+[info]   Finished TypeScript in 4.9s ...
+
+[info]   Collecting page data using 15 workers ...
+
+[info]   Generating static pages using 15 workers (0/35) ...
+
+[info]   Generating static pages using 15 workers (8/35) 
+
+[info]   Generating static pages using 15 workers (17/35) 
+
+[info]   Generating static pages using 15 workers (26/35) 
+
+[info] ✓ Generating static pages using 15 workers (35/35) in 523ms
+
+[info]   Finalizing page optimization ...
+
+[info] 
+
+[info] Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/auth/[...nextauth]
+├ ƒ /api/auth/forgot-password
+├ ƒ /api/auth/reset-password
+├ ƒ /api/chat
+├ ƒ /api/faq
+├ ƒ /api/faq/[id]
+├ ƒ /api/master/categories
+├ ƒ /api/master/categories/[id]
+├ ƒ /api/master/reference
+├ ƒ /api/master/roles
+├ ƒ /api/master/roles/[id]
+├ ƒ /api/master/sla
+├ ƒ /api/master/sla/[id]
+├ ƒ /api/master/sub-units
+├ ƒ /api/master/sub-units/[id]
+├ ƒ /api/master/units
+├ ƒ /api/master/units/[id]
+├ ƒ /api/master/users
+├ ƒ /api/master/users/[id]
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[id]
+├ ƒ /api/tickets/[id]/comments
+├ ƒ /api/tickets/active-count
+├ ƒ /api/user/profile
+├ ƒ /dashboard
+├ ○ /dashboard/chat
+├ ○ /dashboard/faq
+├ ○ /dashboard/master
+├ ○ /dashboard/master/categories
+├ ○ /dashboard/master/roles
+├ ○ /dashboard/master/sla
+├ ○ /dashboard/master/sub-units
+├ ○ /dashboard/master/units
+├ ○ /dashboard/master/users
+├ ○ /dashboard/settings
+├ ○ /dashboard/tickets
+├ ƒ /dashboard/tickets/[id]
+├ ○ /forgot-password
+├ ○ /icon.svg
+├ ○ /login
+├ ○ /reset-password
+└ ○ /user-portal
+
+
+ƒ Proxy (Middleware)
+
+[info] 
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+[info] Building a Cloud Function to run this application. This is needed due to:
+[info]  • middleware
+[info]  • non-static component /api/auth/[...nextauth]/route
+[info]  • non-static component /api/auth/forgot-password/route
+[info]  • non-static component /api/auth/reset-password/route
+[info]  • non-static component /api/chat/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/faq/[id]/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/faq/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/master/categories/[id]/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/master/categories/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/master/reference/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/master/roles/[id]/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/master/roles/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/master/sla/[id]/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/master/sla/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/master/sub-units/[id]/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/master/sub-units/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/master/units/[id]/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/master/units/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/master/users/[id]/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/master/users/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/tickets/[id]/comments/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/tickets/[id]/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/tickets/active-count/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/tickets/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /api/user/profile/route
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /dashboard/page
+[debug] [2026-07-21T00:51:00.945Z]  • non-static component /dashboard/tickets/[id]/page
+[info]  • and 22 other reasons, use --debug to see more
+[info] 
+[debug] [2026-07-21T00:51:01.020Z] skipping / due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.020Z] skipping /_global-error due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.020Z] skipping /_not-found due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.020Z] skipping /dashboard/chat due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.020Z] skipping /dashboard/faq due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.020Z] skipping /dashboard/master due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.020Z] skipping /dashboard/master/categories due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.020Z] skipping /dashboard/master/roles due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.021Z] skipping /dashboard/master/sla due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.021Z] skipping /dashboard/master/sub-units due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.021Z] skipping /dashboard/master/units due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.021Z] skipping /dashboard/master/users due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.021Z] skipping /dashboard/settings due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.021Z] skipping /dashboard/tickets due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.021Z] skipping /forgot-password due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.021Z] skipping /icon.svg due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.021Z] skipping /login due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.021Z] skipping /reset-password due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.021Z] skipping /user-portal due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.021Z] skipping /404 due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.021Z] skipping /500 due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:51:01.038Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:51:01.038Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:51:01.038Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/helpdeskmis-v1/sites/helpdeskmis-v1 [none]
+[debug] [2026-07-21T00:51:01.940Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/helpdeskmis-v1/sites/helpdeskmis-v1 200
+[debug] [2026-07-21T00:51:01.940Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/helpdeskmis-v1/sites/helpdeskmis-v1 {"name":"projects/helpdeskmis-v1/sites/helpdeskmis-v1","defaultUrl":"https://helpdeskmis-v1.web.app","type":"DEFAULT_SITE"}
+[debug] [2026-07-21T00:51:26.633Z] Error: EPERM: operation not permitted, symlink 'C:\Helpdesk_IT\HelpdeskMIS\node_modules\@prisma\client' -> 'C:\Helpdesk_IT\HelpdeskMIS\.firebase\helpdeskmis-v1\functions\.next\node_modules\@prisma\client-a6f741c197bef6c5'
+[debug] [2026-07-21T00:51:39.990Z] ----------------------------------------------------------------------
+[debug] [2026-07-21T00:51:39.992Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\fakhri sidqi\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting --debug
+[debug] [2026-07-21T00:51:39.992Z] CLI Version:   15.4.0
+[debug] [2026-07-21T00:51:39.992Z] Platform:      win32
+[debug] [2026-07-21T00:51:39.992Z] Node Version:  v22.18.0
+[debug] [2026-07-21T00:51:39.993Z] Time:          Tue Jul 21 2026 07:51:39 GMT+0700 (Western Indonesia Time)
+[debug] [2026-07-21T00:51:39.993Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-07-21T00:51:41.499Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-07-21T00:51:41.500Z] > authorizing via signed-in user (fakhrisidqin@gmail.com)
+[debug] [2026-07-21T00:51:41.500Z] [iam] checking project helpdesk-mis for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-07-21T00:51:41.501Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:51:41.501Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:51:41.502Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdesk-mis:testIamPermissions [none]
+[debug] [2026-07-21T00:51:41.502Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdesk-mis:testIamPermissions x-goog-quota-user=projects/helpdesk-mis
+[debug] [2026-07-21T00:51:41.502Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdesk-mis:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-07-21T00:51:42.491Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdesk-mis:testIamPermissions 200
+[debug] [2026-07-21T00:51:42.492Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdesk-mis:testIamPermissions {}
+[debug] [2026-07-21T00:51:42.492Z] [iam] error while checking permissions, command may fail: Authorization failed. This account is missing the following required permissions on project helpdesk-mis:
+
+  firebase.projects.get
+  firebasehosting.sites.update
+[debug] [2026-07-21T00:51:42.492Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:51:42.492Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:51:42.493Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/helpdesk-mis [none]
+[debug] [2026-07-21T00:51:42.885Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/helpdesk-mis 403
+[debug] [2026-07-21T00:51:42.885Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/helpdesk-mis {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2026-07-21T00:51:42.885Z] Request to https://firebase.googleapis.com/v1beta1/projects/helpdesk-mis had HTTP Error: 403, The caller does not have permission
+[debug] [2026-07-21T00:51:42.886Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/helpdesk-mis had HTTP Error: 403, The caller does not have permission
+    at responseToError (C:\Users\fakhri sidqi\AppData\Roaming\npm\node_modules\firebase-tools\lib\responseToError.js:53:12)
+    at RetryOperation._fn (C:\Users\fakhri sidqi\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:325:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[error] 
+[error] Error: Failed to get Firebase project helpdesk-mis. Please make sure the project exists and your account has permission to access it.
+[debug] [2026-07-21T00:51:54.011Z] ----------------------------------------------------------------------
+[debug] [2026-07-21T00:51:54.014Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\fakhri sidqi\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting --project helpdeskmis-v1 --debug
+[debug] [2026-07-21T00:51:54.014Z] CLI Version:   15.4.0
+[debug] [2026-07-21T00:51:54.014Z] Platform:      win32
+[debug] [2026-07-21T00:51:54.014Z] Node Version:  v22.18.0
+[debug] [2026-07-21T00:51:54.015Z] Time:          Tue Jul 21 2026 07:51:54 GMT+0700 (Western Indonesia Time)
+[debug] [2026-07-21T00:51:54.015Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-07-21T00:51:55.481Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-07-21T00:51:55.481Z] > authorizing via signed-in user (fakhrisidqin@gmail.com)
+[debug] [2026-07-21T00:51:55.482Z] [iam] checking project helpdeskmis-v1 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-07-21T00:51:55.482Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:51:55.482Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:51:55.483Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdeskmis-v1:testIamPermissions [none]
+[debug] [2026-07-21T00:51:55.483Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdeskmis-v1:testIamPermissions x-goog-quota-user=projects/helpdeskmis-v1
+[debug] [2026-07-21T00:51:55.483Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdeskmis-v1:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-07-21T00:51:55.765Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdeskmis-v1:testIamPermissions 200
+[debug] [2026-07-21T00:51:55.765Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/helpdeskmis-v1:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-07-21T00:51:55.765Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:51:55.765Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:51:55.765Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/helpdeskmis-v1 [none]
+[debug] [2026-07-21T00:51:56.110Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/helpdeskmis-v1 200
+[debug] [2026-07-21T00:51:56.110Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/helpdeskmis-v1 {"projectId":"helpdeskmis-v1","projectNumber":"353484988985","displayName":"HelpdeskMIS","name":"projects/helpdeskmis-v1","resources":{"hostingSite":"helpdeskmis-v1"},"state":"ACTIVE","labels":{"firebase":"enabled"},"etag":"1_0fafb4a5-fedb-4cd9-ad3d-b02e55d8a82d"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-07-21T00:52:03.911Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:52:03.911Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:52:03.913Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/helpdeskmis-v1/sites/helpdeskmis-v1 [none]
+[debug] [2026-07-21T00:52:04.763Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/helpdeskmis-v1/sites/helpdeskmis-v1 200
+[debug] [2026-07-21T00:52:04.763Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/helpdeskmis-v1/sites/helpdeskmis-v1 {"name":"projects/helpdeskmis-v1/sites/helpdeskmis-v1","defaultUrl":"https://helpdeskmis-v1.web.app","type":"DEFAULT_SITE"}
+[info] ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Helpdesk_IT\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Helpdesk_IT\HelpdeskMIS\package-lock.json
+
+
+[info] ▲ Next.js 16.2.6 (Turbopack)
+
+[info] - Environments: .env.production, .env
+
+
+[info] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+[info]   Creating an optimized production build ...
+
+[info] 
+[0.24ms] [@tailwindcss/postcss] app\hand-loader.css
+
+[info] [0.23ms]   ↳ Quick bail check
+
+
+[info] 
+
+[info] [202.19ms] [@tailwindcss/postcss] app\globals.css
+[  0.00ms]   ↳ Quick bail check
+[ 34.97ms]   ↳ Setup compiler
+[  0.31ms]     ↳ PostCSS AST -> Tailwind CSS AST
+[ 34.64ms]     ↳ Create compiler
+[  0.42ms]   ↳ Register full rebuild paths
+[  1.35ms]   ↳ Setup scanner
+
+[info] [ 49.97ms]   ↳ Scan for candidates
+[ 19.94ms]   ↳ Register dependency messages
+
+[info] [ 51.38ms]   ↳ Build utilities
+[ 36.93ms]   ↳ Optimization
+
+[info] [  1.16ms]     ↳ AST -> CSS
+[ 21.63ms]     ↳ Lightning CSS
+[ 14.11ms]     ↳ CSS -> PostCSS AST
+
+[info] [  6.84ms]   ↳ Update PostCSS AST
+
+
+[info] ✓ Compiled successfully in 4.9s
+
+[info]   Running TypeScript ...
+
+[info]   Finished TypeScript in 4.9s ...
+
+[info]   Collecting page data using 15 workers ...
+
+[info]   Generating static pages using 15 workers (0/35) ...
+
+[info]   Generating static pages using 15 workers (8/35) 
+
+[info]   Generating static pages using 15 workers (17/35) 
+
+[info]   Generating static pages using 15 workers (26/35) 
+
+[info] ✓ Generating static pages using 15 workers (35/35) in 555ms
+
+[info]   Finalizing page optimization ...
+
+[info] 
+
+[info] Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/auth/[...nextauth]
+├ ƒ /api/auth/forgot-password
+├ ƒ /api/auth/reset-password
+├ ƒ /api/chat
+├ ƒ /api/faq
+├ ƒ /api/faq/[id]
+├ ƒ /api/master/categories
+├ ƒ /api/master/categories/[id]
+├ ƒ /api/master/reference
+├ ƒ /api/master/roles
+├ ƒ /api/master/roles/[id]
+├ ƒ /api/master/sla
+├ ƒ /api/master/sla/[id]
+├ ƒ /api/master/sub-units
+├ ƒ /api/master/sub-units/[id]
+├ ƒ /api/master/units
+├ ƒ /api/master/units/[id]
+├ ƒ /api/master/users
+├ ƒ /api/master/users/[id]
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[id]
+├ ƒ /api/tickets/[id]/comments
+├ ƒ /api/tickets/active-count
+├ ƒ /api/user/profile
+├ ƒ /dashboard
+├ ○ /dashboard/chat
+├ ○ /dashboard/faq
+├ ○ /dashboard/master
+├ ○ /dashboard/master/categories
+├ ○ /dashboard/master/roles
+├ ○ /dashboard/master/sla
+├ ○ /dashboard/master/sub-units
+├ ○ /dashboard/master/units
+├ ○ /dashboard/master/users
+├ ○ /dashboard/settings
+├ ○ /dashboard/tickets
+├ ƒ /dashboard/tickets/[id]
+├ ○ /forgot-password
+├ ○ /icon.svg
+├ ○ /login
+├ ○ /reset-password
+└ ○ /user-portal
+
+
+ƒ Proxy (Middleware)
+
+
+[info] ○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+[info] Building a Cloud Function to run this application. This is needed due to:
+[info]  • middleware
+[info]  • non-static component /api/auth/[...nextauth]/route
+[info]  • non-static component /api/auth/forgot-password/route
+[info]  • non-static component /api/auth/reset-password/route
+[info]  • non-static component /api/chat/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/faq/[id]/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/faq/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/master/categories/[id]/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/master/categories/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/master/reference/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/master/roles/[id]/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/master/roles/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/master/sla/[id]/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/master/sla/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/master/sub-units/[id]/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/master/sub-units/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/master/units/[id]/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/master/units/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/master/users/[id]/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/master/users/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/tickets/[id]/comments/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/tickets/[id]/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/tickets/active-count/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/tickets/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /api/user/profile/route
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /dashboard/page
+[debug] [2026-07-21T00:52:19.203Z]  • non-static component /dashboard/tickets/[id]/page
+[info] 
+[debug] [2026-07-21T00:52:19.286Z] skipping / due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.286Z] skipping /_global-error due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.286Z] skipping /_not-found due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.286Z] skipping /dashboard/chat due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.286Z] skipping /dashboard/faq due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.286Z] skipping /dashboard/master due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.286Z] skipping /dashboard/master/categories due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.286Z] skipping /dashboard/master/roles due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.286Z] skipping /dashboard/master/sla due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.286Z] skipping /dashboard/master/sub-units due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.286Z] skipping /dashboard/master/units due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.286Z] skipping /dashboard/master/users due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.286Z] skipping /dashboard/settings due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.286Z] skipping /dashboard/tickets due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.287Z] skipping /forgot-password due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.287Z] skipping /icon.svg due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.287Z] skipping /login due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.287Z] skipping /reset-password due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.287Z] skipping /user-portal due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.287Z] skipping /404 due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.287Z] skipping /500 due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-07-21T00:52:19.615Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:52:19.616Z] Checked if tokens are valid: true, expires at: 1784598390725
+[debug] [2026-07-21T00:52:19.616Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/helpdeskmis-v1/sites/helpdeskmis-v1 [none]
+[debug] [2026-07-21T00:52:20.549Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/helpdeskmis-v1/sites/helpdeskmis-v1 200
+[debug] [2026-07-21T00:52:20.549Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/helpdeskmis-v1/sites/helpdeskmis-v1 {"name":"projects/helpdeskmis-v1/sites/helpdeskmis-v1","defaultUrl":"https://helpdeskmis-v1.web.app","type":"DEFAULT_SITE"}
+[debug] [2026-07-21T00:52:21.952Z] Error: EPERM: operation not permitted, symlink 'C:\Helpdesk_IT\HelpdeskMIS\node_modules\@prisma\client' -> 'C:\Helpdesk_IT\HelpdeskMIS\.firebase\helpdeskmis-v1\functions\.next\node_modules\@prisma\client-a6f741c197bef6c5'
