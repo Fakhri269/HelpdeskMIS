@@ -12,35 +12,7 @@ export default function LandingPage() {
         }}
       />
 
-      {/* ── WAVE SVG TOP-RIGHT ── */}
-      <svg
-        className="absolute top-0 right-0 z-0 opacity-30"
-        viewBox="0 0 600 800"
-        width="600"
-        height="800"
-        preserveAspectRatio="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M600,0 C500,120 380,80 420,280 C460,480 560,460 540,640 C520,780 460,800 600,800 Z"
-          fill="white"
-        />
-      </svg>
 
-      {/* ── WAVE SVG BOTTOM-LEFT ── */}
-      <svg
-        className="absolute bottom-0 left-0 z-0 opacity-20"
-        viewBox="0 0 500 400"
-        width="500"
-        height="400"
-        preserveAspectRatio="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M0,400 C80,300 60,200 180,180 C300,160 340,260 420,220 C500,180 500,400 500,400 Z"
-          fill="white"
-        />
-      </svg>
 
 
 
