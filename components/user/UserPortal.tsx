@@ -458,7 +458,7 @@ function ChatRoom({ session, ticket, onBack }: { session: any, ticket: any, onBa
   )
 }
 
-function ChatTab({ session, tickets }: { session: any, tickets: any[] }) {
+function ChatTab({ session, tickets, readCounts, markAsRead }: { session: any, tickets: any[], readCounts: Record<string, number>, markAsRead: (id: string, count: number) => void }) {
   const [activeTicket, setActiveTicket] = useState<any>(null)
   
   if (activeTicket) {
@@ -472,11 +472,16 @@ function ChatTab({ session, tickets }: { session: any, tickets: any[] }) {
       ) : (
         <div className="flex flex-col divide-y divide-white/15">
           {tickets.map(t => {
-            const unreadCount = t._count?.comments || 0
+            const totalOthers = t._count?.comments || 0
+            const read = readCounts[t.id] || 0
+            const unreadCount = Math.max(0, totalOthers - read)
             return (
               <button 
                 key={t.id} 
-                onClick={() => setActiveTicket(t)}
+                onClick={() => {
+                  markAsRead(t.id, totalOthers)
+                  setActiveTicket(t)
+                }}
                 className="flex flex-col px-5 py-4 text-left hover:bg-black/5 transition-colors relative"
               >
                 <div className="flex items-center justify-between w-full mb-1">
@@ -506,6 +511,22 @@ export default function UserPortal() {
   const [createOpen, setCreateOpen]         = useState(false)
   const [selectedTicket, setSelectedTicket] = useState<any>(null)
   const [loadingDetail, setLoadingDetail]   = useState(false)
+  const [readCounts, setReadCounts]         = useState<Record<string, number>>({})
+
+  useEffect(() => {
+    const saved = localStorage.getItem("helpdesk_chat_read")
+    if (saved) {
+      try { setReadCounts(JSON.parse(saved)) } catch {}
+    }
+  }, [])
+
+  const markAsRead = (ticketId: string, count: number) => {
+    setReadCounts(prev => {
+      const next = { ...prev, [ticketId]: count }
+      localStorage.setItem("helpdesk_chat_read", JSON.stringify(next))
+      return next
+    })
+  }
 
   const fetchTickets = useCallback(async () => {
     setLoading(true)
@@ -596,7 +617,11 @@ export default function UserPortal() {
         <div className="flex items-stretch justify-around">
           {TABS.map(tab => {
             const isChat = tab.id === "Chat"
-            const unreadChatsCount = isChat ? tickets.reduce((sum, t) => sum + (t._count?.comments || 0), 0) : 0
+            const unreadChatsCount = isChat ? tickets.reduce((sum, t) => {
+              const totalOthers = t._count?.comments || 0
+              const read = readCounts[t.id] || 0
+              return sum + Math.max(0, totalOthers - read)
+            }, 0) : 0
             
             return (
               <button key={tab.id} onClick={() => setActiveTab(tab.id)}
@@ -633,14 +658,14 @@ export default function UserPortal() {
             {!loading && tickets.length > 0 && (
               <div className="grid grid-cols-4 gap-2">
                 {[
-                  { label:"Open",      count:openCount,     cls:"from-cyan-500 to-cyan-600"     },
-                  { label:"Diproses",  count:inprogCount + pendingCount, cls:"from-amber-500 to-orange-500"  },
-                  { label:"Selesai",   count:resolvedCount, cls:"from-green-500 to-emerald-600" },
-                  { label:"Total",     count:tickets.length,cls:"from-[#2496bb] to-[#1e7fa8]"  },
+                  { label:"Open",      count:openCount,                   color:"text-[#16cedc]" },
+                  { label:"Diproses",  count:inprogCount + pendingCount,  color:"text-[#f59e0b]" },
+                  { label:"Selesai",   count:resolvedCount,               color:"text-[#22c55e]" },
+                  { label:"Total",     count:tickets.length,              color:"text-[#1e7fa8]" },
                 ].map(s => (
-                  <div key={s.label} className={`flex flex-col items-center py-3 rounded-2xl bg-gradient-to-br ${s.cls} shadow-md text-white`}>
-                    <span className="text-xl font-black">{s.count}</span>
-                    <span className="text-[10px] font-semibold opacity-90 text-center leading-tight">{s.label}</span>
+                  <div key={s.label} className="flex flex-col items-center py-3 rounded-2xl bg-white border border-slate-100 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
+                    <span className={`text-[22px] font-black ${s.color} leading-none mb-1`}>{s.count}</span>
+                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider text-center">{s.label}</span>
                   </div>
                 ))}
               </div>
@@ -743,7 +768,7 @@ export default function UserPortal() {
 
         {/* ── CHAT ── */}
         {activeTab === "Chat" && (
-          <ChatTab session={session} tickets={tickets} />
+          <ChatTab session={session} tickets={tickets} readCounts={readCounts} markAsRead={markAsRead} />
         )}
 
         {/* ── AKUN ── */}
@@ -764,13 +789,13 @@ export default function UserPortal() {
             {!loading && (
               <div className="grid grid-cols-3 gap-3">
                 {[
-                  { label:"Total Tiket", count:tickets.length,              cls:"from-[#2496bb] to-[#1e7fa8]"   },
-                  { label:"Aktif",       count:openCount+inprogCount+pendingCount, cls:"from-amber-500 to-orange-500"  },
-                  { label:"Selesai",     count:resolvedCount,               cls:"from-green-500 to-emerald-600" },
+                  { label:"Total Tiket", count:tickets.length,                     color:"text-[#1e7fa8]" },
+                  { label:"Aktif",       count:openCount+inprogCount+pendingCount, color:"text-[#f59e0b]" },
+                  { label:"Selesai",     count:resolvedCount,                      color:"text-[#22c55e]" },
                 ].map(s => (
-                  <div key={s.label} className={`flex flex-col items-center py-4 rounded-2xl bg-gradient-to-br ${s.cls} shadow-md text-white`}>
-                    <span className="text-3xl font-black">{s.count}</span>
-                    <span className="text-[10px] font-semibold opacity-80 text-center leading-tight">{s.label}</span>
+                  <div key={s.label} className="flex flex-col items-center py-4 rounded-2xl bg-white border border-slate-100 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
+                    <span className={`text-2xl font-black ${s.color} leading-none mb-1`}>{s.count}</span>
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider text-center">{s.label}</span>
                   </div>
                 ))}
               </div>
