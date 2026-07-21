@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function LandingPage() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-white font-sans">
+    <main className="relative min-h-screen bg-white font-sans">
 
       {/* ── BACKGROUND GRADIENT ── */}
       <div
@@ -87,12 +87,6 @@ export default function LandingPage() {
 
         {/* HERO */}
         <section className="flex-1 flex flex-col items-center justify-center text-center px-6 py-16">
-
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm border border-white/30 text-white text-xs font-medium px-4 py-1.5 rounded-full mb-8">
-            <span className="w-2 h-2 rounded-full bg-green-300 animate-pulse" />
-            Sistem Aktif &amp; Beroperasi
-          </div>
 
           {/* Heading */}
           <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-6 drop-shadow-md">
