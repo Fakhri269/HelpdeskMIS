@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   // Ganti URL ini dengan domain utama Anda nantinya
-  const baseUrl = 'https://helpdesk-pdam.vercel.app' 
+  const baseUrl = 'https://helpdesk-mis.vercel.app' 
   
   return [
     {
