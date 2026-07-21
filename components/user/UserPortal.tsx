@@ -466,22 +466,44 @@ function ChatTab({ session, tickets }: { session: any, tickets: any[] }) {
   }
 
   return (
-    <div className="flex flex-col w-full bg-[#2496bb] rounded-2xl shadow-xl overflow-hidden border border-white/10">
+    <div className="flex flex-col w-full gap-3.5 mt-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
       {tickets.length === 0 ? (
-        <div className="p-8 text-center text-white/70 text-sm">Belum ada tiket untuk di-chat.</div>
-      ) : (
-        <div className="flex flex-col divide-y divide-white/15">
-          {tickets.map(t => (
-            <button 
-              key={t.id} 
-              onClick={() => setActiveTicket(t)}
-              className="flex flex-col px-5 py-4 text-left hover:bg-black/5 transition-colors"
-            >
-              <span className="text-white/70 text-[10px] font-bold tracking-wider mb-1 uppercase">Judul</span>
-              <span className="text-white text-[14px] font-bold truncate w-full">{t.title}</span>
-            </button>
-          ))}
+        <div className="flex flex-col items-center justify-center p-10 bg-slate-50 border border-slate-100 rounded-3xl shadow-sm">
+          <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-3">
+            <MessageSquare className="w-7 h-7 text-slate-300" />
+          </div>
+          <p className="text-slate-500 text-sm font-medium">Belum ada tiket untuk di-chat.</p>
         </div>
+      ) : (
+        tickets.map(t => (
+          <button 
+            key={t.id} 
+            onClick={() => setActiveTicket(t)}
+            className="group relative flex items-center w-full p-4 bg-gradient-to-br from-[#2ba8d4] to-[#155f7a] shadow-[0_4px_15px_rgba(21,95,122,0.15)] rounded-2xl text-left overflow-hidden hover:shadow-[0_8px_25px_rgba(21,95,122,0.3)] hover:-translate-y-0.5 transition-all duration-300 border border-white/10"
+          >
+            {/* Glass reflection hover effect */}
+            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+            <div className="flex-1 min-w-0 relative z-10">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-white/70 text-[10px] font-extrabold tracking-wider uppercase flex items-center gap-1.5">
+                  <MessageSquare className="w-3.5 h-3.5" />
+                  Ruang Obrolan
+                </span>
+                <div className="flex items-center gap-1.5 bg-black/10 px-2 py-0.5 rounded-full">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse shadow-[0_0_4px_#4ade80]" />
+                  <span className="text-white/90 text-[9px] uppercase font-bold tracking-widest">Aktif</span>
+                </div>
+              </div>
+              <h3 className="text-white text-[15px] font-bold truncate w-full leading-tight">{t.title}</h3>
+              <p className="text-white/60 text-[11px] font-mono mt-1 opacity-80">{t.ticketNumber}</p>
+            </div>
+            
+            <div className="ml-4 w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center shrink-0 group-hover:bg-white transition-colors duration-300 relative z-10 shadow-inner">
+              <ChevronRight className="w-5 h-5 text-white group-hover:text-[#155f7a] transition-colors duration-300" />
+            </div>
+          </button>
+        ))
       )}
     </div>
   )
