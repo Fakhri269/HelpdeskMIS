@@ -539,6 +539,15 @@ export default function LoginPage() {
                       <br />
                       All rights reserved.
                     </p>
+                    <Link
+                      href="/"
+                      className="inline-flex items-center gap-1 mt-2 text-[9px] sm:text-xs text-[#0E8A9E] hover:text-[#0a6b7a] transition-colors font-medium"
+                    >
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                      </svg>
+                      Kembali ke Beranda
+                    </Link>
                   </div>
                 </div>
               </div>
