@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
-import { UserPortal } from "@/components/user/UserPortal"
+import UserPortal from "@/components/user/UserPortal"
 
 export default function UserPage() {
   const { data: session, status } = useSession()
@@ -25,5 +25,5 @@ export default function UserPage() {
 
   if (!session?.user) return null
 
-  return <UserPortal session={session} />
+  return <UserPortal />
 }
