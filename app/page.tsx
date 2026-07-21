@@ -119,13 +119,6 @@ export default function LandingPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
               </svg>
             </Link>
-            <Link
-              href="/user-portal"
-              id="cta-portal-user"
-              className="flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/30 text-white font-semibold px-8 py-3.5 rounded-full hover:bg-white/25 transition-all duration-300 text-sm"
-            >
-              Portal Pengguna
-            </Link>
           </div>
         </section>
 
