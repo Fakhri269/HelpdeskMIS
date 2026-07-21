@@ -7,6 +7,7 @@ export function middleware(req: NextRequest) {
   const isAuthRoute = pathname.startsWith("/login")
   const isDashboard = pathname.startsWith("/dashboard")
   const isUserPortal = pathname.startsWith("/user-portal")
+  const isHome = pathname === "/"
 
   // Get the NextAuth JWT session token from cookies
   const sessionToken =
@@ -32,6 +33,13 @@ export function middleware(req: NextRequest) {
   }
 
   const isUserRole = role === "user"
+
+  // Redirect logged-in users from landing page to their portal
+  if (isHome && isLoggedIn) {
+    return NextResponse.redirect(
+      new URL(isUserRole ? "/user-portal" : "/dashboard", req.nextUrl)
+    )
+  }
 
   // Redirect logged-in users away from login page
   if (isAuthRoute) {
