@@ -449,19 +449,19 @@ function ChatTab({ session, tickets }: { session: any, tickets: any[] }) {
   }
 
   return (
-    <div className="flex flex-col w-full bg-[#2496bb] rounded-t-2xl shadow-xl mt-2 overflow-hidden border border-white/10">
+    <div className="flex flex-col w-full bg-[#2496bb] rounded-2xl shadow-xl overflow-hidden border border-white/10">
       {tickets.length === 0 ? (
         <div className="p-8 text-center text-white/70 text-sm">Belum ada tiket untuk di-chat.</div>
       ) : (
-        <div className="flex flex-col divide-y divide-white/10">
+        <div className="flex flex-col divide-y divide-white/15">
           {tickets.map(t => (
             <button 
               key={t.id} 
               onClick={() => setActiveTicket(t)}
-              className="flex flex-col p-4 text-left hover:bg-black/10 transition-colors"
+              className="flex flex-col px-5 py-4 text-left hover:bg-black/5 transition-colors"
             >
-              <span className="text-white/60 text-[10px] font-bold tracking-wider mb-1 uppercase">Judul</span>
-              <span className="text-white text-sm font-bold truncate w-full">{t.title}</span>
+              <span className="text-white/70 text-[10px] font-bold tracking-wider mb-1 uppercase">Judul</span>
+              <span className="text-white text-[14px] font-bold truncate w-full">{t.title}</span>
             </button>
           ))}
         </div>
