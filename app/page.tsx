@@ -154,6 +154,63 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* ── ABOUT & INFO SECTION ── */}
+        <section className="relative z-10 px-6 pb-20">
+          <div className="max-w-5xl mx-auto bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl overflow-hidden shadow-xl">
+            <div className="grid grid-cols-1 md:grid-cols-2">
+              {/* Image side */}
+              <div className="relative h-56 md:h-auto">
+                <Image 
+                  src="/gedung-pdam.jpg" 
+                  alt="Gedung PDAM Tirta Kahuripan" 
+                  fill 
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0e7fb0]/90 via-[#0e7fb0]/40 to-transparent md:bg-gradient-to-r md:from-transparent md:to-[#0e7fb0]" />
+              </div>
+              
+              {/* Content side */}
+              <div className="p-8 md:p-10 text-white bg-[#0e7fb0]/60 md:bg-transparent">
+                <h2 className="text-2xl font-bold mb-4 drop-shadow-sm">Tentang MIS</h2>
+                <p className="text-blue-50 text-sm leading-relaxed mb-6">
+                  Management Information System (MIS) Perumda Air Minum Tirta Kahuripan adalah divisi yang bertanggung jawab atas pengelolaan, pengembangan, dan pemeliharaan infrastruktur teknologi informasi. Portal Helpdesk ini dirancang untuk mempermudah pegawai dalam melaporkan kendala IT dan mempercepat proses penanganan oleh tim support.
+                </p>
+                
+                <div className="space-y-4">
+                  <details className="group border border-white/20 rounded-xl bg-white/5 p-4 cursor-pointer transition-all hover:bg-white/10">
+                    <summary className="font-semibold text-sm flex items-center justify-between outline-none select-none">
+                      Syarat dan Ketentuan
+                      <svg className="w-5 h-5 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                    </summary>
+                    <div className="mt-3 text-xs text-blue-100 leading-relaxed cursor-text">
+                      <ol className="list-decimal pl-4 space-y-1">
+                        <li>Portal ini hanya diperuntukkan bagi pegawai internal Perumda Air Minum Tirta Kahuripan.</li>
+                        <li>Setiap pengguna wajib menjaga kerahasiaan akun (username & password).</li>
+                        <li>Tiket yang dibuat harus memuat informasi kendala yang jelas dan akurat.</li>
+                        <li>Tim IT Support akan menangani tiket berdasarkan tingkat prioritas dan waktu pelaporan.</li>
+                      </ol>
+                    </div>
+                  </details>
+
+                  <details className="group border border-white/20 rounded-xl bg-white/5 p-4 cursor-pointer transition-all hover:bg-white/10">
+                    <summary className="font-semibold text-sm flex items-center justify-between outline-none select-none">
+                      Kebijakan Privasi
+                      <svg className="w-5 h-5 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                    </summary>
+                    <div className="mt-3 text-xs text-blue-100 leading-relaxed cursor-text">
+                      <ol className="list-decimal pl-4 space-y-1">
+                        <li>Data pribadi dan kredensial pegawai disimpan dalam server yang aman dan terenkripsi.</li>
+                        <li>Informasi yang dilaporkan pada tiket hanya digunakan untuk keperluan perbaikan dan analisis layanan IT.</li>
+                        <li>Divisi MIS tidak akan membagikan data log pelaporan kepada pihak luar tanpa persetujuan tertulis dari manajemen.</li>
+                      </ol>
+                    </div>
+                  </details>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* FOOTER WAVE */}
         <footer className="relative z-10 mt-auto">
           {/* Wave SVG top of footer */}
