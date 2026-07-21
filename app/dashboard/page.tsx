@@ -29,6 +29,11 @@ export default async function DashboardPage() {
     return <StaffDashboard />
   }
 
+  // User biasa → arahkan ke User Portal
+  if (role === "user" || role === "") {
+    redirect("/user")
+  }
+
   // Fallback if role is not recognized or trying to access wrong dashboard
   return (
     <div className="flex flex-col items-center justify-center py-20 text-center">
