@@ -18,6 +18,9 @@ export const metadata: Metadata = {
     shortcut: "/PdamLogo.svg",
     apple: "/PdamLogo.svg",
   },
+  verification: {
+    google: "IkQGuo0FTJ0Y2Kqm9lN5XK6vJydSEOKHA_5FNeYWHHY",
+  },
 };
 
 export default function RootLayout({
