@@ -373,45 +373,61 @@ function ChatRoom({ session, ticket, onBack }: { session: any, ticket: any, onBa
   }
 
   // Negative margins to break out of the main container's padding and fill the white area completely.
-  // Using 100dvh - top nav heights to ensure it fits perfectly.
   return (
-    <div className="-mx-4 -mt-5 -mb-24 flex flex-col h-[calc(100dvh-115px)] bg-white relative z-50 animate-in slide-in-from-right-8 duration-300">
-      {/* Header */}
-      <div className="flex items-center px-4 py-3 bg-white border-b border-slate-200 shadow-sm shrink-0 gap-3">
-        <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-slate-100 text-slate-600 transition-colors">
-          <ChevronLeft className="w-5 h-5" />
+    <div className="-mx-4 -mt-5 -mb-24 flex flex-col h-[calc(100dvh-115px)] bg-[#f4f9fb] relative z-50 animate-in slide-in-from-right-4 duration-300 overflow-hidden">
+      
+      {/* Background Decor */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <Image src="/PdamBG.jpg" alt="Background" fill className="object-cover opacity-[0.03]" />
+      </div>
+
+      {/* Header - Glassmorphism */}
+      <div className="relative z-10 flex items-center px-4 py-3.5 bg-white/90 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.04)] shrink-0 gap-3 border-b border-white/50">
+        <button onClick={onBack} className="w-9 h-9 flex items-center justify-center -ml-2 rounded-full hover:bg-[#16cedc]/10 text-[#155f7a] transition-all">
+          <ChevronLeft className="w-6 h-6" />
         </button>
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1e92bf] to-[#155f7a] flex items-center justify-center shrink-0 shadow-md">
+           <Image src="/PdamLogo.svg" alt="Logo" width={22} height={22} className="brightness-0 invert" />
+        </div>
         <div className="flex-1 min-w-0">
-          <h2 className="font-bold text-slate-800 text-sm truncate">{ticket.title}</h2>
-          <p className="text-xs text-slate-500 font-mono">{ticket.ticketNumber}</p>
+          <h2 className="font-extrabold text-[#155f7a] text-[13px] truncate">{ticket.title}</h2>
+          <div className="flex items-center gap-1.5 mt-0.5">
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_5px_#22c55e]" />
+            <span className="text-[#155f7a]/70 text-[10px] font-semibold uppercase tracking-wider">{ticket.ticketNumber}</span>
+          </div>
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/80">
+      <div className="relative z-10 flex-1 overflow-y-auto p-4 space-y-4">
         {loading && messages.length === 0 ? (
-           <div className="flex justify-center py-10"><Loader2 className="w-6 h-6 text-slate-400 animate-spin" /></div>
+           <div className="flex justify-center py-10"><Loader2 className="w-7 h-7 text-[#16cedc] animate-spin" /></div>
         ) : messages.length === 0 ? (
-           <div className="flex flex-col items-center justify-center h-full gap-2 text-slate-400">
-             <MessageSquare className="w-8 h-8 opacity-50" />
-             <p className="text-xs">Belum ada pesan di tiket ini.</p>
+           <div className="flex flex-col items-center justify-center h-full gap-3 text-[#155f7a]/40">
+             <div className="w-16 h-16 rounded-full bg-[#155f7a]/5 flex items-center justify-center">
+               <MessageSquare className="w-7 h-7" />
+             </div>
+             <p className="text-[11px] font-bold tracking-wide">Mulai percakapan dengan Tim IT</p>
            </div>
         ) : (
            messages.map((msg: any) => {
              const isMe = msg.user?.id === session?.user?.id
              return (
-               <div key={msg.id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
-                 <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 shadow-sm ${
-                   isMe ? 'bg-[#16cedc] text-white rounded-br-sm' : 
-                   msg.isSystem ? 'bg-slate-200 text-slate-700 rounded-bl-sm border border-slate-300' :
-                   'bg-white text-slate-800 rounded-bl-sm border border-slate-200'
-                 }`}>
-                   {!isMe && !msg.isSystem && <p className="text-[10px] font-bold text-[#2496bb] mb-1">{msg.user?.name ?? "Tim IT"}</p>}
-                   {msg.isSystem && <div className="flex items-center gap-1 text-[10px] uppercase font-bold text-slate-500 mb-1"><AlertCircle className="w-3 h-3"/> System</div>}
-                   <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
-                   <div className={`flex items-center gap-1 mt-1.5 text-[9px] ${isMe ? 'text-white/80 justify-end' : 'text-slate-400'}`}>
-                     {new Date(msg.createdAt).toLocaleTimeString("id-ID", { hour:"2-digit", minute:"2-digit" })}
-                     {isMe && <CheckCheck className="w-3 h-3" />}
+               <div key={msg.id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}>
+                 <div className={`max-w-[82%] relative ${isMe ? 'pl-8' : 'pr-8'}`}>
+                   <div className={`rounded-2xl px-4 py-3 shadow-[0_4px_15px_rgba(0,0,0,0.05)] ${
+                     isMe ? 'bg-gradient-to-br from-[#2ba8d4] to-[#1e7fa8] text-white rounded-br-sm' : 
+                     msg.isSystem ? 'bg-amber-50 text-amber-900 rounded-bl-sm border border-amber-200/50' :
+                     'bg-white text-slate-700 rounded-bl-sm border border-white'
+                   }`}>
+                     {!isMe && !msg.isSystem && <p className="text-[10px] font-bold text-[#1e92bf] mb-1">{msg.user?.name ?? "Tim IT"}</p>}
+                     {msg.isSystem && <div className="flex items-center gap-1.5 text-[9px] uppercase font-bold text-amber-600 mb-1"><AlertCircle className="w-3.5 h-3.5"/> System Note</div>}
+                     <p className={`text-[13px] leading-relaxed ${isMe ? 'text-white' : 'text-slate-600'}`}>{msg.content}</p>
+                     
+                     <div className={`flex items-center gap-1 mt-1.5 text-[9px] font-semibold ${isMe ? 'text-white/70 justify-end' : 'text-slate-400'}`}>
+                       {new Date(msg.createdAt).toLocaleTimeString("id-ID", { hour:"2-digit", minute:"2-digit" })}
+                       {isMe && <CheckCheck className="w-3.5 h-3.5" />}
+                     </div>
                    </div>
                  </div>
                </div>
@@ -422,18 +438,19 @@ function ChatRoom({ session, ticket, onBack }: { session: any, ticket: any, onBa
       </div>
 
       {/* Input */}
-      <form onSubmit={handleSend} className="shrink-0 p-3 bg-white border-t border-slate-200 flex items-end gap-2 pb-6 sm:pb-3">
+      <form onSubmit={handleSend} className="relative z-10 shrink-0 p-4 bg-white/90 backdrop-blur-md border-t border-[#155f7a]/10 flex items-end gap-2 pb-6 sm:pb-4">
         <textarea
           value={input}
           onChange={e => setInput(e.target.value)}
-          placeholder="Ketik balasan..."
-          className="flex-1 max-h-24 min-h-[44px] bg-slate-100 border-none rounded-2xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#16cedc]/50 resize-none"
+          placeholder="Ketik pesan Anda..."
+          className="flex-1 max-h-28 min-h-[48px] bg-[#f4f9fb] border border-[#155f7a]/10 rounded-2xl px-4 py-3.5 text-[13px] text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#16cedc]/50 focus:bg-white resize-none shadow-inner transition-all"
           rows={1}
           onKeyDown={e => {
             if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(e) }
           }}
         />
-        <button type="submit" disabled={!input.trim() || sending} className="w-11 h-11 shrink-0 rounded-full bg-[#16cedc] flex items-center justify-center text-white shadow-md disabled:opacity-50 transition-transform active:scale-95">
+        <button type="submit" disabled={!input.trim() || sending} 
+          className="w-12 h-12 shrink-0 rounded-full bg-gradient-to-r from-[#1e92bf] to-[#155f7a] flex items-center justify-center text-white shadow-[0_4px_15px_rgba(30,146,191,0.4)] disabled:opacity-50 disabled:shadow-none transition-all active:scale-95">
           {sending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5 ml-1" />}
         </button>
       </form>
