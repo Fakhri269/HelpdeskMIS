@@ -62,7 +62,7 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${fontSans.variable} h-full antialiased smooth-scroll`}
+      className={`${fontSans.variable} min-h-full antialiased smooth-scroll`}
     >
       <body className="min-h-full flex flex-col font-sans bg-slate-50 text-slate-900 selection:bg-blue-600 selection:text-white">
         <NextAuthSessionProvider>

@@ -66,7 +66,7 @@ export function UserPortal({ session }: { session: Session }) {
 
   return (
     <div
-      className="min-h-screen max-w-sm mx-auto flex flex-col font-sans relative overflow-hidden"
+      className="min-h-[100dvh] max-w-sm mx-auto flex flex-col font-sans relative overflow-x-hidden overflow-y-auto"
       style={{ background: "linear-gradient(180deg, #1a7fa8 0%, #1296c3 35%, #e8f6fb 100%)" }}
     >
       {/* ── TOP NAVBAR ── */}
