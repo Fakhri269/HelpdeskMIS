@@ -134,7 +134,7 @@ export function UserPortal({ session }: { session: Session }) {
               {/* CTA + Info Card */}
               <div className="md:col-span-2 flex flex-col gap-3">
                 <button
-                  onClick={() => router.push("/dashboard/tickets")}
+                  onClick={() => router.push("/user/create-ticket")}
                   className="flex-1 flex items-center justify-center gap-3 rounded-2xl border-2 border-white/50 bg-white/15 backdrop-blur-sm text-white font-semibold text-sm hover:bg-white/25 active:scale-95 transition-all min-h-[70px] md:min-h-0"
                 >
                   <Plus className="w-5 h-5" />
@@ -183,7 +183,7 @@ export function UserPortal({ session }: { session: Session }) {
                       return (
                         <button
                           key={ticket.id}
-                          onClick={() => router.push(`/dashboard/tickets/${ticket.id}`)}
+                          onClick={() => router.push(`/user/tickets/${ticket.id}`)}
                           className="w-full grid grid-cols-[1fr_2fr_auto_auto] gap-3 px-5 py-3 items-center hover:bg-white/10 transition-all text-left"
                         >
                           <span className="text-white text-xs font-mono truncate">{ticket.ticketNumber}</span>
@@ -224,7 +224,7 @@ export function UserPortal({ session }: { session: Session }) {
             <div className="flex items-center justify-between">
               <h1 className="text-white font-bold text-lg">Tiket Saya</h1>
               <button
-                onClick={() => router.push("/dashboard/tickets")}
+                onClick={() => router.push("/user/create-ticket")}
                 className="flex items-center gap-2 px-4 py-2 bg-white/20 border border-white/30 rounded-xl text-white text-sm font-semibold hover:bg-white/30 transition-all"
               >
                 <Plus className="w-4 h-4" /> Buat Tiket Baru
@@ -249,7 +249,7 @@ export function UserPortal({ session }: { session: Session }) {
                       return (
                         <button
                           key={ticket.id}
-                          onClick={() => router.push(`/dashboard/tickets/${ticket.id}`)}
+                          onClick={() => router.push(`/user/tickets/${ticket.id}`)}
                           className="w-full px-5 py-4 hover:bg-white/10 transition-all text-left"
                         >
                           {/* Mobile */}
