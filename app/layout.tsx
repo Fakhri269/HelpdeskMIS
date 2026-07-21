@@ -43,9 +43,12 @@ export const metadata: Metadata = {
   verification: {
     google: "IkQGuo0FTJ0Y2Kqm9lN5XK6vJydSEOKHA_5FNeYWHHY",
   },
+  applicationName: "Helpdesk MIS PDAM Tirta Kahuripan",
+  authors: [{ name: "Divisi MIS PDAM Tirta Kahuripan" }],
   openGraph: {
     title: "Helpdesk MIS | PDAM Tirta Kahuripan Kabupaten Bogor",
     description: "Portal resmi layanan teknologi informasi Perumda Air Minum Tirta Kahuripan Kabupaten Bogor. Laporkan gangguan IT, buat tiket, dan pantau progres penanganan secara online.",
+    siteName: "Helpdesk MIS PDAM Tirta Kahuripan",
     type: "website",
     locale: "id_ID",
   },
