@@ -3,15 +3,12 @@ import Image from "next/image";
 
 export default function LandingPage() {
   return (
-    <main className="relative min-h-screen bg-white font-sans">
-
-      {/* ── BACKGROUND GRADIENT ── */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          background: "linear-gradient(160deg, #0e7fb0 0%, #1aa3c8 40%, #e8f7fc 100%)",
-        }}
-      />
+    <main 
+      className="relative min-h-screen font-sans"
+      style={{
+        background: "linear-gradient(160deg, #0e7fb0 0%, #1aa3c8 40%, #e8f7fc 100%)",
+      }}
+    >
 
       {/* ── WAVE SVG TOP-RIGHT ── */}
       <svg
@@ -43,21 +40,7 @@ export default function LandingPage() {
         />
       </svg>
 
-      {/* ── WAVE DIVIDER BOTTOM ── */}
-      <div className="absolute bottom-0 left-0 right-0 z-0">
-        <svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-          <path
-            d="M0,60 C240,120 480,0 720,60 C960,120 1200,0 1440,60 L1440,120 L0,120 Z"
-            fill="white"
-            fillOpacity="0.15"
-          />
-          <path
-            d="M0,80 C360,20 720,120 1080,60 C1260,30 1380,80 1440,90 L1440,120 L0,120 Z"
-            fill="white"
-            fillOpacity="0.1"
-          />
-        </svg>
-      </div>
+
 
       {/* ── FLOATING CIRCLES ── */}
       <div className="absolute top-20 left-10 w-64 h-64 rounded-full opacity-10 z-0"
@@ -173,7 +156,7 @@ export default function LandingPage() {
         <footer className="relative z-10 mt-auto">
           {/* Wave SVG top of footer */}
           <div className="w-full overflow-hidden leading-none">
-            <svg viewBox="0 0 1440 90" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="w-full h-20">
+            <svg viewBox="0 0 1440 90" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="w-full h-20 block">
               <path d="M0,40 C180,90 360,0 540,45 C720,90 900,10 1080,50 C1260,85 1380,20 1440,40 L1440,90 L0,90 Z" fill="#0a4f6e" />
               <path d="M0,60 C200,20 400,80 600,55 C800,30 1000,75 1200,50 C1320,35 1400,65 1440,60 L1440,90 L0,90 Z" fill="#0d6b8f" opacity="0.6" />
             </svg>
