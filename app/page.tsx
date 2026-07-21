@@ -182,6 +182,39 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* ── BRIEF INFO SECTION ── */}
+        <section className="relative z-10 px-6 pb-20">
+          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 text-white hover:bg-white/15 transition-all">
+              <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                Syarat & Ketentuan
+              </h3>
+              <p className="text-blue-100 text-xs leading-relaxed mb-4">
+                Portal ini khusus untuk pegawai internal. Pengguna wajib menjaga kerahasiaan akun dan melaporkan kendala IT secara akurat. Penyalahgunaan portal dapat dikenakan sanksi.
+              </p>
+              <Link href="/syarat-ketentuan" className="inline-flex items-center gap-1 text-sm font-semibold text-white/90 hover:text-white group">
+                Baca Selengkapnya
+                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+              </Link>
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 text-white hover:bg-white/15 transition-all">
+              <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                Kebijakan Privasi
+              </h3>
+              <p className="text-blue-100 text-xs leading-relaxed mb-4">
+                Data pribadi dan log pelaporan disimpan dengan enkripsi. Informasi hanya digunakan untuk keperluan perbaikan IT dan tidak akan dibagikan tanpa izin resmi.
+              </p>
+              <Link href="/kebijakan-privasi" className="inline-flex items-center gap-1 text-sm font-semibold text-white/90 hover:text-white group">
+                Baca Selengkapnya
+                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* FOOTER WAVE */}
         <footer className="relative z-10 mt-auto">
           {/* Wave SVG top of footer */}
