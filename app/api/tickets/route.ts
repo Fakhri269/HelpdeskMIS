@@ -38,6 +38,15 @@ export async function GET(req: Request) {
       assignee: { select: { id: true, name: true } },
       unitKerja: { select: { id: true, name: true } },
       subUnitKerja: { select: { id: true, name: true } },
+      _count: {
+        select: {
+          comments: {
+            where: {
+              userId: { not: session.user.id },
+            }
+          }
+        }
+      }
     },
     orderBy: { createdAt: "desc" },
   })
