@@ -321,29 +321,27 @@ function TicketDetailSheet({ ticket, onClose }: { ticket: any; onClose: () => vo
   )
 }
 
-/* ─────────────────────── CHAT TAB ─────────────────────── */
-function ChatTab({ session }: { session: any }) {
+/* ─────────────────────── CHAT TAB & CHAT ROOM ─────────────────────── */
+function ChatRoom({ session, ticket, onBack }: { session: any, ticket: any, onBack: () => void }) {
   const [messages, setMessages] = useState<any[]>([])
-  const [ticket, setTicket] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
   const [input, setInput] = useState("")
   const [sending, setSending] = useState(false)
+  const [loading, setLoading] = useState(true)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const fetchChat = useCallback(async () => {
     try {
-      const res = await fetch("/api/chat")
+      const res = await fetch(`/api/tickets/${ticket.id}`)
       if (res.ok) {
         const data = await res.json()
-        setTicket(data.ticket)
-        setMessages(data.messages || [])
+        setMessages(data.comments || [])
       }
     } catch {
       // silent
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [ticket.id])
 
   useEffect(() => {
     fetchChat()
@@ -358,117 +356,116 @@ function ChatTab({ session }: { session: any }) {
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim() || sending) return
-
     const msg = input.trim()
     setInput("")
     setSending(true)
-
     try {
-      const res = await fetch("/api/chat", {
+      const res = await fetch(`/api/tickets/${ticket.id}/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: msg }),
+        body: JSON.stringify({ content: msg }),
       })
-      if (res.ok) {
-        await fetchChat()
-      }
+      if (res.ok) await fetchChat()
     } catch {
-      // silent
     } finally {
       setSending(false)
     }
   }
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 text-center gap-4">
-        <Loader2 className="w-8 h-8 text-white animate-spin" />
-        <p className="text-white/70 text-sm">Memuat obrolan...</p>
-      </div>
-    )
-  }
-
+  // Negative margins to break out of the main container's padding and fill the white area completely.
+  // Using 100dvh - top nav heights to ensure it fits perfectly.
   return (
-    <div className="flex flex-col h-[65vh] max-h-[600px] w-full bg-[#2496bb]/80 backdrop-blur-md rounded-2xl overflow-hidden shadow-xl border border-white/10 relative mt-2">
-      {/* Chat Header */}
-      <div className="px-4 py-3 border-b border-white/15 bg-white/5 shrink-0 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
-            <Image src="/PdamLogo.svg" alt="Logo" width={24} height={24} className="brightness-0 invert opacity-80" />
-          </div>
-          <div>
-            <h2 className="text-white font-bold text-sm">Tim Helpdesk IT</h2>
-            <div className="flex items-center gap-1.5 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-              <p className="text-white/60 text-[10px]">Online</p>
-            </div>
-          </div>
+    <div className="-mx-4 -mt-5 -mb-24 flex flex-col h-[calc(100dvh-115px)] bg-white relative z-50 animate-in slide-in-from-right-8 duration-300">
+      {/* Header */}
+      <div className="flex items-center px-4 py-3 bg-white border-b border-slate-200 shadow-sm shrink-0 gap-3">
+        <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-slate-100 text-slate-600 transition-colors">
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        <div className="flex-1 min-w-0">
+          <h2 className="font-bold text-slate-800 text-sm truncate">{ticket.title}</h2>
+          <p className="text-xs text-slate-500 font-mono">{ticket.ticketNumber}</p>
         </div>
-        {ticket && (
-          <span className="px-2 py-1 bg-white/10 rounded-lg text-white/70 text-[10px] font-mono">
-            {ticket.ticketNumber}
-          </span>
-        )}
       </div>
 
-      {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center gap-2 opacity-60">
-            <MessageSquare className="w-8 h-8 text-white mb-2" />
-            <p className="text-white text-xs">Belum ada pesan.</p>
-            <p className="text-white/70 text-[10px] max-w-[200px]">Silakan kirim pesan untuk memulai percakapan dengan tim IT.</p>
-          </div>
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/80">
+        {loading && messages.length === 0 ? (
+           <div className="flex justify-center py-10"><Loader2 className="w-6 h-6 text-slate-400 animate-spin" /></div>
+        ) : messages.length === 0 ? (
+           <div className="flex flex-col items-center justify-center h-full gap-2 text-slate-400">
+             <MessageSquare className="w-8 h-8 opacity-50" />
+             <p className="text-xs">Belum ada pesan di tiket ini.</p>
+           </div>
         ) : (
-          messages.map((msg: any) => {
-            const isMe = msg.user.id === session?.user?.id
-            return (
-              <div key={msg.id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
-                <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 ${isMe ? 'bg-[#16cedc] text-white rounded-br-sm' : 'bg-white/15 text-white rounded-bl-sm border border-white/10'}`}>
-                  {!isMe && !msg.isSystem && (
-                    <p className="text-white/60 text-[10px] font-bold mb-1">{msg.user.name}</p>
-                  )}
-                  {msg.isSystem && (
-                    <div className="flex items-center gap-1.5 mb-1 text-white/50 text-[10px] uppercase font-bold">
-                      <AlertCircle className="w-3 h-3" /> System
-                    </div>
-                  )}
-                  <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
-                  <div className={`flex items-center gap-1 mt-1.5 text-[9px] ${isMe ? 'text-white/70 justify-end' : 'text-white/40'}`}>
-                    {new Date(msg.createdAt).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}
-                    {isMe && <CheckCheck className="w-3 h-3" />}
-                  </div>
-                </div>
-              </div>
-            )
-          })
+           messages.map((msg: any) => {
+             const isMe = msg.user?.id === session?.user?.id
+             return (
+               <div key={msg.id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
+                 <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 shadow-sm ${
+                   isMe ? 'bg-[#16cedc] text-white rounded-br-sm' : 
+                   msg.isSystem ? 'bg-slate-200 text-slate-700 rounded-bl-sm border border-slate-300' :
+                   'bg-white text-slate-800 rounded-bl-sm border border-slate-200'
+                 }`}>
+                   {!isMe && !msg.isSystem && <p className="text-[10px] font-bold text-[#2496bb] mb-1">{msg.user?.name ?? "Tim IT"}</p>}
+                   {msg.isSystem && <div className="flex items-center gap-1 text-[10px] uppercase font-bold text-slate-500 mb-1"><AlertCircle className="w-3 h-3"/> System</div>}
+                   <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+                   <div className={`flex items-center gap-1 mt-1.5 text-[9px] ${isMe ? 'text-white/80 justify-end' : 'text-slate-400'}`}>
+                     {new Date(msg.createdAt).toLocaleTimeString("id-ID", { hour:"2-digit", minute:"2-digit" })}
+                     {isMe && <CheckCheck className="w-3 h-3" />}
+                   </div>
+                 </div>
+               </div>
+             )
+           })
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area */}
-      <form onSubmit={handleSend} className="shrink-0 p-3 bg-white/5 border-t border-white/10 flex items-end gap-2">
+      {/* Input */}
+      <form onSubmit={handleSend} className="shrink-0 p-3 bg-white border-t border-slate-200 flex items-end gap-2 pb-6 sm:pb-3">
         <textarea
           value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Ketik pesan..."
-          className="flex-1 max-h-24 min-h-[44px] bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400/50 resize-none"
+          onChange={e => setInput(e.target.value)}
+          placeholder="Ketik balasan..."
+          className="flex-1 max-h-24 min-h-[44px] bg-slate-100 border-none rounded-2xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#16cedc]/50 resize-none"
           rows={1}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault()
-              handleSend(e)
-            }
+          onKeyDown={e => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(e) }
           }}
         />
-        <button
-          type="submit"
-          disabled={!input.trim() || sending}
-          className="w-11 h-11 shrink-0 rounded-full bg-[#16cedc] flex items-center justify-center text-white shadow-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-cyan-400 transition-colors"
-        >
-          {sending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5 ml-0.5" />}
+        <button type="submit" disabled={!input.trim() || sending} className="w-11 h-11 shrink-0 rounded-full bg-[#16cedc] flex items-center justify-center text-white shadow-md disabled:opacity-50 transition-transform active:scale-95">
+          {sending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5 ml-1" />}
         </button>
       </form>
+    </div>
+  )
+}
+
+function ChatTab({ session, tickets }: { session: any, tickets: any[] }) {
+  const [activeTicket, setActiveTicket] = useState<any>(null)
+  
+  if (activeTicket) {
+    return <ChatRoom session={session} ticket={activeTicket} onBack={() => setActiveTicket(null)} />
+  }
+
+  return (
+    <div className="flex flex-col w-full bg-[#2496bb] rounded-t-2xl shadow-xl mt-2 overflow-hidden border border-white/10">
+      {tickets.length === 0 ? (
+        <div className="p-8 text-center text-white/70 text-sm">Belum ada tiket untuk di-chat.</div>
+      ) : (
+        <div className="flex flex-col divide-y divide-white/10">
+          {tickets.map(t => (
+            <button 
+              key={t.id} 
+              onClick={() => setActiveTicket(t)}
+              className="flex flex-col p-4 text-left hover:bg-black/10 transition-colors"
+            >
+              <span className="text-white/60 text-[10px] font-bold tracking-wider mb-1 uppercase">Judul</span>
+              <span className="text-white text-sm font-bold truncate w-full">{t.title}</span>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -707,7 +704,7 @@ export default function UserPortal() {
 
         {/* ── CHAT ── */}
         {activeTab === "Chat" && (
-          <ChatTab session={session} />
+          <ChatTab session={session} tickets={tickets} />
         )}
 
         {/* ── AKUN ── */}
