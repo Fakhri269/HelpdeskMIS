@@ -51,7 +51,7 @@ export default function LandingPage() {
         style={{ background: "radial-gradient(circle, #ffffff 0%, transparent 70%)" }} />
 
       {/* ── CONTENT ── */}
-      <div className="relative z-10 flex flex-col min-h-screen">
+      <div className="relative z-10 flex flex-col min-h-[100dvh]">
 
         {/* NAVBAR */}
         <nav className="flex items-center justify-between px-8 py-5">
