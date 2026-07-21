@@ -24,7 +24,16 @@ export const metadata: Metadata = {
     "Server", "Database", "Digitalisasi", "Transformasi Digital", "Perumda Air Minum",
     "Tirta Kahuripan", "PDAM Bogor", "Portal Helpdesk", "Helpdesk Online",
     "Service Desk", "IT Service Management", "ITSM", "Ticketing System",
-    "Aplikasi Helpdesk", "Portal Teknologi Informasi"
+    "Aplikasi Helpdesk", "Portal Teknologi Informasi",
+    "Cara melaporkan gangguan IT di PDAM Tirta Kahuripan",
+    "Sistem Helpdesk untuk Pegawai PDAM Kabupaten Bogor",
+    "Portal Layanan Teknologi Informasi Perumda Air Minum",
+    "Bantuan IT dan Jaringan PDAM Tirta Kahuripan Bogor",
+    "Cara membuat tiket bantuan IT di aplikasi MIS",
+    "Sistem Manajemen Informasi Perumda Air Minum Kabupaten Bogor",
+    "Aplikasi Pelaporan Gangguan IT PDAM Tirta Kahuripan",
+    "Layanan Pengaduan Komputer dan Jaringan Pegawai PDAM",
+    "Portal Resmi MIS Perumda Air Minum Tirta Kahuripan Kabupaten Bogor"
   ],
   icons: {
     icon: "/PdamLogo.svg",
