@@ -176,36 +176,7 @@ export default function LandingPage() {
                   Management Information System (MIS) Perumda Air Minum Tirta Kahuripan adalah divisi yang bertanggung jawab atas pengelolaan, pengembangan, dan pemeliharaan infrastruktur teknologi informasi. Portal Helpdesk ini dirancang untuk mempermudah pegawai dalam melaporkan kendala IT dan mempercepat proses penanganan oleh tim support.
                 </p>
                 
-                <div className="space-y-4">
-                  <details className="group border border-white/20 rounded-xl bg-white/5 p-4 cursor-pointer transition-all hover:bg-white/10">
-                    <summary className="font-semibold text-sm flex items-center justify-between outline-none select-none">
-                      Syarat dan Ketentuan
-                      <svg className="w-5 h-5 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                    </summary>
-                    <div className="mt-3 text-xs text-blue-100 leading-relaxed cursor-text">
-                      <ol className="list-decimal pl-4 space-y-1">
-                        <li>Portal ini hanya diperuntukkan bagi pegawai internal Perumda Air Minum Tirta Kahuripan.</li>
-                        <li>Setiap pengguna wajib menjaga kerahasiaan akun (username & password).</li>
-                        <li>Tiket yang dibuat harus memuat informasi kendala yang jelas dan akurat.</li>
-                        <li>Tim IT Support akan menangani tiket berdasarkan tingkat prioritas dan waktu pelaporan.</li>
-                      </ol>
-                    </div>
-                  </details>
 
-                  <details className="group border border-white/20 rounded-xl bg-white/5 p-4 cursor-pointer transition-all hover:bg-white/10">
-                    <summary className="font-semibold text-sm flex items-center justify-between outline-none select-none">
-                      Kebijakan Privasi
-                      <svg className="w-5 h-5 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                    </summary>
-                    <div className="mt-3 text-xs text-blue-100 leading-relaxed cursor-text">
-                      <ol className="list-decimal pl-4 space-y-1">
-                        <li>Data pribadi dan kredensial pegawai disimpan dalam server yang aman dan terenkripsi.</li>
-                        <li>Informasi yang dilaporkan pada tiket hanya digunakan untuk keperluan perbaikan dan analisis layanan IT.</li>
-                        <li>Divisi MIS tidak akan membagikan data log pelaporan kepada pihak luar tanpa persetujuan tertulis dari manajemen.</li>
-                      </ol>
-                    </div>
-                  </details>
-                </div>
               </div>
             </div>
           </div>
@@ -270,9 +241,15 @@ export default function LandingPage() {
               <div>
                 <h4 className="text-white font-semibold text-sm mb-4">Informasi</h4>
                 <ul className="space-y-2">
-                  {["Tentang MIS", "Kebijakan Privasi", "Syarat & Ketentuan"].map(item => (
-                    <li key={item}>
-                      <span className="text-cyan-100/70 text-xs hover:text-white transition-colors cursor-pointer">{item}</span>
+                  {[
+                    { label: "Tentang MIS", href: "/tentang-mis" },
+                    { label: "Kebijakan Privasi", href: "/kebijakan-privasi" },
+                    { label: "Syarat & Ketentuan", href: "/syarat-ketentuan" }
+                  ].map(item => (
+                    <li key={item.label}>
+                      <Link href={item.href} className="text-cyan-100/70 text-xs hover:text-white transition-colors cursor-pointer">
+                        {item.label}
+                      </Link>
                     </li>
                   ))}
                 </ul>
