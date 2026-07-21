@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { useSession, signOut } from "next-auth/react"
-import { Loader2, Plus, ChevronRight, LogOut, User, Ticket, MessageSquare, Home, AlertCircle, X, Send, FileText } from "lucide-react"
+import { Loader2, Plus, ChevronRight, LogOut, User, Ticket, MessageSquare, Home, AlertCircle, X, Send, FileText, CheckCheck, Clock } from "lucide-react"
 import Image from "next/image"
 
 /* ─────────────────────── CONFIG ─────────────────────── */
@@ -321,6 +321,158 @@ function TicketDetailSheet({ ticket, onClose }: { ticket: any; onClose: () => vo
   )
 }
 
+/* ─────────────────────── CHAT TAB ─────────────────────── */
+function ChatTab({ session }: { session: any }) {
+  const [messages, setMessages] = useState<any[]>([])
+  const [ticket, setTicket] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [input, setInput] = useState("")
+  const [sending, setSending] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  const fetchChat = useCallback(async () => {
+    try {
+      const res = await fetch("/api/chat")
+      if (res.ok) {
+        const data = await res.json()
+        setTicket(data.ticket)
+        setMessages(data.messages || [])
+      }
+    } catch {
+      // silent
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchChat()
+    const interval = setInterval(fetchChat, 5000)
+    return () => clearInterval(interval)
+  }, [fetchChat])
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [messages])
+
+  const handleSend = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!input.trim() || sending) return
+
+    const msg = input.trim()
+    setInput("")
+    setSending(true)
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg }),
+      })
+      if (res.ok) {
+        await fetchChat()
+      }
+    } catch {
+      // silent
+    } finally {
+      setSending(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-center gap-4">
+        <Loader2 className="w-8 h-8 text-white animate-spin" />
+        <p className="text-white/70 text-sm">Memuat obrolan...</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col h-[65vh] max-h-[600px] w-full bg-[#2496bb]/80 backdrop-blur-md rounded-2xl overflow-hidden shadow-xl border border-white/10 relative mt-2">
+      {/* Chat Header */}
+      <div className="px-4 py-3 border-b border-white/15 bg-white/5 shrink-0 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+            <Image src="/PdamLogo.svg" alt="Logo" width={24} height={24} className="brightness-0 invert opacity-80" />
+          </div>
+          <div>
+            <h2 className="text-white font-bold text-sm">Tim Helpdesk IT</h2>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              <p className="text-white/60 text-[10px]">Online</p>
+            </div>
+          </div>
+        </div>
+        {ticket && (
+          <span className="px-2 py-1 bg-white/10 rounded-lg text-white/70 text-[10px] font-mono">
+            {ticket.ticketNumber}
+          </span>
+        )}
+      </div>
+
+      {/* Messages Area */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {messages.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-center gap-2 opacity-60">
+            <MessageSquare className="w-8 h-8 text-white mb-2" />
+            <p className="text-white text-xs">Belum ada pesan.</p>
+            <p className="text-white/70 text-[10px] max-w-[200px]">Silakan kirim pesan untuk memulai percakapan dengan tim IT.</p>
+          </div>
+        ) : (
+          messages.map((msg: any) => {
+            const isMe = msg.user.id === session?.user?.id
+            return (
+              <div key={msg.id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
+                <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 ${isMe ? 'bg-[#16cedc] text-white rounded-br-sm' : 'bg-white/15 text-white rounded-bl-sm border border-white/10'}`}>
+                  {!isMe && !msg.isSystem && (
+                    <p className="text-white/60 text-[10px] font-bold mb-1">{msg.user.name}</p>
+                  )}
+                  {msg.isSystem && (
+                    <div className="flex items-center gap-1.5 mb-1 text-white/50 text-[10px] uppercase font-bold">
+                      <AlertCircle className="w-3 h-3" /> System
+                    </div>
+                  )}
+                  <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                  <div className={`flex items-center gap-1 mt-1.5 text-[9px] ${isMe ? 'text-white/70 justify-end' : 'text-white/40'}`}>
+                    {new Date(msg.createdAt).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}
+                    {isMe && <CheckCheck className="w-3 h-3" />}
+                  </div>
+                </div>
+              </div>
+            )
+          })
+        )}
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Input Area */}
+      <form onSubmit={handleSend} className="shrink-0 p-3 bg-white/5 border-t border-white/10 flex items-end gap-2">
+        <textarea
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Ketik pesan..."
+          className="flex-1 max-h-24 min-h-[44px] bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400/50 resize-none"
+          rows={1}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault()
+              handleSend(e)
+            }
+          }}
+        />
+        <button
+          type="submit"
+          disabled={!input.trim() || sending}
+          className="w-11 h-11 shrink-0 rounded-full bg-[#16cedc] flex items-center justify-center text-white shadow-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-cyan-400 transition-colors"
+        >
+          {sending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5 ml-0.5" />}
+        </button>
+      </form>
+    </div>
+  )
+}
+
 /* ─────────────────────── MAIN PORTAL ─────────────────────── */
 export default function UserPortal() {
   const { data: session } = useSession()
@@ -555,19 +707,7 @@ export default function UserPortal() {
 
         {/* ── CHAT ── */}
         {activeTab === "Chat" && (
-          <div className="flex flex-col items-center justify-center py-20 text-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-[#2496bb] flex items-center justify-center shadow-lg">
-              <MessageSquare className="w-8 h-8 text-white" />
-            </div>
-            <div>
-              <h3 className="text-[#155f7a] font-bold text-lg">Chat Helpdesk</h3>
-              <p className="text-slate-500 text-sm mt-1 max-w-[260px]">Fitur chat dengan tim IT akan segera hadir.</p>
-            </div>
-            <button onClick={() => { setActiveTab("Beranda"); setCreateOpen(true) }}
-              className="mt-2 px-6 py-2.5 bg-[#2496bb] text-white text-sm font-semibold rounded-full shadow hover:bg-[#1e7fa8] transition-all">
-              Buat Tiket Sekarang
-            </button>
-          </div>
+          <ChatTab session={session} />
         )}
 
         {/* ── AKUN ── */}
