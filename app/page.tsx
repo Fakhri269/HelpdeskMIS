@@ -3,12 +3,14 @@ import Image from "next/image";
 
 export default function LandingPage() {
   return (
-    <main 
-      className="relative min-h-screen font-sans"
-      style={{
-        background: "linear-gradient(160deg, #0e7fb0 0%, #1aa3c8 40%, #e8f7fc 100%)",
-      }}
-    >
+    <main className="relative min-h-screen font-sans bg-[#0e7fb0]">
+      {/* ── FIXED BACKGROUND GRADIENT ── */}
+      <div
+        className="fixed inset-0 z-0 pointer-events-none"
+        style={{
+          background: "linear-gradient(160deg, #0e7fb0 0%, #1aa3c8 40%, #e8f7fc 100%)",
+        }}
+      />
 
       {/* ── WAVE SVG TOP-RIGHT ── */}
       <svg
