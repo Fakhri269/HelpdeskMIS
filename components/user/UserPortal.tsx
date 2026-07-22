@@ -466,11 +466,11 @@ function ChatTab({ session, tickets, readCounts, markAsRead }: { session: any, t
   }
 
   return (
-    <div className="flex flex-col w-full bg-[#2496bb] rounded-2xl md:rounded-3xl shadow-xl overflow-hidden border border-white/10 mt-2 md:mt-0">
+    <div className="flex flex-col w-full bg-white/80 backdrop-blur-xl rounded-3xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] overflow-hidden border border-white/50 mt-2 md:mt-0">
       {tickets.length === 0 ? (
-        <div className="p-8 text-center text-white/70 text-sm">Belum ada tiket untuk di-chat.</div>
+        <div className="p-8 text-center text-slate-500 text-sm font-medium">Belum ada tiket untuk di-chat.</div>
       ) : (
-        <div className="flex flex-col divide-y divide-white/15">
+        <div className="flex flex-col divide-y divide-slate-100">
           {tickets.map(t => {
             const totalOthers = t._count?.comments || 0
             const read = readCounts[t.id] || 0
@@ -482,17 +482,17 @@ function ChatTab({ session, tickets, readCounts, markAsRead }: { session: any, t
                   markAsRead(t.id, totalOthers)
                   setActiveTicket(t)
                 }}
-                className="flex flex-col px-5 py-4 text-left hover:bg-black/10 transition-colors relative"
+                className="flex flex-col px-5 py-4 text-left hover:bg-slate-50/60 transition-colors relative"
               >
                 <div className="flex items-center justify-between w-full mb-1">
-                  <span className="text-white/70 text-[10px] font-bold tracking-wider uppercase">Judul</span>
+                  <span className="text-slate-400 text-[10px] font-bold tracking-wider uppercase">Judul</span>
                   {unreadCount > 0 && (
                     <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-sm animate-pulse">
                       {unreadCount} Pesan Baru
                     </span>
                   )}
                 </div>
-                <span className="text-white text-[14px] font-bold truncate w-full">{t.title}</span>
+                <span className="text-slate-800 text-[14px] font-bold truncate w-full">{t.title}</span>
               </button>
             )
           })}
@@ -558,24 +558,24 @@ export default function UserPortal() {
 
   /* ── TABLE ROW ── */
   const TicketRow = ({ ticket }: { ticket: any }) => (
-    <div className="border-b border-white/10 last:border-0">
+    <div className="border-b border-slate-100 last:border-0 group">
       {/* Header row */}
       <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)_auto_auto] gap-x-3 gap-y-0.5 px-4 pt-2.5">
-        <span className="text-white/55 text-[10px] font-semibold uppercase">No. Tiket</span>
-        <span className="text-white/55 text-[10px] font-semibold uppercase">Judul</span>
-        <span className="text-white/55 text-[10px] font-semibold uppercase text-center">Status</span>
-        <span className="text-white/55 text-[10px] font-semibold uppercase text-center">Prioritas</span>
+        <span className="text-slate-400 text-[10px] font-semibold uppercase">No. Tiket</span>
+        <span className="text-slate-400 text-[10px] font-semibold uppercase">Judul</span>
+        <span className="text-slate-400 text-[10px] font-semibold uppercase text-center">Status</span>
+        <span className="text-slate-400 text-[10px] font-semibold uppercase text-center">Prioritas</span>
       </div>
       {/* Data row */}
       <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)_auto_auto] gap-x-3 items-center px-4 pb-1">
-        <span className="text-white text-[11px] font-bold font-mono truncate">{ticket.ticketNumber}</span>
-        <span className="text-white text-[11px] truncate">{ticket.title}</span>
+        <span className="text-slate-600 text-[11px] font-bold font-mono truncate">{ticket.ticketNumber}</span>
+        <span className="text-slate-800 text-[11px] font-semibold truncate">{ticket.title}</span>
         <StatusBadge status={ticket.status} />
         <PriorityBadge priority={ticket.priority} />
       </div>
       <button
         onClick={() => handleTicketClick(ticket)}
-        className="w-full text-center text-[11px] text-white/60 py-2.5 hover:text-white hover:bg-white/5 transition-colors"
+        className="w-full text-center text-[11px] font-medium text-slate-400 py-2.5 hover:text-slate-700 hover:bg-slate-50/80 transition-colors"
       >
         Lihat Selengkapnya →
       </button>
@@ -798,21 +798,21 @@ export default function UserPortal() {
             )}
 
             {/* Riwayat Laporan */}
-            <div className="w-full bg-gradient-to-br from-[#2496bb] to-[#1e85a6] rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white/10 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(0,0,0,0.16)]">
-              <div className="px-5 py-4 border-b border-white/15 flex items-center justify-between bg-white/5">
-                <h2 className="text-white font-bold text-[13px] md:text-[14px]">Riwayat Laporan</h2>
+            <div className="w-full bg-white/80 backdrop-blur-xl rounded-3xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/50 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)]">
+              <div className="px-5 py-4 border-b border-slate-200/50 flex items-center justify-between bg-white/40">
+                <h2 className="text-slate-800 font-bold text-[13px] md:text-[14px]">Riwayat Laporan</h2>
                 {tickets.length > 3 && (
-                  <button onClick={() => setActiveTab("Tiket")} className="flex items-center gap-1 text-white/70 text-[11px] hover:text-white transition">
+                  <button onClick={() => setActiveTab("Tiket")} className="flex items-center gap-1 text-slate-500 font-semibold text-[11px] hover:text-slate-800 transition">
                     Lihat Semua <ChevronRight className="w-3.5 h-3.5" />
                   </button>
                 )}
               </div>
               {loading ? (
-                <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 text-white animate-spin" /></div>
+                <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 text-slate-400 animate-spin" /></div>
               ) : tickets.length === 0 ? (
-                <div className="flex flex-col items-center gap-2 py-10 text-white/70 text-xs">
+                <div className="flex flex-col items-center gap-2 py-10 text-slate-400 text-xs">
                   <AlertCircle className="w-8 h-8 opacity-40" />
-                  <span>Belum ada laporan. Klik tombol di atas untuk membuat.</span>
+                  <span className="font-medium">Belum ada laporan. Klik tombol di atas untuk membuat.</span>
                 </div>
               ) : (
                 <div>{tickets.slice(0, 3).map(t => <TicketRow key={t.id} ticket={t} />)}</div>
@@ -826,40 +826,40 @@ export default function UserPortal() {
             </div>
 
             {/* Info Status */}
-            <div className="w-full bg-gradient-to-br from-[#2496bb] to-[#1e85a6] rounded-2xl md:rounded-3xl p-5 shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white/10">
-              <h3 className="text-white font-bold text-[13px] md:text-[14px] mb-3.5">Informasi Status</h3>
+            <div className="w-full bg-white/80 backdrop-blur-xl rounded-3xl p-5 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/50">
+              <h3 className="text-slate-800 font-bold text-[13px] md:text-[14px] mb-3.5">Informasi Status</h3>
               <div className="grid grid-cols-2 gap-y-3 gap-x-4">
                 {Object.values(STATUS_CONFIG).map(s => (
                   <div key={s.label} className="flex items-center gap-2.5">
-                    <span className={`w-3.5 h-3.5 rounded-full shrink-0 ${s.dot} shadow-[0_0_8px_rgba(255,255,255,0.3)]`} />
-                    <span className="text-white text-[12px] font-medium tracking-wide">{s.label}</span>
+                    <span className={`w-3.5 h-3.5 rounded-full shrink-0 ${s.dot} shadow-sm`} />
+                    <span className="text-slate-600 text-[12px] font-semibold tracking-wide">{s.label}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Info Prioritas */}
-            <div className="w-full bg-gradient-to-br from-[#2496bb] to-[#1e85a6] rounded-2xl md:rounded-3xl p-5 shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white/10">
-              <h3 className="text-white font-bold text-[13px] md:text-[14px] mb-3.5">Informasi Prioritas</h3>
-              <div className="rounded-xl overflow-hidden border border-white/20 shadow-inner">
+            <div className="w-full bg-white/80 backdrop-blur-xl rounded-3xl p-5 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/50">
+              <h3 className="text-slate-800 font-bold text-[13px] md:text-[14px] mb-3.5">Informasi Prioritas</h3>
+              <div className="rounded-2xl overflow-hidden border border-slate-200/60 shadow-sm">
                 {/* Labels row */}
-                <div className="grid grid-cols-4 bg-black/20 backdrop-blur-sm">
+                <div className="grid grid-cols-4 bg-slate-50/80 backdrop-blur-sm">
                   {Object.entries(PRIORITY_CONFIG).map(([, p]) => (
-                    <div key={p.label} className="flex flex-col items-center justify-center gap-1.5 py-3 border-r border-white/10 last:border-0">
-                      <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${p.dot} shadow-[0_0_6px_rgba(255,255,255,0.4)]`} />
-                      <span className="text-white/90 text-[10px] md:text-[11px] font-bold">{p.label}</span>
+                    <div key={p.label} className="flex flex-col items-center justify-center gap-1.5 py-3 border-r border-slate-200/60 last:border-0">
+                      <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${p.dot} shadow-sm`} />
+                      <span className="text-slate-600 text-[10px] md:text-[11px] font-bold">{p.label}</span>
                     </div>
                   ))}
                 </div>
                 {/* Subheader */}
-                <div className="w-full bg-black/40 py-2 text-center border-y border-white/10">
-                  <span className="text-white/80 text-[10px] font-bold tracking-widest uppercase">Target Waktu Maksimal</span>
+                <div className="w-full bg-slate-100/80 py-2 text-center border-y border-slate-200/60">
+                  <span className="text-slate-500 text-[10px] font-bold tracking-widest uppercase">Target Waktu Maksimal</span>
                 </div>
                 {/* Time row */}
                 <div className="grid grid-cols-4">
                   {Object.values(PRIORITY_CONFIG).map(p => (
-                    <div key={p.label} className={`py-3 text-center ${p.bg} border-r border-white/10 last:border-0 bg-opacity-90`}>
-                      <span className="text-white text-[12px] md:text-[13px] font-black">{p.time}</span>
+                    <div key={p.label} className={`py-3 text-center bg-white/80 border-r border-slate-200/60 last:border-0`}>
+                      <span className={`text-slate-800 text-[12px] md:text-[13px] font-black`}>{p.time}</span>
                     </div>
                   ))}
                 </div>
@@ -875,15 +875,15 @@ export default function UserPortal() {
                 className="w-full md:max-w-md md:mx-auto flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-[#1e7fa8] to-[#2196c4] text-white font-bold text-[14px] rounded-full shadow-[0_8px_30px_rgba(30,127,168,0.4)] hover:shadow-[0_12px_40px_rgba(30,127,168,0.5)] hover:-translate-y-0.5 active:scale-[0.97] active:translate-y-0 transition-all duration-300">
                 <Plus className="w-5 h-5" /> Buat Tiket Baru
               </button>
-              <div className="w-full bg-gradient-to-br from-[#2496bb] to-[#1e85a6] rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white/10 transition-all duration-300">
-                <div className="px-5 py-4 border-b border-white/15 bg-white/5">
-                  <h2 className="text-white font-bold text-[13px] md:text-[14px]">Semua Tiket Saya ({tickets.length})</h2>
+              <div className="w-full bg-white/80 backdrop-blur-xl rounded-3xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/50 transition-all duration-300">
+                <div className="px-5 py-4 border-b border-slate-200/50 bg-white/40">
+                  <h2 className="text-slate-800 font-bold text-[13px] md:text-[14px]">Semua Tiket Saya ({tickets.length})</h2>
                 </div>
               {loading ? (
-                <div className="flex justify-center py-10"><Loader2 className="w-6 h-6 text-white animate-spin" /></div>
+                <div className="flex justify-center py-10"><Loader2 className="w-6 h-6 text-slate-400 animate-spin" /></div>
               ) : tickets.length === 0 ? (
-                <div className="flex flex-col items-center gap-2 py-12 text-white/70 text-xs">
-                  <AlertCircle className="w-8 h-8 opacity-40" /><span>Belum ada tiket.</span>
+                <div className="flex flex-col items-center gap-2 py-12 text-slate-400 text-xs">
+                  <AlertCircle className="w-8 h-8 opacity-40" /><span className="font-medium">Belum ada tiket.</span>
                 </div>
               ) : (
                 <div>{tickets.map(t => <TicketRow key={t.id} ticket={t} />)}</div>
