@@ -34,3 +34,33 @@ export async function PUT(req: Request) {
     return NextResponse.json({ error: "Gagal menyimpan pengaturan" }, { status: 500 })
   }
 }
+
+export async function GET(req: Request) {
+  const session = await auth()
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      include: {
+        unitKerja: true,
+        subUnitKerja: true,
+        role: true
+      }
+    })
+    
+    if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 })
+
+    return NextResponse.json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      position: user.position,
+      role: user.role?.name,
+      unitKerja: user.unitKerja?.name,
+      subUnitKerja: user.subUnitKerja?.name
+    })
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to fetch profile" }, { status: 500 })
+  }
+}

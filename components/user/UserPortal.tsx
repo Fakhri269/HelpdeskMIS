@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react"
 import { useSession, signOut } from "next-auth/react"
-import { Loader2, Plus, ChevronRight, LogOut, User, Ticket, MessageSquare, Home, AlertCircle, X, Send, FileText, CheckCheck, Clock, ChevronLeft, Eye, EyeOff, Lock, Shield, Edit3, Check, KeyRound, Mail, BadgeCheck } from "lucide-react"
+import { Loader2, Plus, ChevronRight, LogOut, User, Ticket, MessageSquare, Home, AlertCircle, X, Send, FileText, CheckCheck, Clock, ChevronLeft, Eye, EyeOff, Lock, Shield, Edit3, Check, KeyRound, Mail, BadgeCheck, Building2, Briefcase } from "lucide-react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -603,6 +603,17 @@ function AkunTab({ session, tickets, loading, openCount, inprogCount, pendingCou
   const initials = (session?.user?.name ?? "U")[0].toUpperCase()
   const role     = (session?.user as any)?.role ?? "user"
 
+  const [profileData, setProfileData] = useState<{unitKerja?: string, position?: string, role?: string}>({})
+
+  useEffect(() => {
+    fetch("/api/user/profile")
+      .then(res => res.json())
+      .then(data => {
+        if (!data.error) setProfileData(data)
+      })
+      .catch(() => {})
+  }, [])
+
   const handleSaveProfile = async () => {
     setSaving(true); setSaveMsg(null); setSaveError(null)
     try {
@@ -740,6 +751,30 @@ function AkunTab({ session, tickets, loading, openCount, inprogCount, pendingCou
                 <span className="text-slate-600 text-sm font-mono">{session?.user?.email}</span>
               </div>
             )}
+          </div>
+          
+          {/* Unit Kerja (Read Only) */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest">Unit Kerja</label>
+              <span className="text-[9px] font-bold text-slate-300 uppercase flex items-center gap-1"><Lock className="w-3 h-3" /> Hanya Admin</span>
+            </div>
+            <div className="h-11 rounded-xl bg-slate-50 border border-slate-100 px-3.5 flex items-center gap-2 opacity-80 cursor-not-allowed">
+              <Building2 className="w-4 h-4 text-slate-400 shrink-0" />
+              <span className="text-slate-600 text-sm font-semibold truncate">{profileData.unitKerja ?? "-"}</span>
+            </div>
+          </div>
+
+          {/* Jabatan (Read Only) */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest">Jabatan</label>
+              <span className="text-[9px] font-bold text-slate-300 uppercase flex items-center gap-1"><Lock className="w-3 h-3" /> Hanya Admin</span>
+            </div>
+            <div className="h-11 rounded-xl bg-slate-50 border border-slate-100 px-3.5 flex items-center gap-2 opacity-80 cursor-not-allowed">
+              <Briefcase className="w-4 h-4 text-slate-400 shrink-0" />
+              <span className="text-slate-600 text-sm font-semibold truncate">{profileData.position ?? "-"}</span>
+            </div>
           </div>
 
           {/* Error / success */}
