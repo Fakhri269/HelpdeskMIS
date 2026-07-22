@@ -508,38 +508,73 @@ function ChatTab({ session, tickets, readCounts, markAsRead }: { session: any, t
   }
 
   return (
-    <div className="flex flex-col w-full bg-white/80 backdrop-blur-xl rounded-3xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] overflow-hidden border border-white/50 mt-2 md:mt-0">
-      {tickets.length === 0 ? (
-        <div className="p-8 text-center text-slate-500 text-sm font-medium">Belum ada tiket untuk di-chat.</div>
-      ) : (
-        <div className="flex flex-col divide-y divide-slate-100">
-          {tickets.map(t => {
-            const totalOthers = t._count?.comments || 0
-            const read = readCounts[t.id] || 0
-            const unreadCount = Math.max(0, totalOthers - read)
-            return (
-              <button 
-                key={t.id} 
-                onClick={() => {
-                  markAsRead(t.id, totalOthers)
-                  setActiveTicket(t)
-                }}
-                className="flex flex-col px-5 py-4 text-left hover:bg-slate-50/60 transition-colors relative"
-              >
-                <div className="flex items-center justify-between w-full mb-1">
-                  <span className="text-slate-400 text-[10px] font-bold tracking-wider uppercase">Judul</span>
-                  {unreadCount > 0 && (
-                    <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-sm animate-pulse">
-                      {unreadCount} Pesan Baru
-                    </span>
-                  )}
-                </div>
-                <span className="text-slate-800 text-[14px] font-bold truncate w-full">{t.title}</span>
-              </button>
-            )
-          })}
+    <div className="-mx-4 -mt-5 -mb-24 md:mx-0 md:mt-0 md:mb-0 flex flex-col min-h-[calc(100dvh-115px)] md:min-h-[calc(100vh-140px)] bg-[#f4f9fb] animate-in fade-in duration-300">
+      {/* Header */}
+      <div className="flex items-center gap-3 px-4 py-4 bg-white/90 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.04)] border-b border-white/50 shrink-0">
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1e92bf] to-[#155f7a] flex items-center justify-center shadow-md shrink-0">
+          <Image src="/PdamLogo.svg" alt="PDAM" width={22} height={22} className="brightness-0 invert" />
         </div>
-      )}
+        <div>
+          <h2 className="font-extrabold text-[#155f7a] text-[14px]">Helpdesk MIS</h2>
+          <p className="text-[#155f7a]/60 text-[10px] font-semibold uppercase tracking-wider">Pilih Tiket untuk Memulai Chat</p>
+        </div>
+      </div>
+
+      {/* Ticket List */}
+      <div className="flex-1 overflow-y-auto">
+        {tickets.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full gap-3 text-[#155f7a]/40 py-20">
+            <div className="w-16 h-16 rounded-full bg-[#155f7a]/5 flex items-center justify-center">
+              <MessageSquare className="w-7 h-7" />
+            </div>
+            <p className="text-[12px] font-bold tracking-wide">Belum ada tiket untuk di-chat</p>
+          </div>
+        ) : (
+          <div className="flex flex-col divide-y divide-slate-100/80">
+            {tickets.map(t => {
+              const totalOthers = t._count?.comments || 0
+              const read = readCounts[t.id] || 0
+              const unreadCount = Math.max(0, totalOthers - read)
+              const st = STATUS_CONFIG[t.status] ?? { dot: "bg-gray-400", label: t.status }
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => { markAsRead(t.id, totalOthers); setActiveTicket(t) }}
+                  className="flex items-center gap-3.5 px-4 py-4 text-left hover:bg-white/70 active:bg-white/90 transition-colors relative"
+                >
+                  {/* Logo Avatar */}
+                  <div className="relative shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#1e92bf] to-[#155f7a] flex items-center justify-center shadow-md">
+                      <Image src="/PdamLogo.svg" alt="PDAM" width={24} height={24} className="brightness-0 invert" />
+                    </div>
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-black rounded-full flex items-center justify-center px-1 shadow-sm animate-pulse">
+                        {unreadCount}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2 mb-0.5">
+                      <span className="text-slate-800 text-[14px] font-bold truncate">{t.title}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className={`w-2 h-2 rounded-full shrink-0 ${st.dot}`} />
+                      <span className="text-slate-400 text-[11px] font-semibold">{st.label}</span>
+                      <span className="text-slate-300 text-[10px]">•</span>
+                      <span className="text-slate-400 text-[11px] font-mono truncate">{t.ticketNumber}</span>
+                    </div>
+                  </div>
+
+                  {/* Arrow */}
+                  <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
+                </button>
+              )
+            })}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
@@ -1255,9 +1290,7 @@ export default function UserPortal() {
 
           {/* ── CHAT ── */}
           {activeTab === "Chat" && (
-            <div className="animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out h-full">
-              <ChatTab session={session} tickets={tickets} readCounts={readCounts} markAsRead={markAsRead} />
-            </div>
+            <ChatTab session={session} tickets={tickets} readCounts={readCounts} markAsRead={markAsRead} />
           )}
 
           {/* ── AKUN ── */}
