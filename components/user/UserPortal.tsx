@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react"
 import { useSession, signOut } from "next-auth/react"
-import { Loader2, Plus, ChevronRight, LogOut, User, Ticket, MessageSquare, Home, AlertCircle, X, Send, FileText, CheckCheck, Clock, ChevronLeft } from "lucide-react"
+import { Loader2, Plus, ChevronRight, LogOut, User, Ticket, MessageSquare, Home, AlertCircle, X, Send, FileText, CheckCheck, Clock, ChevronLeft, Eye, EyeOff, Lock, Shield, Edit3, Check, KeyRound, Mail, BadgeCheck } from "lucide-react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -544,6 +544,325 @@ function ChatTab({ session, tickets, readCounts, markAsRead }: { session: any, t
   )
 }
 
+/* ─────────────────────── AKUN TAB ─────────────────────── */
+function AkunTab({ session, tickets, loading, openCount, inprogCount, pendingCount, resolvedCount }: {
+  session: any; tickets: any[]; loading: boolean;
+  openCount: number; inprogCount: number; pendingCount: number; resolvedCount: number
+}) {
+  const [editMode, setEditMode]           = useState(false)
+  const [name, setName]                   = useState(session?.user?.name ?? "")
+  const [email, setEmail]                 = useState(session?.user?.email ?? "")
+  const [saving, setSaving]               = useState(false)
+  const [saveMsg, setSaveMsg]             = useState<string | null>(null)
+  const [saveError, setSaveError]         = useState<string | null>(null)
+
+  // Password section
+  const [showPwSection, setShowPwSection] = useState(false)
+  const [currentPw, setCurrentPw]         = useState("")
+  const [newPw, setNewPw]                 = useState("")
+  const [confirmPw, setConfirmPw]         = useState("")
+  const [showCurrent, setShowCurrent]     = useState(false)
+  const [showNew, setShowNew]             = useState(false)
+  const [showConfirm, setShowConfirm]     = useState(false)
+  const [pwSaving, setPwSaving]           = useState(false)
+  const [pwMsg, setPwMsg]                 = useState<string | null>(null)
+  const [pwError, setPwError]             = useState<string | null>(null)
+
+  const initials = (session?.user?.name ?? "U")[0].toUpperCase()
+  const role     = (session?.user as any)?.role ?? "user"
+
+  const handleSaveProfile = async () => {
+    setSaving(true); setSaveMsg(null); setSaveError(null)
+    try {
+      const res = await fetch("/api/user/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email })
+      })
+      const data = await res.json()
+      if (!res.ok) { setSaveError(data.error ?? "Gagal menyimpan"); return }
+      setSaveMsg("Profil berhasil disimpan!")
+      setEditMode(false)
+      setTimeout(() => setSaveMsg(null), 3000)
+    } catch { setSaveError("Terjadi kesalahan sistem") }
+    finally { setSaving(false) }
+  }
+
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setPwMsg(null); setPwError(null)
+    if (newPw.length < 6) { setPwError("Password baru minimal 6 karakter"); return }
+    if (newPw !== confirmPw) { setPwError("Konfirmasi password tidak cocok"); return }
+    setPwSaving(true)
+    try {
+      const res = await fetch("/api/user/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: session?.user?.name, email: session?.user?.email, currentPassword: currentPw, newPassword: newPw })
+      })
+      const data = await res.json()
+      if (!res.ok) { setPwError(data.error ?? "Gagal mengganti password"); return }
+      setPwMsg("Password berhasil diganti!")
+      setCurrentPw(""); setNewPw(""); setConfirmPw("")
+      setShowPwSection(false)
+      setTimeout(() => setPwMsg(null), 4000)
+    } catch { setPwError("Terjadi kesalahan sistem") }
+    finally { setPwSaving(false) }
+  }
+
+  const pwStrength = newPw.length === 0 ? 0 : newPw.length < 6 ? 1 : newPw.length < 10 ? 2 : 3
+  const pwStrengthLabel = ["", "Lemah", "Sedang", "Kuat"][pwStrength]
+  const pwStrengthColor = ["", "bg-red-400", "bg-amber-400", "bg-emerald-400"][pwStrength]
+
+  return (
+    <div className="flex flex-col gap-5 md:max-w-2xl md:mx-auto w-full animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out pb-6">
+
+      {/* ── PROFILE HERO CARD ── */}
+      <div className="relative overflow-hidden rounded-3xl shadow-[0_16px_50px_rgba(21,95,122,0.28)]">
+        {/* Background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0d5f82] via-[#1481a8] to-[#2ba8d4]" />
+        {/* Decorative circles */}
+        <div className="absolute -top-10 -right-10 w-52 h-52 rounded-full bg-white/5" />
+        <div className="absolute -bottom-16 -left-10 w-64 h-64 rounded-full bg-white/5" />
+
+        <div className="relative z-10 p-6 md:p-8">
+          <div className="flex items-center gap-5">
+            {/* Avatar */}
+            <div className="relative shrink-0">
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border-[3px] border-white/30 shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
+                <span className="text-white font-black text-3xl md:text-4xl">{initials}</span>
+              </div>
+              <div className="absolute bottom-1 right-1 w-4 h-4 bg-emerald-400 rounded-full border-2 border-[#0d5f82]" />
+            </div>
+            {/* Name & meta */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <BadgeCheck className="w-4 h-4 text-cyan-300 shrink-0" />
+                <span className="px-2.5 py-0.5 bg-white/15 rounded-full text-white text-[10px] font-bold uppercase tracking-widest">
+                  {role.replace("_", " ")}
+                </span>
+              </div>
+              <p className="text-white font-black text-xl md:text-2xl truncate leading-tight">{session?.user?.name ?? "Pengguna"}</p>
+              <p className="text-white/70 text-sm mt-1 truncate font-mono">{session?.user?.email ?? ""}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── STATS ROW ── */}
+      {!loading && (
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            { label: "Total", count: tickets.length,                    color: "text-[#1e7fa8]", bg: "from-[#e8f7fc] to-white" },
+            { label: "Aktif",  count: openCount+inprogCount+pendingCount, color: "text-amber-500", bg: "from-amber-50 to-white" },
+            { label: "Selesai",count: resolvedCount,                     color: "text-emerald-500",bg: "from-emerald-50 to-white" },
+          ].map((s, i) => (
+            <div key={s.label} className={`flex flex-col items-center py-5 rounded-2xl bg-gradient-to-b ${s.bg} border border-white/80 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300`}
+              style={{ animationDelay: `${i * 80}ms` }}>
+              <span className={`text-3xl font-black ${s.color} leading-none mb-1`}>{s.count}</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{s.label}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ── EDIT PROFILE CARD ── */}
+      <div className="bg-white/90 backdrop-blur-xl rounded-3xl border border-white/60 shadow-[0_8px_30px_rgba(0,0,0,0.06)] overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-[#e8f7fc] flex items-center justify-center">
+              <User className="w-4 h-4 text-[#1e7fa8]" />
+            </div>
+            <span className="text-slate-800 font-bold text-[14px]">Informasi Profil</span>
+          </div>
+          <button onClick={() => { setEditMode(!editMode); setSaveError(null) }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[12px] font-bold transition-all ${editMode ? "bg-slate-100 text-slate-500" : "bg-[#e8f7fc] text-[#1e7fa8] hover:bg-[#d0eef8]"}`}>
+            {editMode ? <X className="w-3.5 h-3.5" /> : <Edit3 className="w-3.5 h-3.5" />}
+            {editMode ? "Batal" : "Edit"}
+          </button>
+        </div>
+
+        <div className="p-5 space-y-4">
+          {/* Name field */}
+          <div>
+            <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Nama Lengkap</label>
+            {editMode ? (
+              <input value={name} onChange={e => setName(e.target.value)}
+                className="w-full h-11 rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 font-medium focus:ring-2 focus:ring-[#2ba8d4]/40 focus:border-[#2ba8d4] outline-none transition-all" />
+            ) : (
+              <div className="h-11 rounded-xl bg-slate-50 px-3.5 flex items-center">
+                <span className="text-slate-800 text-sm font-semibold">{session?.user?.name}</span>
+              </div>
+            )}
+          </div>
+          {/* Email field */}
+          <div>
+            <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Email</label>
+            {editMode ? (
+              <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+                className="w-full h-11 rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 font-medium focus:ring-2 focus:ring-[#2ba8d4]/40 focus:border-[#2ba8d4] outline-none transition-all" />
+            ) : (
+              <div className="h-11 rounded-xl bg-slate-50 px-3.5 flex items-center gap-2">
+                <Mail className="w-4 h-4 text-slate-400 shrink-0" />
+                <span className="text-slate-600 text-sm font-mono">{session?.user?.email}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Error / success */}
+          <AnimatePresence>
+            {saveError && (
+              <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                className="flex items-center gap-2 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm font-medium">
+                <AlertCircle className="w-4 h-4 shrink-0" />{saveError}
+              </motion.div>
+            )}
+            {saveMsg && (
+              <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                className="flex items-center gap-2 px-4 py-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-700 text-sm font-medium">
+                <Check className="w-4 h-4 shrink-0" />{saveMsg}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Save button */}
+          {editMode && (
+            <button onClick={handleSaveProfile} disabled={saving}
+              className="w-full h-11 rounded-xl bg-gradient-to-r from-[#1e7fa8] to-[#2ba8d4] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(43,168,212,0.35)] hover:shadow-[0_6px_24px_rgba(43,168,212,0.45)] active:scale-[0.98] transition-all disabled:opacity-60">
+              {saving ? <><Loader2 className="w-4 h-4 animate-spin" /> Menyimpan...</> : <><Check className="w-4 h-4" /> Simpan Perubahan</>}
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* ── CHANGE PASSWORD CARD ── */}
+      <div className="bg-white/90 backdrop-blur-xl rounded-3xl border border-white/60 shadow-[0_8px_30px_rgba(0,0,0,0.06)] overflow-hidden">
+        {/* Header toggle */}
+        <button onClick={() => { setShowPwSection(!showPwSection); setPwError(null); setPwMsg(null) }}
+          className="w-full flex items-center justify-between px-5 py-4 hover:bg-slate-50/80 transition-colors">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-amber-50 flex items-center justify-center">
+              <KeyRound className="w-4 h-4 text-amber-500" />
+            </div>
+            <span className="text-slate-800 font-bold text-[14px]">Ganti Password</span>
+          </div>
+          <motion.div animate={{ rotate: showPwSection ? 180 : 0 }} transition={{ duration: 0.25 }}>
+            <ChevronRight className={`w-4 h-4 text-slate-400 rotate-90`} />
+          </motion.div>
+        </button>
+
+        <AnimatePresence initial={false}>
+          {showPwSection && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="overflow-hidden">
+              <form onSubmit={handleChangePassword} className="px-5 pb-5 space-y-4 border-t border-slate-100 pt-4">
+                {/* Current password */}
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Password Saat Ini</label>
+                  <div className="relative">
+                    <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input type={showCurrent ? "text" : "password"} value={currentPw} onChange={e => setCurrentPw(e.target.value)}
+                      placeholder="Masukkan password saat ini"
+                      className="w-full h-11 rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-10 text-sm text-slate-800 focus:ring-2 focus:ring-amber-300/60 focus:border-amber-400 outline-none transition-all" required />
+                    <button type="button" onClick={() => setShowCurrent(!showCurrent)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
+                      {showCurrent ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
+                {/* New password */}
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Password Baru</label>
+                  <div className="relative">
+                    <Shield className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input type={showNew ? "text" : "password"} value={newPw} onChange={e => setNewPw(e.target.value)}
+                      placeholder="Minimal 6 karakter"
+                      className="w-full h-11 rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-10 text-sm text-slate-800 focus:ring-2 focus:ring-amber-300/60 focus:border-amber-400 outline-none transition-all" required />
+                    <button type="button" onClick={() => setShowNew(!showNew)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
+                      {showNew ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                  {/* Strength bar */}
+                  {newPw.length > 0 && (
+                    <div className="mt-2 space-y-1">
+                      <div className="flex gap-1">
+                        {[1,2,3].map(i => (
+                          <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= pwStrength ? pwStrengthColor : "bg-slate-200"}`} />
+                        ))}
+                      </div>
+                      <p className={`text-[11px] font-semibold ${["","text-red-500","text-amber-500","text-emerald-500"][pwStrength]}`}>
+                        Kekuatan: {pwStrengthLabel}
+                      </p>
+                    </div>
+                  )}
+                </div>
+                {/* Confirm password */}
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Konfirmasi Password Baru</label>
+                  <div className="relative">
+                    <Shield className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input type={showConfirm ? "text" : "password"} value={confirmPw} onChange={e => setConfirmPw(e.target.value)}
+                      placeholder="Ulangi password baru"
+                      className={`w-full h-11 rounded-xl border bg-slate-50 pl-10 pr-10 text-sm text-slate-800 focus:ring-2 outline-none transition-all ${
+                        confirmPw && confirmPw !== newPw ? "border-red-300 focus:ring-red-200" : "border-slate-200 focus:ring-amber-300/60 focus:border-amber-400"
+                      }`} required />
+                    <button type="button" onClick={() => setShowConfirm(!showConfirm)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
+                      {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                  {confirmPw && confirmPw !== newPw && (
+                    <p className="text-[11px] text-red-500 font-semibold mt-1 ml-1">Password tidak cocok</p>
+                  )}
+                </div>
+
+                {/* Error / success */}
+                <AnimatePresence>
+                  {pwError && (
+                    <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                      className="flex items-center gap-2 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm font-medium">
+                      <AlertCircle className="w-4 h-4 shrink-0" />{pwError}
+                    </motion.div>
+                  )}
+                  {pwMsg && (
+                    <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                      className="flex items-center gap-2 px-4 py-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-700 text-sm font-medium">
+                      <Check className="w-4 h-4 shrink-0" />{pwMsg}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <button type="submit" disabled={pwSaving}
+                  className="w-full h-11 rounded-xl bg-gradient-to-r from-amber-500 to-orange-400 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(245,158,11,0.35)] hover:shadow-[0_6px_24px_rgba(245,158,11,0.45)] active:scale-[0.98] transition-all disabled:opacity-60">
+                  {pwSaving ? <><Loader2 className="w-4 h-4 animate-spin" /> Mengganti...</> : <><KeyRound className="w-4 h-4" /> Ganti Password</>}
+                </button>
+              </form>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* ── DANGER ZONE ── */}
+      <div className="bg-white/90 backdrop-blur-xl rounded-3xl border border-red-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)] overflow-hidden">
+        <div className="px-5 py-4 border-b border-red-50">
+          <p className="text-[11px] font-bold text-red-400 uppercase tracking-widest">Zona Bahaya</p>
+        </div>
+        <div className="p-5">
+          <button onClick={() => signOut({ callbackUrl: "/login" })}
+            className="w-full flex items-center justify-center gap-2.5 h-12 bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 font-bold text-sm rounded-2xl active:scale-[0.98] transition-all duration-300 group">
+            <LogOut className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            Keluar dari Akun
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 /* ─────────────────────── MAIN PORTAL ─────────────────────── */
 export default function UserPortal() {
   const { data: session } = useSession()
@@ -942,41 +1261,7 @@ export default function UserPortal() {
           )}
 
           {/* ── AKUN ── */}
-          {activeTab === "Akun" && (
-            <div className="flex flex-col gap-4 md:max-w-2xl md:mx-auto w-full animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out">
-              <div className="w-full bg-gradient-to-br from-[#155f7a] to-[#2196c4] rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-[0_12px_40px_rgba(21,95,122,0.3)] flex items-center gap-5 md:gap-6 border border-white/10 hover:shadow-[0_16px_50px_rgba(21,95,122,0.4)] transition-all duration-300">
-              <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/20 flex items-center justify-center shrink-0 border-2 border-white/30 shadow-inner">
-                <span className="text-white font-black text-3xl md:text-4xl">{(session?.user?.name ?? "U")[0].toUpperCase()}</span>
-              </div>
-              <div className="min-w-0">
-                <p className="text-white font-bold text-lg md:text-2xl truncate">{session?.user?.name ?? "Pengguna"}</p>
-                <p className="text-white/80 text-sm md:text-base font-mono mt-1 truncate">{session?.user?.email ?? ""}</p>
-                <span className="inline-block mt-3 px-3 py-1 bg-white/20 rounded-full text-white text-[11px] font-bold uppercase tracking-widest shadow-sm">
-                  {(session?.user as any)?.role ?? "user"}
-                </span>
-              </div>
-            </div>
-            {!loading && (
-              <div className="grid grid-cols-3 gap-3 md:gap-4 mt-2">
-                {[
-                  { label:"Total Tiket", count:tickets.length,                     color:"text-[#1e7fa8]" },
-                  { label:"Aktif",       count:openCount+inprogCount+pendingCount, color:"text-[#f59e0b]" },
-                  { label:"Selesai",     count:resolvedCount,                      color:"text-[#22c55e]" },
-                ].map((s, idx) => (
-                  <div key={s.label} className="flex flex-col items-center py-5 md:py-6 rounded-2xl md:rounded-3xl bg-white/90 backdrop-blur-md border border-white/50 shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300"
-                    style={{ animationDelay: `${idx * 100}ms` }}>
-                    <span className={`text-3xl md:text-4xl font-black ${s.color} leading-none mb-1.5 md:mb-2`}>{s.count}</span>
-                    <span className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider text-center">{s.label}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-            <button onClick={() => signOut({ callbackUrl: "/login" })}
-              className="w-full flex items-center justify-center gap-2 py-4 bg-red-500/90 hover:bg-red-600 text-white font-bold text-sm md:text-base rounded-2xl shadow-[0_8px_30px_rgba(239,68,68,0.3)] active:scale-[0.98] transition-all duration-300 mt-4 md:mt-6">
-              <LogOut className="w-5 h-5" /> Keluar dari Akun
-            </button>
-          </div>
-        )}
+          {activeTab === "Akun" && <AkunTab session={session} tickets={tickets} loading={loading} openCount={openCount} inprogCount={inprogCount} pendingCount={pendingCount} resolvedCount={resolvedCount} />}
         </main>
       </div>
 
