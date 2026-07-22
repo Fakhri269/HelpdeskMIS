@@ -888,6 +888,7 @@ export default function UserPortal() {
               ) : (
                 <div>{tickets.map(t => <TicketRow key={t.id} ticket={t} />)}</div>
               )}
+              </div>
             </div>
           )}
 
