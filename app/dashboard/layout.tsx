@@ -450,7 +450,7 @@ export default function DashboardLayout({
         </header>
 
         {/* Main content */}
-        <main className="relative flex-1 overflow-y-auto focus:outline-none scroll-smooth">
+        <main className="relative flex-1 overflow-y-scroll focus:outline-none scroll-smooth">
           <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] dark:bg-[url('/grid-dark.svg')] opacity-20 pointer-events-none"></div>
           <div className="relative p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto min-h-full">
             {children}
