@@ -596,41 +596,115 @@ export default function UserPortal() {
       </div>
 
       {/* ══ SIDEBAR (DESKTOP) ══ */}
-      <aside className="hidden md:flex flex-col w-64 h-[100dvh] sticky top-0 bg-gradient-to-b from-[#155f7a] to-[#2496bb] shadow-xl shrink-0 z-30">
-        <div className="px-6 pt-10 pb-6 flex flex-col items-center gap-3 border-b border-white/10">
-          <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center p-2 shadow-inner">
-            <Image src="/PdamLogo.svg" alt="Logo PDAM" width={46} height={46} className="brightness-0 invert" />
+      <aside className="hidden md:flex flex-col w-[280px] h-[100dvh] sticky top-0 bg-gradient-to-b from-[#155f7a] to-[#2496bb] shadow-xl shrink-0 z-30 relative">
+        {/* Subtle dot-grid texture */}
+        <div
+          className="absolute inset-0 opacity-[0.05] pointer-events-none"
+          style={{
+            backgroundImage: "radial-gradient(rgba(255,255,255,0.7) 1px, transparent 1px)",
+            backgroundSize: "22px 22px",
+          }}
+        />
+
+        {/* Wave SVG */}
+        <svg
+          className="absolute top-0 h-full pointer-events-none"
+          style={{ right: '-24px', zIndex: 25 }}
+          width="26"
+          height="100%"
+          viewBox="0 0 26 800"
+          preserveAspectRatio="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <linearGradient id="waveGradUser" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#155f7a" />
+              <stop offset="100%" stopColor="#2496bb" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M0,0 L14,0 C22,3 26,16 24,45 C22,90 12,115 12,175 C12,235 26,258 24,315 C22,372 10,390 12,455 C14,515 22,538 26,600 L26,800 L0,800 Z"
+            fill="url(#waveGradUser)"
+          />
+        </svg>
+
+        {/* Logo */}
+        <div className="flex h-20 items-center px-6 font-bold text-2xl tracking-tight z-10 transition-all">
+          <div className="flex items-center justify-center mr-3">
+            <Image src="/PdamLogo.svg" alt="PDAM Logo" width={36} height={36} className="drop-shadow-md brightness-0 invert" />
           </div>
-          <span className="text-white font-black text-xl tracking-wide text-center">Helpdesk MIS</span>
+          <div className="flex items-center overflow-hidden whitespace-nowrap">
+            <span className="text-white font-bold">Helpdesk</span>
+            <span className="text-cyan-300 ml-1">.</span>
+          </div>
         </div>
-        <div className="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
-          {TABS.map(tab => {
-            const isChat = tab.id === "Chat"
-            const unreadChatsCount = isChat ? tickets.reduce((sum, t) => sum + Math.max(0, (t._count?.comments||0) - (readCounts[t.id]||0)), 0) : 0
-            
-            return (
-              <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-[14px] font-bold transition-all relative ${activeTab === tab.id ? "bg-white/20 text-white shadow-inner" : "text-white/60 hover:bg-white/10 hover:text-white"}`}>
-                <tab.icon className="w-[20px] h-[20px]" />
-                {tab.label}
-                {isChat && unreadChatsCount > 0 && (
-                  <span className="ml-auto bg-red-500 text-white text-[10px] font-bold rounded-full px-2 py-0.5 shadow-sm">
-                    {unreadChatsCount} Baru
-                  </span>
-                )}
-              </button>
-            )
-          })}
+
+        {/* Nav */}
+        <div className="flex-1 overflow-y-auto py-6 px-4 z-10 scrollbar-hide space-y-6">
+          <div>
+            <div className="text-[10px] font-semibold text-white/40 mb-3 uppercase tracking-widest px-3 whitespace-nowrap overflow-hidden transition-all duration-300">Menu Utama</div>
+            <nav className="space-y-1">
+              {TABS.map(tab => {
+                if (tab.id === "Akun") return null;
+
+                const isChat = tab.id === "Chat"
+                const unreadChatsCount = isChat ? tickets.reduce((sum, t) => sum + Math.max(0, (t._count?.comments||0) - (readCounts[t.id]||0)), 0) : 0
+                const active = activeTab === tab.id
+                
+                return (
+                  <button key={tab.id} onClick={() => setActiveTab(tab.id)}
+                    className={`group w-full flex items-center justify-between rounded-xl p-2.5 text-sm font-medium transition-all duration-200 ${
+                      active
+                        ? "bg-white/20 text-white shadow-inner backdrop-blur-sm border border-white/20"
+                        : "text-white/65 hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    <div className="flex items-center">
+                      <tab.icon className={`mr-3 h-5 w-5 transition-transform duration-200 group-hover:scale-110 ${active ? "text-cyan-300" : "text-white/50 group-hover:text-cyan-300"}`} />
+                      <span>{tab.label}</span>
+                    </div>
+                    {isChat && unreadChatsCount > 0 && (
+                      <span className="bg-cyan-400/20 text-cyan-100 border border-cyan-300/30 text-[10px] font-bold rounded-full px-2 py-0.5 shadow-sm">
+                        {unreadChatsCount}
+                      </span>
+                    )}
+                  </button>
+                )
+              })}
+            </nav>
+          </div>
         </div>
-        <div className="p-4 border-t border-white/10">
-          <div className="flex items-center gap-3 p-3 bg-black/10 rounded-xl hover:bg-black/20 transition-colors cursor-pointer" onClick={() => setActiveTab("Akun")}>
-             <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/30">
-                <span className="text-white font-black">{(session?.user?.name ?? "U")[0].toUpperCase()}</span>
-             </div>
-             <div className="min-w-0 flex-1 text-left">
-                <p className="text-white font-bold text-sm truncate">{session?.user?.name ?? "Pengguna"}</p>
-                <p className="text-white/60 text-[10px] font-mono truncate">{session?.user?.email ?? ""}</p>
-             </div>
+
+        {/* User card */}
+        <div className="p-4 z-10">
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-3 border border-white/15 transition-all duration-300">
+            <div 
+              className="flex items-center space-x-3 mb-3 cursor-pointer hover:bg-white/5 p-1.5 -mx-1.5 rounded-xl transition-colors"
+              onClick={() => setActiveTab("Akun")}
+            >
+              <div className="relative shrink-0">
+                <div className="h-9 w-9 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 border-2 border-white/30 shadow-sm flex items-center justify-center">
+                  <span className="text-white font-medium text-sm">{(session?.user?.name ?? "U")[0].toUpperCase()}</span>
+                </div>
+                <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-white/20"></div>
+              </div>
+              <div className="flex-1 min-w-0 text-left">
+                <p className="text-sm font-bold text-white truncate">
+                  {session?.user?.name}
+                </p>
+                <p className="text-[11px] font-medium text-white/50 capitalize truncate">
+                  {(session?.user as any)?.role?.replace('_', ' ') || "user"}
+                </p>
+              </div>
+            </div>
+            <button
+              className="w-full flex items-center justify-center gap-2 text-xs h-8 text-white/70 hover:text-white hover:bg-white/15 border border-white/15 rounded-md transition-colors"
+              onClick={() => signOut({ callbackUrl: "/login" })}
+              title="Keluar"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              Keluar
+            </button>
           </div>
         </div>
       </aside>
