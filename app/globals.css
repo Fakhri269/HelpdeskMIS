@@ -157,6 +157,8 @@
     margin: 0;
     padding: 0;
     height: 100%;
+    scrollbar-gutter: stable;
+    overflow-y: scroll;
   }
   body {
     @apply bg-background text-foreground;
