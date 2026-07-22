@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react"
 import { useSession, signOut } from "next-auth/react"
-import { Loader2, Plus, ChevronRight, LogOut, User, Ticket, MessageSquare, Home, AlertCircle, X, Send, FileText, CheckCheck, Clock, ChevronLeft, Eye, EyeOff, Lock, Shield, Edit3, Check, KeyRound, Mail, BadgeCheck, Building2, Briefcase } from "lucide-react"
+import { Loader2, Plus, ChevronRight, LogOut, User, Ticket, MessageSquare, Home, AlertCircle, X, Send, FileText, CheckCheck, Clock, ChevronLeft, Eye, EyeOff, Lock, Shield, Edit3, Check, KeyRound, Mail, BadgeCheck, Building2, Briefcase, HelpCircle, ChevronDown, Search } from "lucide-react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -31,6 +31,7 @@ const TABS = [
   { id: "Beranda", icon: Home,          label: "Beranda" },
   { id: "Tiket",   icon: Ticket,        label: "Tiket"   },
   { id: "Chat",    icon: MessageSquare, label: "Chat"    },
+  { id: "FAQ",     icon: HelpCircle,    label: "FAQ"     },
   { id: "Akun",    icon: User,          label: "Akun"    },
 ]
 
@@ -573,6 +574,134 @@ function ChatTab({ session, tickets, readCounts, markAsRead }: { session: any, t
           </div>
         )}
       </div>
+    </div>
+  )
+}
+
+/* ─────────────────────── FAQ TAB ─────────────────────── */
+function FaqTab() {
+  const [faqs, setFaqs]             = useState<any[]>([])
+  const [loading, setLoading]       = useState(true)
+  const [search, setSearch]         = useState("")
+  const [openId, setOpenId]         = useState<string | null>(null)
+
+  useEffect(() => {
+    fetch("/api/faq")
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) setFaqs(data) })
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [])
+
+  const filtered = faqs.filter(f =>
+    f.question.toLowerCase().includes(search.toLowerCase()) ||
+    f.answer.toLowerCase().includes(search.toLowerCase()) ||
+    (f.tags || "").toLowerCase().includes(search.toLowerCase())
+  )
+
+  return (
+    <div className="flex flex-col gap-4 md:max-w-2xl md:mx-auto w-full animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out pb-6">
+
+      {/* ── HERO ── */}
+      <div className="relative overflow-hidden rounded-3xl shadow-[0_16px_50px_rgba(21,95,122,0.22)]">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0097a7] via-[#00acc1] to-[#4dd0e1]" />
+        <div className="absolute -top-8 -right-8 w-44 h-44 rounded-full bg-white/10" />
+        <div className="absolute -bottom-12 -left-8 w-56 h-56 rounded-full bg-white/5" />
+        <div className="relative z-10 px-6 py-6 flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center shrink-0 shadow-lg">
+            <HelpCircle className="w-7 h-7 text-white" />
+          </div>
+          <div>
+            <p className="text-white/70 text-xs font-semibold uppercase tracking-widest mb-0.5">Pusat Bantuan</p>
+            <h2 className="text-white font-black text-xl leading-tight">FAQ</h2>
+            <p className="text-white/65 text-sm mt-0.5">Pertanyaan yang sering ditanyakan</p>
+          </div>
+        </div>
+      </div>
+
+      {/* ── SEARCH ── */}
+      <div className="relative">
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+        <input
+          value={search} onChange={e => setSearch(e.target.value)}
+          placeholder="Cari pertanyaan..."
+          className="w-full h-11 pl-10 pr-4 rounded-2xl border border-slate-200 bg-white text-sm text-slate-700 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-[#00acc1]/40 focus:border-[#00acc1] transition-all shadow-sm"
+        />
+      </div>
+
+      {/* ── LIST ── */}
+      {loading ? (
+        <div className="flex flex-col items-center justify-center py-16 gap-3">
+          <Loader2 className="w-8 h-8 text-[#00acc1] animate-spin" />
+          <p className="text-slate-400 text-sm">Memuat FAQ...</p>
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-16 gap-3 text-slate-400">
+          <HelpCircle className="w-12 h-12 opacity-30" />
+          <p className="font-semibold text-sm">{search ? "Tidak ada hasil pencarian" : "Belum ada FAQ"}</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {filtered.map((faq, i) => {
+            const isOpen = openId === faq.id
+            const tags = faq.tags ? faq.tags.split(",").map((t: string) => t.trim()).filter(Boolean) : []
+            return (
+              <div
+                key={faq.id}
+                className={`rounded-2xl border transition-all duration-300 overflow-hidden shadow-sm ${
+                  isOpen
+                    ? "border-[#00acc1]/40 bg-white shadow-[0_4px_24px_rgba(0,172,193,0.12)]"
+                    : "border-slate-100 bg-white/80 hover:border-[#00acc1]/30 hover:shadow-md"
+                }`}
+                style={{ animationDelay: `${i * 40}ms` }}
+              >
+                {/* Question row */}
+                <button
+                  onClick={() => setOpenId(isOpen ? null : faq.id)}
+                  className="w-full flex items-start gap-3 px-4 py-4 text-left"
+                >
+                  <div className={`shrink-0 w-7 h-7 rounded-xl flex items-center justify-center mt-0.5 transition-colors ${
+                    isOpen ? "bg-[#00acc1] text-white" : "bg-[#e0f7fa] text-[#00838f]"
+                  }`}>
+                    <span className="text-[11px] font-black">{i + 1}</span>
+                  </div>
+                  <p className={`flex-1 text-sm font-semibold leading-snug pr-2 ${
+                    isOpen ? "text-[#004d5e]" : "text-slate-700"
+                  }`}>{faq.question}</p>
+                  <ChevronDown className={`shrink-0 w-4 h-4 text-[#00acc1] transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+                </button>
+
+                {/* Answer */}
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25, ease: "easeInOut" }}
+                    >
+                      <div className="px-4 pb-4 pt-0">
+                        <div className="ml-10 border-l-2 border-[#00acc1]/30 pl-4">
+                          <p className="text-slate-600 text-sm leading-relaxed">{faq.answer}</p>
+                          {tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1.5 mt-3">
+                              {tags.map((tag: string) => (
+                                <span key={tag} className="px-2.5 py-0.5 rounded-full bg-[#e0f7fa] text-[#00838f] text-[10px] font-bold">
+                                  #{tag}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }
@@ -1338,6 +1467,9 @@ export default function UserPortal() {
           {activeTab === "Chat" && (
             <ChatTab session={session} tickets={tickets} readCounts={readCounts} markAsRead={markAsRead} />
           )}
+
+          {/* ── FAQ ── */}
+          {activeTab === "FAQ" && <FaqTab />}
 
           {/* ── AKUN ── */}
           {activeTab === "Akun" && <AkunTab session={session} tickets={tickets} loading={loading} openCount={openCount} inprogCount={inprogCount} pendingCount={pendingCount} resolvedCount={resolvedCount} />}
