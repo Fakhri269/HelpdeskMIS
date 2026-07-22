@@ -511,9 +511,6 @@ function ChatTab({ session, tickets, readCounts, markAsRead }: { session: any, t
     <div className="-mx-4 -mt-5 -mb-24 md:mx-0 md:mt-0 md:mb-0 flex flex-col min-h-[calc(100dvh-115px)] md:min-h-[calc(100vh-140px)] bg-[#f4f9fb] animate-in fade-in duration-300">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-4 bg-white/90 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.04)] border-b border-white/50 shrink-0">
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1e92bf] to-[#155f7a] flex items-center justify-center shadow-md shrink-0">
-          <Image src="/PdamLogo.svg" alt="PDAM" width={22} height={22} className="brightness-0 invert" />
-        </div>
         <div>
           <h2 className="font-extrabold text-[#155f7a] text-[14px]">Helpdesk MIS</h2>
           <p className="text-[#155f7a]/60 text-[10px] font-semibold uppercase tracking-wider">Pilih Tiket untuk Memulai Chat</p>
