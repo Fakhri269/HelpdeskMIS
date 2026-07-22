@@ -509,33 +509,11 @@ function ChatTab({ session, tickets, readCounts, markAsRead }: { session: any, t
 
   return (
     <div className="-mx-4 -mt-5 -mb-24 md:mx-0 md:mt-0 md:mb-0 flex flex-col min-h-[calc(100dvh-115px)] md:min-h-[calc(100vh-140px)] bg-[#f4f9fb] animate-in fade-in duration-300">
-      {/* Header with waves */}
-      <div className="relative shrink-0 overflow-hidden" style={{background: "linear-gradient(135deg, #0e6d8a 0%, #1e92bf 50%, #16cedc 100%)"}}>
-        {/* Decorative circles */}
-        <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full opacity-10" style={{background: "radial-gradient(circle, #ffffff 0%, transparent 70%)"}} />
-        <div className="absolute -top-4 right-16 w-24 h-24 rounded-full opacity-[0.07]" style={{background: "radial-gradient(circle, #ffffff 0%, transparent 70%)"}} />
-
-        {/* Content */}
-        <div className="relative z-10 flex items-center gap-3 px-5 pt-5 pb-10">
-          {/* Wave icon (PDAM style) */}
-          <div className="flex flex-col gap-[3px] shrink-0">
-            <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
-              <path d="M2 5 Q6 1 10 5 Q14 9 18 5 Q22 1 26 5 Q30 9 34 5" stroke="white" strokeWidth="2.2" strokeLinecap="round" fill="none" opacity="0.9"/>
-              <path d="M2 11 Q6 7 10 11 Q14 15 18 11 Q22 7 26 11 Q30 15 34 11" stroke="white" strokeWidth="2.2" strokeLinecap="round" fill="none" opacity="0.7"/>
-              <path d="M2 17 Q6 13 10 17 Q14 21 18 17 Q22 13 26 17 Q30 21 34 17" stroke="white" strokeWidth="2.2" strokeLinecap="round" fill="none" opacity="0.5"/>
-            </svg>
-          </div>
-          <div>
-            <h2 className="font-black text-white text-[18px] tracking-tight leading-none">Helpdesk MIS</h2>
-            <p className="text-white/70 text-[11px] font-semibold mt-0.5 tracking-wide">Pilih tiket untuk memulai chat</p>
-          </div>
-        </div>
-
-        {/* Wave bottom decoration */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 390 32" preserveAspectRatio="none" className="w-full h-8 block">
-            <path d="M0 32 L0 18 Q20 8 40 16 Q60 24 80 14 Q100 4 120 14 Q140 24 160 14 Q180 4 200 14 Q220 24 240 14 Q260 4 280 14 Q300 24 320 14 Q340 4 360 14 Q380 24 390 18 L390 32 Z" fill="#f4f9fb"/>
-          </svg>
+      {/* Header */}
+      <div className="flex items-center gap-3 px-4 py-4 bg-white/90 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.04)] border-b border-white/50 shrink-0">
+        <div>
+          <h2 className="font-extrabold text-[#155f7a] text-[14px]">Helpdesk MIS</h2>
+          <p className="text-[#155f7a]/60 text-[10px] font-semibold uppercase tracking-wider">Pilih Tiket untuk Memulai Chat</p>
         </div>
       </div>
 
@@ -1126,12 +1104,21 @@ export default function UserPortal() {
 
       {/* ══ HEADER (MOBILE) ══ */}
       <header className="relative z-20 w-full bg-gradient-to-r from-[#155f7a] to-[#1e92bf] shadow-lg overflow-hidden md:hidden">
-        <svg className="absolute -bottom-5 left-0 w-full h-6 z-10" viewBox="0 0 1440 60" preserveAspectRatio="none">
-          <path fill="white" d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" />
-        </svg>
-        <div className="px-5 pt-5 pb-9 flex items-center gap-3 relative z-10">
-          <Image src="/PdamLogo.svg" alt="Logo PDAM" width={36} height={36} className="h-9 w-auto brightness-0 invert" />
-          <span className="text-white font-bold text-[18px] tracking-wide">Helpdesk MIS</span>
+        {/* Layered Wave Decoration */}
+        <div className="absolute -bottom-1 left-0 w-full opacity-60">
+          <svg viewBox="0 0 1440 320" preserveAspectRatio="none" className="w-full h-12">
+            <path fill="white" fillOpacity="0.4" d="M0,256L48,229.3C96,203,192,149,288,149.3C384,149,480,203,576,218.7C672,235,768,213,864,192C960,171,1056,149,1152,149.3C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+          </svg>
+        </div>
+        <div className="absolute -bottom-1 left-0 w-full">
+          <svg viewBox="0 0 1440 320" preserveAspectRatio="none" className="w-full h-10">
+            <path fill="white" d="M0,192L60,197.3C120,203,240,213,360,197.3C480,181,600,139,720,133.3C840,128,960,160,1080,186.7C1200,213,1320,235,1380,245.3L1440,256L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
+          </svg>
+        </div>
+
+        <div className="px-5 pt-6 pb-11 flex items-center gap-3 relative z-10">
+          <Image src="/PdamLogo.svg" alt="Logo PDAM" width={40} height={40} className="h-10 w-auto brightness-0 invert drop-shadow-md" />
+          <span className="text-white font-extrabold text-[19px] tracking-wide drop-shadow-sm">Helpdesk MIS</span>
         </div>
       </header>
 
