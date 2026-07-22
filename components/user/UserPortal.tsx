@@ -254,7 +254,7 @@ function TicketDetailSheet({ ticket, onClose }: { ticket: any; onClose: () => vo
         <>
           <motion.div 
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm" 
+            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm" 
             onClick={onClose} 
           />
           <motion.div 
@@ -265,96 +265,97 @@ function TicketDetailSheet({ ticket, onClose }: { ticket: any; onClose: () => vo
             {/* Wave SVG (Mobile Only) */}
             <div className="w-full overflow-hidden leading-none md:hidden shrink-0 translate-y-[1px]">
               <svg viewBox="0 0 1440 90" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="w-full h-10 block">
-                <path d="M0,40 C180,90 360,0 540,45 C720,90 900,10 1080,50 C1260,85 1380,20 1440,40 L1440,90 L0,90 Z" fill="#0d5f82" />
-                <path d="M0,60 C200,20 400,80 600,55 C800,30 1000,75 1200,50 C1320,35 1400,65 1440,60 L1440,90 L0,90 Z" fill="#0b5270" opacity="0.6" />
+                <path d="M0,40 C180,90 360,0 540,45 C720,90 900,10 1080,50 C1260,85 1380,20 1440,40 L1440,90 L0,90 Z" fill="#e0f7fa" />
+                <path d="M0,60 C200,20 400,80 600,55 C800,30 1000,75 1200,50 C1320,35 1400,65 1440,60 L1440,90 L0,90 Z" fill="#e0f7fa" opacity="0.6" />
               </svg>
             </div>
 
-            <div className="flex-1 flex flex-col max-h-[88dvh] md:max-h-[85vh] overflow-hidden md:rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
-                 style={{ background: "linear-gradient(160deg,#0d5f82 0%,#1a8fba 60%,#2ba8d4 100%)" }}>
+            <div className="flex-1 flex flex-col max-h-[88dvh] md:max-h-[85vh] overflow-hidden md:rounded-3xl shadow-[0_20px_80px_rgba(0,0,0,0.25)]"
+                 style={{ background: "linear-gradient(170deg,#e0f7fa 0%,#b2ebf2 40%,#e0f7fa 100%)" }}>
 
-        <div className="flex md:hidden justify-center pt-3 pb-1 shrink-0">
-          <div className="w-10 h-1 rounded-full bg-white/30" />
-        </div>
-
-        <div className="shrink-0 px-5 py-4 flex items-start justify-between border-b border-white/10">
-          <div className="flex-1 min-w-0 pr-3">
-            <p className="text-white/55 text-[11px] font-mono mb-0.5">{ticket.ticketNumber}</p>
-            <h2 className="text-white font-bold text-base leading-snug">{ticket.title}</h2>
-          </div>
-          <button onClick={onClose} className="shrink-0 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
-            <X className="w-4 h-4 text-white" />
-          </button>
-        </div>
-
-        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
-          {/* Status + Prioritas badges */}
-          <div className="flex flex-wrap gap-2">
-            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold ${st.bg} ${st.text}`}>
-              <span className="w-1.5 h-1.5 rounded-full bg-white/70" />Status: {st.label}
-            </span>
-            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold ${pr.bg} text-white`}>
-              <span className="w-1.5 h-1.5 rounded-full bg-white/70" />Prioritas: {pr.label}
-            </span>
-            {ticket.category && (
-              <span className="px-3 py-1 rounded-lg bg-white/15 text-white text-xs font-medium">{ticket.category}</span>
-            )}
-          </div>
-
-          {/* SLA info */}
-          {ticket.slaDeadline && (
-            <div className="bg-white/10 rounded-xl px-4 py-3 flex items-center gap-3">
-              <span className="text-white/60 text-xs">⏱ Target Selesai:</span>
-              <span className="text-white text-xs font-bold">
-                {new Date(ticket.slaDeadline).toLocaleString("id-ID", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" })}
-              </span>
-            </div>
-          )}
-
-          {/* Deskripsi */}
-          <div className="bg-white/10 rounded-xl p-4">
-            <p className="text-white/55 text-[10px] font-bold uppercase tracking-wider mb-2">Detail Masalah</p>
-            <p className="text-white text-sm leading-relaxed">{ticket.description}</p>
-          </div>
-
-          {/* Meta grid */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white/10 rounded-xl p-3">
-              <p className="text-white/55 text-[10px] font-bold uppercase tracking-wider mb-1">Dibuat</p>
-              <p className="text-white text-xs font-semibold">
-                {new Date(ticket.createdAt).toLocaleDateString("id-ID", { day:"2-digit", month:"long", year:"numeric" })}
-              </p>
-            </div>
-            <div className="bg-white/10 rounded-xl p-3">
-              <p className="text-white/55 text-[10px] font-bold uppercase tracking-wider mb-1">Petugas</p>
-              <p className="text-white text-xs font-semibold">{ticket.assignee?.name ?? "Belum ditugaskan"}</p>
-            </div>
-            {ticket.unitKerja && (
-              <div className="col-span-2 bg-white/10 rounded-xl p-3">
-                <p className="text-white/55 text-[10px] font-bold uppercase tracking-wider mb-1">Unit Kerja</p>
-                <p className="text-white text-xs font-semibold">{ticket.unitKerja.name}</p>
+              <div className="flex md:hidden justify-center pt-3 pb-1 shrink-0">
+                <div className="w-10 h-1 rounded-full bg-[#00acc1]/30" />
               </div>
-            )}
-          </div>
 
-          {/* Komentar/riwayat */}
-          {ticket.comments && ticket.comments.length > 0 && (
-            <div>
-              <p className="text-white/55 text-[10px] font-bold uppercase tracking-wider mb-2">Riwayat Aktivitas</p>
-              <div className="space-y-2">
-                {ticket.comments.map((c: any) => (
-                  <div key={c.id} className={`rounded-xl p-3 ${c.isSystem ? "bg-white/5 border border-white/10" : "bg-white/15"}`}>
-                    {!c.isSystem && <p className="text-white/60 text-[10px] font-bold mb-1">{c.user?.name ?? "Tim IT"}</p>}
-                    <p className="text-white text-xs leading-relaxed">{c.content}</p>
-                    <p className="text-white/40 text-[10px] mt-1">
-                      {new Date(c.createdAt).toLocaleString("id-ID", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" })}
+              {/* Header */}
+              <div className="shrink-0 px-5 py-4 flex items-start justify-between border-b border-[#00acc1]/20">
+                <div className="flex-1 min-w-0 pr-3">
+                  <p className="text-[#00838f] text-[11px] font-mono mb-0.5">{ticket.ticketNumber}</p>
+                  <h2 className="text-[#004d5e] font-bold text-base leading-snug">{ticket.title}</h2>
+                </div>
+                <button onClick={onClose} className="shrink-0 w-8 h-8 rounded-full bg-[#00acc1]/15 flex items-center justify-center hover:bg-[#00acc1]/30 transition">
+                  <X className="w-4 h-4 text-[#00838f]" />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
+
+                {/* Status + Prioritas badges */}
+                <div className="flex flex-wrap gap-2">
+                  <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm ${st.bg} ${st.text}`}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-white/80" />Status: {st.label}
+                  </span>
+                  <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white shadow-sm ${pr.bg}`}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-white/80" />Prioritas: {pr.label}
+                  </span>
+                  {ticket.category && (
+                    <span className="px-3 py-1.5 rounded-xl bg-[#00acc1]/15 text-[#00838f] text-xs font-semibold border border-[#00acc1]/20">{ticket.category}</span>
+                  )}
+                </div>
+
+                {/* SLA info */}
+                {ticket.slaDeadline && (
+                  <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-4 py-3 flex items-center gap-3 border border-[#00acc1]/20 shadow-sm">
+                    <div className="w-8 h-8 rounded-xl bg-[#00acc1]/15 flex items-center justify-center shrink-0">
+                      <Clock className="w-4 h-4 text-[#00838f]" />
+                    </div>
+                    <div>
+                      <p className="text-[#00838f]/70 text-[10px] font-bold uppercase tracking-wider">Target Selesai</p>
+                      <p className="text-[#004d5e] text-sm font-bold">
+                        {new Date(ticket.slaDeadline).toLocaleString("id-ID", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" })}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Deskripsi */}
+                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-[#00acc1]/20 shadow-sm">
+                  <p className="text-[#00838f]/70 text-[10px] font-bold uppercase tracking-wider mb-2">Detail Masalah</p>
+                  <p className="text-[#004d5e] text-sm leading-relaxed">{ticket.description}</p>
+                </div>
+
+                {/* Meta row: Dibuat + Unit Kerja */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-3 border border-[#00acc1]/20 shadow-sm">
+                    <p className="text-[#00838f]/70 text-[10px] font-bold uppercase tracking-wider mb-1">Dibuat</p>
+                    <p className="text-[#004d5e] text-xs font-bold">
+                      {new Date(ticket.createdAt).toLocaleDateString("id-ID", { day:"2-digit", month:"long", year:"numeric" })}
                     </p>
                   </div>
-                ))}
+                  <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-3 border border-[#00acc1]/20 shadow-sm">
+                    <p className="text-[#00838f]/70 text-[10px] font-bold uppercase tracking-wider mb-1">Unit Kerja</p>
+                    <p className="text-[#004d5e] text-xs font-bold">{ticket.unitKerja?.name ?? "-"}</p>
+                  </div>
+                </div>
+
+                {/* Riwayat */}
+                {ticket.comments && ticket.comments.length > 0 && (
+                  <div>
+                    <p className="text-[#00838f]/70 text-[10px] font-bold uppercase tracking-wider mb-2">Riwayat Aktivitas</p>
+                    <div className="space-y-2">
+                      {ticket.comments.map((c: any) => (
+                        <div key={c.id} className={`rounded-2xl p-3 border shadow-sm ${c.isSystem ? "bg-white/50 border-[#00acc1]/15" : "bg-[#00acc1]/10 border-[#00acc1]/25"}`}>
+                          {!c.isSystem && <p className="text-[#00838f] text-[10px] font-bold mb-1">{c.user?.name ?? "Tim IT"}</p>}
+                          <p className="text-[#004d5e] text-xs leading-relaxed">{c.content}</p>
+                          <p className="text-[#00838f]/50 text-[10px] mt-1">
+                            {new Date(c.createdAt).toLocaleString("id-ID", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" })}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-          )}
-            </div>
             </div>
           </motion.div>
         </>
