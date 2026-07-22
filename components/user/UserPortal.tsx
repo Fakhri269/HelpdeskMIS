@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react"
 import { useSession, signOut } from "next-auth/react"
 import { Loader2, Plus, ChevronRight, LogOut, User, Ticket, MessageSquare, Home, AlertCircle, X, Send, FileText, CheckCheck, Clock, ChevronLeft } from "lucide-react"
 import Image from "next/image"
+import { motion, AnimatePresence } from "framer-motion"
 
 /* ─────────────────────── CONFIG ─────────────────────── */
 const STATUS_CONFIG: Record<string, { label: string; dot: string; bg: string; text: string }> = {
@@ -109,13 +110,30 @@ function CreateTicketSheet({ open, onClose, onSuccess }: { open: boolean; onClos
     } catch { alert("Terjadi kesalahan sistem"); setIsSubmitting(false) }
   }
 
-  if (!open) return null
-
   return (
-    <>
-      <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300" onClick={onClose} />
-      <div className="fixed bottom-0 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl z-50 max-h-[92dvh] md:max-h-[85vh] flex flex-col rounded-t-3xl md:rounded-3xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.4)] animate-in slide-in-from-bottom-[100%] md:slide-in-from-bottom-0 md:zoom-in-95 duration-500 ease-out"
-        style={{ background: "linear-gradient(160deg,#0d5f82 0%,#1a8fba 60%,#2ba8d4 100%)" }}>
+    <AnimatePresence>
+      {open && (
+        <>
+          <motion.div 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm" 
+            onClick={onClose} 
+          />
+          <motion.div 
+            initial={{ y: "100%", opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: "100%", opacity: 0 }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed bottom-0 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl z-50 flex flex-col"
+          >
+            {/* Wave SVG (Mobile Only) */}
+            <div className="w-full overflow-hidden leading-none md:hidden shrink-0 translate-y-[1px]">
+              <svg viewBox="0 0 1440 90" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="w-full h-10 block">
+                <path d="M0,40 C180,90 360,0 540,45 C720,90 900,10 1080,50 C1260,85 1380,20 1440,40 L1440,90 L0,90 Z" fill="#0d5f82" />
+                <path d="M0,60 C200,20 400,80 600,55 C800,30 1000,75 1200,50 C1320,35 1400,65 1440,60 L1440,90 L0,90 Z" fill="#0b5270" opacity="0.6" />
+              </svg>
+            </div>
+
+            <div className="flex-1 flex flex-col max-h-[92dvh] md:max-h-[85vh] overflow-hidden md:rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
+                 style={{ background: "linear-gradient(160deg,#0d5f82 0%,#1a8fba 60%,#2ba8d4 100%)" }}>
 
         {/* Handle */}
         <div className="flex md:hidden justify-center pt-3 pb-1 shrink-0">
@@ -217,22 +235,43 @@ function CreateTicketSheet({ open, onClose, onSuccess }: { open: boolean; onClos
             </div>
           </form>
         )}
-      </div>
-    </>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   )
 }
 
 /* ─────────────────────── TICKET DETAIL BOTTOM SHEET ─────────────────────── */
 function TicketDetailSheet({ ticket, onClose }: { ticket: any; onClose: () => void }) {
-  if (!ticket) return null
-  const st = STATUS_CONFIG[ticket.status] ?? { label: ticket.status, dot: "bg-gray-400", bg: "bg-gray-400", text: "text-white" }
-  const pr = PRIORITY_CONFIG[ticket.priority] ?? { label: ticket.priority, dot: "bg-gray-400", bg: "bg-gray-400", time: "" }
+  const st = STATUS_CONFIG[ticket?.status] ?? { label: ticket?.status || "", dot: "bg-gray-400", bg: "bg-gray-400", text: "text-white" }
+  const pr = PRIORITY_CONFIG[ticket?.priority] ?? { label: ticket?.priority || "", dot: "bg-gray-400", bg: "bg-gray-400", time: "" }
 
   return (
-    <>
-      <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300" onClick={onClose} />
-      <div className="fixed bottom-0 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl z-50 max-h-[88dvh] md:max-h-[85vh] flex flex-col rounded-t-3xl md:rounded-3xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.4)] animate-in slide-in-from-bottom-[100%] md:slide-in-from-bottom-0 md:zoom-in-95 duration-500 ease-out"
-        style={{ background: "linear-gradient(160deg,#0d5f82 0%,#1a8fba 60%,#2ba8d4 100%)" }}>
+    <AnimatePresence>
+      {ticket && (
+        <>
+          <motion.div 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm" 
+            onClick={onClose} 
+          />
+          <motion.div 
+            initial={{ y: "100%", opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: "100%", opacity: 0 }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed bottom-0 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl z-50 flex flex-col"
+          >
+            {/* Wave SVG (Mobile Only) */}
+            <div className="w-full overflow-hidden leading-none md:hidden shrink-0 translate-y-[1px]">
+              <svg viewBox="0 0 1440 90" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="w-full h-10 block">
+                <path d="M0,40 C180,90 360,0 540,45 C720,90 900,10 1080,50 C1260,85 1380,20 1440,40 L1440,90 L0,90 Z" fill="#0d5f82" />
+                <path d="M0,60 C200,20 400,80 600,55 C800,30 1000,75 1200,50 C1320,35 1400,65 1440,60 L1440,90 L0,90 Z" fill="#0b5270" opacity="0.6" />
+              </svg>
+            </div>
+
+            <div className="flex-1 flex flex-col max-h-[88dvh] md:max-h-[85vh] overflow-hidden md:rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
+                 style={{ background: "linear-gradient(160deg,#0d5f82 0%,#1a8fba 60%,#2ba8d4 100%)" }}>
 
         <div className="flex md:hidden justify-center pt-3 pb-1 shrink-0">
           <div className="w-10 h-1 rounded-full bg-white/30" />
@@ -315,9 +354,12 @@ function TicketDetailSheet({ ticket, onClose }: { ticket: any; onClose: () => vo
               </div>
             </div>
           )}
-        </div>
-      </div>
-    </>
+            </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   )
 }
 
@@ -940,7 +982,7 @@ export default function UserPortal() {
 
       {/* ══ MODALS ══ */}
       <CreateTicketSheet open={createOpen} onClose={() => setCreateOpen(false)} onSuccess={fetchTickets} />
-      {selectedTicket && <TicketDetailSheet ticket={selectedTicket} onClose={() => setSelectedTicket(null)} />}
+      <TicketDetailSheet ticket={selectedTicket} onClose={() => setSelectedTicket(null)} />
     </div>
   )
 }
