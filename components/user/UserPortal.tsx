@@ -31,7 +31,6 @@ const TABS = [
   { id: "Beranda", icon: Home,          label: "Beranda" },
   { id: "Tiket",   icon: Ticket,        label: "Tiket"   },
   { id: "Chat",    icon: MessageSquare, label: "Chat"    },
-  { id: "FAQ",     icon: HelpCircle,    label: "FAQ"     },
   { id: "Akun",    icon: User,          label: "Akun"    },
 ]
 
@@ -1390,51 +1389,8 @@ export default function UserPortal() {
               )}
             </div>
 
-            {/* INFORMASI Banner */}
-            <div className="relative w-full flex items-center justify-center py-4 mt-1">
-              <div className="absolute inset-0 bg-[#155f7a]" style={{ clipPath: "polygon(0 20%, 100% 0%, 100% 80%, 0% 100%)" }} />
-              <h2 className="relative z-10 text-white font-extrabold text-[15px] tracking-[0.3em] uppercase">INFORMASI</h2>
-            </div>
-
-            {/* Info Status */}
-            <div className="w-full bg-white/80 backdrop-blur-xl rounded-3xl p-5 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/50">
-              <h3 className="text-slate-800 font-bold text-[13px] md:text-[14px] mb-3.5">Informasi Status</h3>
-              <div className="grid grid-cols-2 gap-y-3 gap-x-4">
-                {Object.values(STATUS_CONFIG).map(s => (
-                  <div key={s.label} className="flex items-center gap-2.5">
-                    <span className={`w-3.5 h-3.5 rounded-full shrink-0 ${s.dot} shadow-sm`} />
-                    <span className="text-slate-600 text-[12px] font-semibold tracking-wide">{s.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Info Prioritas */}
-            <div className="w-full bg-white/80 backdrop-blur-xl rounded-3xl p-5 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/50">
-              <h3 className="text-slate-800 font-bold text-[13px] md:text-[14px] mb-3.5">Informasi Prioritas</h3>
-              <div className="rounded-2xl overflow-hidden border border-slate-200/60 shadow-sm">
-                {/* Labels row */}
-                <div className="grid grid-cols-4 bg-slate-50/80 backdrop-blur-sm">
-                  {Object.entries(PRIORITY_CONFIG).map(([, p]) => (
-                    <div key={p.label} className="flex flex-col items-center justify-center gap-1.5 py-3 border-r border-slate-200/60 last:border-0">
-                      <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${p.dot} shadow-sm`} />
-                      <span className="text-slate-600 text-[10px] md:text-[11px] font-bold">{p.label}</span>
-                    </div>
-                  ))}
-                </div>
-                {/* Subheader */}
-                <div className="w-full bg-slate-100/80 py-2 text-center border-y border-slate-200/60">
-                  <span className="text-slate-500 text-[10px] font-bold tracking-widest uppercase">Target Waktu Maksimal</span>
-                </div>
-                {/* Time row */}
-                <div className="grid grid-cols-4">
-                  {Object.values(PRIORITY_CONFIG).map(p => (
-                    <div key={p.label} className={`py-3 text-center bg-white/80 border-r border-slate-200/60 last:border-0`}>
-                      <span className={`text-slate-800 text-[12px] md:text-[13px] font-black`}>{p.time}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+            <div className="mt-4">
+              <FaqTab />
             </div>
             </div>
           )}
@@ -1467,9 +1423,6 @@ export default function UserPortal() {
           {activeTab === "Chat" && (
             <ChatTab session={session} tickets={tickets} readCounts={readCounts} markAsRead={markAsRead} />
           )}
-
-          {/* ── FAQ ── */}
-          {activeTab === "FAQ" && <FaqTab />}
 
           {/* ── AKUN ── */}
           {activeTab === "Akun" && <AkunTab session={session} tickets={tickets} loading={loading} openCount={openCount} inprogCount={inprogCount} pendingCount={pendingCount} resolvedCount={resolvedCount} />}
