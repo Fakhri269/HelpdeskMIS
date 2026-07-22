@@ -1103,22 +1103,26 @@ export default function UserPortal() {
       </aside>
 
       {/* ══ HEADER (MOBILE) ══ */}
-      <header className="relative z-20 w-full bg-gradient-to-r from-[#155f7a] to-[#1e92bf] shadow-lg overflow-hidden md:hidden">
-        {/* Layered Wave Decoration */}
-        <div className="absolute -bottom-1 left-0 w-full opacity-60">
-          <svg viewBox="0 0 1440 320" preserveAspectRatio="none" className="w-full h-12">
-            <path fill="white" fillOpacity="0.4" d="M0,256L48,229.3C96,203,192,149,288,149.3C384,149,480,203,576,218.7C672,235,768,213,864,192C960,171,1056,149,1152,149.3C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-          </svg>
+      <header className="relative z-20 w-full md:hidden">
+        {/* Gradient Header */}
+        <div className="bg-gradient-to-r from-[#155f7a] to-[#1e92bf] shadow-lg">
+          <div className="px-5 py-4 flex items-center gap-3 relative z-10">
+            <Image src="/PdamLogo.svg" alt="Logo PDAM" width={38} height={38} className="h-[38px] w-auto brightness-0 invert drop-shadow-md" />
+            <span className="text-white font-extrabold text-[18px] tracking-wide drop-shadow-sm">Helpdesk MIS</span>
+          </div>
         </div>
-        <div className="absolute -bottom-1 left-0 w-full">
-          <svg viewBox="0 0 1440 320" preserveAspectRatio="none" className="w-full h-10">
-            <path fill="white" d="M0,192L60,197.3C120,203,240,213,360,197.3C480,181,600,139,720,133.3C840,128,960,160,1080,186.7C1200,213,1320,235,1380,245.3L1440,256L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
+        
+        {/* Wavy bottom cutout (overlaps the hero image) */}
+        <div className="absolute top-full left-0 w-full leading-none -mt-1 z-20 pointer-events-none">
+          <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="w-full h-5 sm:h-7 block">
+            <defs>
+              <linearGradient id="headerWaveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#155f7a" />
+                <stop offset="100%" stopColor="#1e92bf" />
+              </linearGradient>
+            </defs>
+            <path fill="url(#headerWaveGrad)" d="M0,0 C480,100 960,-20 1440,60 L1440,0 L0,0 Z"></path>
           </svg>
-        </div>
-
-        <div className="px-5 pt-6 pb-11 flex items-center gap-3 relative z-10">
-          <Image src="/PdamLogo.svg" alt="Logo PDAM" width={40} height={40} className="h-10 w-auto brightness-0 invert drop-shadow-md" />
-          <span className="text-white font-extrabold text-[19px] tracking-wide drop-shadow-sm">Helpdesk MIS</span>
         </div>
       </header>
 
