@@ -113,8 +113,8 @@ function CreateTicketSheet({ open, onClose, onSuccess }: { open: boolean; onClos
 
   return (
     <>
-      <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="fixed bottom-0 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl z-50 max-h-[92dvh] md:max-h-[85vh] flex flex-col rounded-t-3xl md:rounded-3xl overflow-hidden shadow-2xl"
+      <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300" onClick={onClose} />
+      <div className="fixed bottom-0 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl z-50 max-h-[92dvh] md:max-h-[85vh] flex flex-col rounded-t-3xl md:rounded-3xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.4)] animate-in slide-in-from-bottom-[100%] md:slide-in-from-bottom-0 md:zoom-in-95 duration-500 ease-out"
         style={{ background: "linear-gradient(160deg,#0d5f82 0%,#1a8fba 60%,#2ba8d4 100%)" }}>
 
         {/* Handle */}
@@ -230,8 +230,8 @@ function TicketDetailSheet({ ticket, onClose }: { ticket: any; onClose: () => vo
 
   return (
     <>
-      <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="fixed bottom-0 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl z-50 max-h-[88dvh] md:max-h-[85vh] flex flex-col rounded-t-3xl md:rounded-3xl overflow-hidden shadow-2xl"
+      <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300" onClick={onClose} />
+      <div className="fixed bottom-0 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl z-50 max-h-[88dvh] md:max-h-[85vh] flex flex-col rounded-t-3xl md:rounded-3xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.4)] animate-in slide-in-from-bottom-[100%] md:slide-in-from-bottom-0 md:zoom-in-95 duration-500 ease-out"
         style={{ background: "linear-gradient(160deg,#0d5f82 0%,#1a8fba 60%,#2ba8d4 100%)" }}>
 
         <div className="flex md:hidden justify-center pt-3 pb-1 shrink-0">
@@ -482,12 +482,12 @@ function ChatTab({ session, tickets, readCounts, markAsRead }: { session: any, t
                   markAsRead(t.id, totalOthers)
                   setActiveTicket(t)
                 }}
-                className="flex flex-col px-5 py-4 text-left hover:bg-black/5 transition-colors relative"
+                className="flex flex-col px-5 py-4 text-left hover:bg-black/10 transition-colors relative"
               >
                 <div className="flex items-center justify-between w-full mb-1">
                   <span className="text-white/70 text-[10px] font-bold tracking-wider uppercase">Judul</span>
                   {unreadCount > 0 && (
-                    <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
+                    <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-sm animate-pulse">
                       {unreadCount} Pesan Baru
                     </span>
                   )}
@@ -575,7 +575,7 @@ export default function UserPortal() {
       </div>
       <button
         onClick={() => handleTicketClick(ticket)}
-        className="w-full text-center text-[11px] text-white/60 py-2 hover:text-white transition-colors"
+        className="w-full text-center text-[11px] text-white/60 py-2.5 hover:text-white hover:bg-white/5 transition-colors"
       >
         Lihat Selengkapnya →
       </button>
@@ -773,10 +773,10 @@ export default function UserPortal() {
           
           {/* ── BERANDA ── */}
           {activeTab === "Beranda" && (
-            <>
+            <div className="animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out space-y-4 md:space-y-6">
               {/* CTA */}
               <button onClick={() => setCreateOpen(true)}
-                className="w-full md:max-w-md md:mx-auto flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-[#1e7fa8] to-[#2196c4] text-white font-bold text-[14px] rounded-full shadow-[0_4px_22px_rgba(30,127,168,0.5)] hover:shadow-[0_6px_30px_rgba(30,127,168,0.6)] active:scale-[0.97] transition-all">
+                className="w-full md:max-w-md md:mx-auto flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-[#1e7fa8] to-[#2196c4] text-white font-bold text-[14px] rounded-full shadow-[0_8px_30px_rgba(30,127,168,0.4)] hover:shadow-[0_12px_40px_rgba(30,127,168,0.5)] hover:-translate-y-0.5 active:scale-[0.97] active:translate-y-0 transition-all duration-300">
                 <Plus className="w-5 h-5" /> Laporkan Masalah / Buat Tiket
               </button>
 
@@ -789,18 +789,18 @@ export default function UserPortal() {
                   { label:"Selesai",   count:resolvedCount,               color:"text-[#22c55e]" },
                   { label:"Total",     count:tickets.length,              color:"text-[#1e7fa8]" },
                 ].map(s => (
-                  <div key={s.label} className="flex flex-col items-center py-3 rounded-2xl bg-white border border-slate-100 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
-                    <span className={`text-[22px] font-black ${s.color} leading-none mb-1`}>{s.count}</span>
-                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider text-center">{s.label}</span>
+                  <div key={s.label} className="flex flex-col items-center py-3 md:py-4 rounded-2xl bg-white/90 backdrop-blur-md border border-white/50 shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300">
+                    <span className={`text-[22px] md:text-[28px] font-black ${s.color} leading-none mb-1 md:mb-1.5`}>{s.count}</span>
+                    <span className="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase tracking-wider text-center">{s.label}</span>
                   </div>
                 ))}
               </div>
             )}
 
             {/* Riwayat Laporan */}
-            <div className="w-full bg-[#2496bb] rounded-2xl overflow-hidden shadow-xl border border-white/10">
-              <div className="px-4 py-3 border-b border-white/15 flex items-center justify-between">
-                <h2 className="text-white font-bold text-[13px]">Riwayat Laporan</h2>
+            <div className="w-full bg-gradient-to-br from-[#2496bb] to-[#1e85a6] rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white/10 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(0,0,0,0.16)]">
+              <div className="px-5 py-4 border-b border-white/15 flex items-center justify-between bg-white/5">
+                <h2 className="text-white font-bold text-[13px] md:text-[14px]">Riwayat Laporan</h2>
                 {tickets.length > 3 && (
                   <button onClick={() => setActiveTab("Tiket")} className="flex items-center gap-1 text-white/70 text-[11px] hover:text-white transition">
                     Lihat Semua <ChevronRight className="w-3.5 h-3.5" />
@@ -826,59 +826,59 @@ export default function UserPortal() {
             </div>
 
             {/* Info Status */}
-            <div className="w-full bg-[#2496bb] rounded-2xl p-4 shadow-xl border border-white/10">
-              <h3 className="text-white font-bold text-[13px] mb-3">Informasi Status</h3>
-              <div className="grid grid-cols-2 gap-y-2.5 gap-x-3">
+            <div className="w-full bg-gradient-to-br from-[#2496bb] to-[#1e85a6] rounded-2xl md:rounded-3xl p-5 shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white/10">
+              <h3 className="text-white font-bold text-[13px] md:text-[14px] mb-3.5">Informasi Status</h3>
+              <div className="grid grid-cols-2 gap-y-3 gap-x-4">
                 {Object.values(STATUS_CONFIG).map(s => (
-                  <div key={s.label} className="flex items-center gap-2">
-                    <span className={`w-3 h-3 rounded-full shrink-0 ${s.dot}`} />
-                    <span className="text-white text-[12px] font-medium">{s.label}</span>
+                  <div key={s.label} className="flex items-center gap-2.5">
+                    <span className={`w-3.5 h-3.5 rounded-full shrink-0 ${s.dot} shadow-[0_0_8px_rgba(255,255,255,0.3)]`} />
+                    <span className="text-white text-[12px] font-medium tracking-wide">{s.label}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Info Prioritas */}
-            <div className="w-full bg-[#2496bb] rounded-2xl p-4 shadow-xl border border-white/10">
-              <h3 className="text-white font-bold text-[13px] mb-3">Informasi Prioritas</h3>
-              <div className="rounded-xl overflow-hidden border border-white/20">
+            <div className="w-full bg-gradient-to-br from-[#2496bb] to-[#1e85a6] rounded-2xl md:rounded-3xl p-5 shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white/10">
+              <h3 className="text-white font-bold text-[13px] md:text-[14px] mb-3.5">Informasi Prioritas</h3>
+              <div className="rounded-xl overflow-hidden border border-white/20 shadow-inner">
                 {/* Labels row */}
-                <div className="grid grid-cols-4 bg-black/15">
+                <div className="grid grid-cols-4 bg-black/20 backdrop-blur-sm">
                   {Object.entries(PRIORITY_CONFIG).map(([, p]) => (
-                    <div key={p.label} className="flex items-center justify-center gap-1 py-2.5 border-r border-white/10 last:border-0">
-                      <span className={`w-2 h-2 rounded-full shrink-0 ${p.dot}`} />
-                      <span className="text-white text-[11px] font-bold">{p.label}</span>
+                    <div key={p.label} className="flex flex-col items-center justify-center gap-1.5 py-3 border-r border-white/10 last:border-0">
+                      <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${p.dot} shadow-[0_0_6px_rgba(255,255,255,0.4)]`} />
+                      <span className="text-white/90 text-[10px] md:text-[11px] font-bold">{p.label}</span>
                     </div>
                   ))}
                 </div>
                 {/* Subheader */}
-                <div className="w-full bg-[#155f7a] py-1.5 text-center border-y border-white/10">
-                  <span className="text-white/80 text-[11px] font-semibold tracking-wide">Target Waktu (Jam)</span>
+                <div className="w-full bg-black/40 py-2 text-center border-y border-white/10">
+                  <span className="text-white/80 text-[10px] font-bold tracking-widest uppercase">Target Waktu Maksimal</span>
                 </div>
                 {/* Time row */}
                 <div className="grid grid-cols-4">
                   {Object.values(PRIORITY_CONFIG).map(p => (
-                    <div key={p.label} className={`py-2.5 text-center ${p.bg} border-r border-white/10 last:border-0`}>
-                      <span className="text-white text-[12px] font-bold">{p.time}</span>
+                    <div key={p.label} className={`py-3 text-center ${p.bg} border-r border-white/10 last:border-0 bg-opacity-90`}>
+                      <span className="text-white text-[12px] md:text-[13px] font-black">{p.time}</span>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
-          </>
-        )}
+            </div>
+          )}
 
-        {/* ── TIKET ── */}
-        {activeTab === "Tiket" && (
-          <>
-            <button onClick={() => setCreateOpen(true)}
-              className="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-[#1e7fa8] to-[#2196c4] text-white font-bold text-[14px] rounded-full shadow-[0_4px_22px_rgba(30,127,168,0.5)] active:scale-[0.97] transition-all">
-              <Plus className="w-5 h-5" /> Buat Tiket Baru
-            </button>
-            <div className="w-full bg-[#2496bb] rounded-2xl overflow-hidden shadow-xl border border-white/10">
-              <div className="px-4 py-3 border-b border-white/15">
-                <h2 className="text-white font-bold text-[13px]">Semua Tiket Saya ({tickets.length})</h2>
-              </div>
+          {/* ── TIKET ── */}
+          {activeTab === "Tiket" && (
+            <div className="animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out space-y-4 md:space-y-6">
+              <button onClick={() => setCreateOpen(true)}
+                className="w-full md:max-w-md md:mx-auto flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-[#1e7fa8] to-[#2196c4] text-white font-bold text-[14px] rounded-full shadow-[0_8px_30px_rgba(30,127,168,0.4)] hover:shadow-[0_12px_40px_rgba(30,127,168,0.5)] hover:-translate-y-0.5 active:scale-[0.97] active:translate-y-0 transition-all duration-300">
+                <Plus className="w-5 h-5" /> Buat Tiket Baru
+              </button>
+              <div className="w-full bg-gradient-to-br from-[#2496bb] to-[#1e85a6] rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white/10 transition-all duration-300">
+                <div className="px-5 py-4 border-b border-white/15 bg-white/5">
+                  <h2 className="text-white font-bold text-[13px] md:text-[14px]">Semua Tiket Saya ({tickets.length})</h2>
+                </div>
               {loading ? (
                 <div className="flex justify-center py-10"><Loader2 className="w-6 h-6 text-white animate-spin" /></div>
               ) : tickets.length === 0 ? (
@@ -889,18 +889,19 @@ export default function UserPortal() {
                 <div>{tickets.map(t => <TicketRow key={t.id} ticket={t} />)}</div>
               )}
             </div>
-          </>
-        )}
+          )}
 
-        {/* ── CHAT ── */}
-        {activeTab === "Chat" && (
-          <ChatTab session={session} tickets={tickets} readCounts={readCounts} markAsRead={markAsRead} />
-        )}
+          {/* ── CHAT ── */}
+          {activeTab === "Chat" && (
+            <div className="animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out h-full">
+              <ChatTab session={session} tickets={tickets} readCounts={readCounts} markAsRead={markAsRead} />
+            </div>
+          )}
 
-        {/* ── AKUN ── */}
-        {activeTab === "Akun" && (
-          <div className="flex flex-col gap-4 md:max-w-2xl md:mx-auto w-full">
-            <div className="w-full bg-gradient-to-br from-[#155f7a] to-[#2196c4] rounded-2xl p-6 md:p-8 shadow-xl flex items-center gap-5 md:gap-6">
+          {/* ── AKUN ── */}
+          {activeTab === "Akun" && (
+            <div className="flex flex-col gap-4 md:max-w-2xl md:mx-auto w-full animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out">
+              <div className="w-full bg-gradient-to-br from-[#155f7a] to-[#2196c4] rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-[0_12px_40px_rgba(21,95,122,0.3)] flex items-center gap-5 md:gap-6 border border-white/10 hover:shadow-[0_16px_50px_rgba(21,95,122,0.4)] transition-all duration-300">
               <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/20 flex items-center justify-center shrink-0 border-2 border-white/30 shadow-inner">
                 <span className="text-white font-black text-3xl md:text-4xl">{(session?.user?.name ?? "U")[0].toUpperCase()}</span>
               </div>
@@ -918,16 +919,17 @@ export default function UserPortal() {
                   { label:"Total Tiket", count:tickets.length,                     color:"text-[#1e7fa8]" },
                   { label:"Aktif",       count:openCount+inprogCount+pendingCount, color:"text-[#f59e0b]" },
                   { label:"Selesai",     count:resolvedCount,                      color:"text-[#22c55e]" },
-                ].map(s => (
-                  <div key={s.label} className="flex flex-col items-center py-5 md:py-6 rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all">
-                    <span className={`text-3xl md:text-4xl font-black ${s.color} leading-none mb-1.5`}>{s.count}</span>
+                ].map((s, idx) => (
+                  <div key={s.label} className="flex flex-col items-center py-5 md:py-6 rounded-2xl md:rounded-3xl bg-white/90 backdrop-blur-md border border-white/50 shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300"
+                    style={{ animationDelay: `${idx * 100}ms` }}>
+                    <span className={`text-3xl md:text-4xl font-black ${s.color} leading-none mb-1.5 md:mb-2`}>{s.count}</span>
                     <span className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider text-center">{s.label}</span>
                   </div>
                 ))}
               </div>
             )}
             <button onClick={() => signOut({ callbackUrl: "/login" })}
-              className="w-full flex items-center justify-center gap-2 py-4 bg-red-500/90 hover:bg-red-600 text-white font-bold text-sm md:text-base rounded-2xl shadow-lg active:scale-[0.98] transition-all mt-4">
+              className="w-full flex items-center justify-center gap-2 py-4 bg-red-500/90 hover:bg-red-600 text-white font-bold text-sm md:text-base rounded-2xl shadow-[0_8px_30px_rgba(239,68,68,0.3)] active:scale-[0.98] transition-all duration-300 mt-4 md:mt-6">
               <LogOut className="w-5 h-5" /> Keluar dari Akun
             </button>
           </div>
