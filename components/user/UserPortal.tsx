@@ -509,11 +509,33 @@ function ChatTab({ session, tickets, readCounts, markAsRead }: { session: any, t
 
   return (
     <div className="-mx-4 -mt-5 -mb-24 md:mx-0 md:mt-0 md:mb-0 flex flex-col min-h-[calc(100dvh-115px)] md:min-h-[calc(100vh-140px)] bg-[#f4f9fb] animate-in fade-in duration-300">
-      {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-4 bg-white/90 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.04)] border-b border-white/50 shrink-0">
-        <div>
-          <h2 className="font-extrabold text-[#155f7a] text-[14px]">Helpdesk MIS</h2>
-          <p className="text-[#155f7a]/60 text-[10px] font-semibold uppercase tracking-wider">Pilih Tiket untuk Memulai Chat</p>
+      {/* Header with waves */}
+      <div className="relative shrink-0 overflow-hidden" style={{background: "linear-gradient(135deg, #0e6d8a 0%, #1e92bf 50%, #16cedc 100%)"}}>
+        {/* Decorative circles */}
+        <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full opacity-10" style={{background: "radial-gradient(circle, #ffffff 0%, transparent 70%)"}} />
+        <div className="absolute -top-4 right-16 w-24 h-24 rounded-full opacity-[0.07]" style={{background: "radial-gradient(circle, #ffffff 0%, transparent 70%)"}} />
+
+        {/* Content */}
+        <div className="relative z-10 flex items-center gap-3 px-5 pt-5 pb-10">
+          {/* Wave icon (PDAM style) */}
+          <div className="flex flex-col gap-[3px] shrink-0">
+            <svg width="34" height="22" viewBox="0 0 34 22" fill="none">
+              <path d="M2 5 Q6 1 10 5 Q14 9 18 5 Q22 1 26 5 Q30 9 34 5" stroke="white" strokeWidth="2.2" strokeLinecap="round" fill="none" opacity="0.9"/>
+              <path d="M2 11 Q6 7 10 11 Q14 15 18 11 Q22 7 26 11 Q30 15 34 11" stroke="white" strokeWidth="2.2" strokeLinecap="round" fill="none" opacity="0.7"/>
+              <path d="M2 17 Q6 13 10 17 Q14 21 18 17 Q22 13 26 17 Q30 21 34 17" stroke="white" strokeWidth="2.2" strokeLinecap="round" fill="none" opacity="0.5"/>
+            </svg>
+          </div>
+          <div>
+            <h2 className="font-black text-white text-[18px] tracking-tight leading-none">Helpdesk MIS</h2>
+            <p className="text-white/70 text-[11px] font-semibold mt-0.5 tracking-wide">Pilih tiket untuk memulai chat</p>
+          </div>
+        </div>
+
+        {/* Wave bottom decoration */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg viewBox="0 0 390 32" preserveAspectRatio="none" className="w-full h-8 block">
+            <path d="M0 32 L0 18 Q20 8 40 16 Q60 24 80 14 Q100 4 120 14 Q140 24 160 14 Q180 4 200 14 Q220 24 240 14 Q260 4 280 14 Q300 24 320 14 Q340 4 360 14 Q380 24 390 18 L390 32 Z" fill="#f4f9fb"/>
+          </svg>
         </div>
       </div>
 
