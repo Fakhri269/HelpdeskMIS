@@ -114,11 +114,11 @@ function CreateTicketSheet({ open, onClose, onSuccess }: { open: boolean; onClos
   return (
     <>
       <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="fixed bottom-0 left-0 right-0 z-50 max-h-[92dvh] flex flex-col rounded-t-3xl overflow-hidden shadow-2xl"
+      <div className="fixed bottom-0 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl z-50 max-h-[92dvh] md:max-h-[85vh] flex flex-col rounded-t-3xl md:rounded-3xl overflow-hidden shadow-2xl"
         style={{ background: "linear-gradient(160deg,#0d5f82 0%,#1a8fba 60%,#2ba8d4 100%)" }}>
 
         {/* Handle */}
-        <div className="flex justify-center pt-3 pb-1 shrink-0">
+        <div className="flex md:hidden justify-center pt-3 pb-1 shrink-0">
           <div className="w-10 h-1 rounded-full bg-white/30" />
         </div>
 
@@ -231,10 +231,10 @@ function TicketDetailSheet({ ticket, onClose }: { ticket: any; onClose: () => vo
   return (
     <>
       <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="fixed bottom-0 left-0 right-0 z-50 max-h-[88dvh] flex flex-col rounded-t-3xl overflow-hidden shadow-2xl"
+      <div className="fixed bottom-0 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl z-50 max-h-[88dvh] md:max-h-[85vh] flex flex-col rounded-t-3xl md:rounded-3xl overflow-hidden shadow-2xl"
         style={{ background: "linear-gradient(160deg,#0d5f82 0%,#1a8fba 60%,#2ba8d4 100%)" }}>
 
-        <div className="flex justify-center pt-3 pb-1 shrink-0">
+        <div className="flex md:hidden justify-center pt-3 pb-1 shrink-0">
           <div className="w-10 h-1 rounded-full bg-white/30" />
         </div>
 
@@ -374,7 +374,7 @@ function ChatRoom({ session, ticket, onBack }: { session: any, ticket: any, onBa
 
   // Negative margins to break out of the main container's padding and fill the white area completely.
   return (
-    <div className="-mx-4 -mt-5 -mb-24 flex flex-col h-[calc(100dvh-115px)] bg-[#f4f9fb] relative z-50 animate-in slide-in-from-right-4 duration-300 overflow-hidden">
+    <div className="-mx-4 -mt-5 -mb-24 md:mx-0 md:mt-0 md:mb-0 flex flex-col h-[calc(100dvh-115px)] md:h-[calc(100vh-140px)] md:min-h-[500px] md:rounded-3xl md:shadow-2xl md:border md:border-white/50 bg-[#f4f9fb] relative z-50 animate-in slide-in-from-right-4 duration-300 overflow-hidden">
       
       {/* Background Decor */}
       <div className="absolute inset-0 pointer-events-none z-0">
@@ -466,7 +466,7 @@ function ChatTab({ session, tickets, readCounts, markAsRead }: { session: any, t
   }
 
   return (
-    <div className="flex flex-col w-full bg-[#2496bb] rounded-2xl shadow-xl overflow-hidden border border-white/10 mt-2">
+    <div className="flex flex-col w-full bg-[#2496bb] rounded-2xl md:rounded-3xl shadow-xl overflow-hidden border border-white/10 mt-2 md:mt-0">
       {tickets.length === 0 ? (
         <div className="p-8 text-center text-white/70 text-sm">Belum ada tiket untuk di-chat.</div>
       ) : (
@@ -583,20 +583,60 @@ export default function UserPortal() {
   )
 
   return (
-    <div className="relative min-h-[100dvh] w-full bg-white overflow-x-hidden font-sans">
+    <div className="relative min-h-[100dvh] w-full bg-[#f4f9fb] flex flex-col md:flex-row overflow-x-hidden font-sans">
 
       {/* ══ BG WAVES ══ */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 200" preserveAspectRatio="none">
+        <svg className="absolute bottom-0 left-0 w-full opacity-50 md:opacity-100" viewBox="0 0 1440 200" preserveAspectRatio="none">
           <path fill="#1e7fa8" fillOpacity="0.08" d="M0,160L60,149C120,139,240,117,360,122.7C480,128,600,160,720,160C840,160,960,128,1080,117.3C1200,107,1320,117,1380,122.7L1440,128L1440,320L0,320Z" />
         </svg>
-        <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 200" preserveAspectRatio="none">
+        <svg className="absolute bottom-0 left-0 w-full opacity-50 md:opacity-100" viewBox="0 0 1440 200" preserveAspectRatio="none">
           <path fill="#2b9cbf" fillOpacity="0.13" d="M0,192L80,181C160,171,320,149,480,154.7C640,160,800,192,960,192C1120,192,1280,160,1360,144L1440,128L1440,320L0,320Z" />
         </svg>
       </div>
 
-      {/* ══ HEADER ══ */}
-      <header className="relative z-20 w-full bg-gradient-to-r from-[#155f7a] to-[#1e92bf] shadow-lg overflow-hidden">
+      {/* ══ SIDEBAR (DESKTOP) ══ */}
+      <aside className="hidden md:flex flex-col w-64 h-[100dvh] sticky top-0 bg-gradient-to-b from-[#155f7a] to-[#2496bb] shadow-xl shrink-0 z-30">
+        <div className="px-6 pt-10 pb-6 flex flex-col items-center gap-3 border-b border-white/10">
+          <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center p-2 shadow-inner">
+            <Image src="/PdamLogo.svg" alt="Logo PDAM" width={46} height={46} className="brightness-0 invert" />
+          </div>
+          <span className="text-white font-black text-xl tracking-wide text-center">Helpdesk MIS</span>
+        </div>
+        <div className="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
+          {TABS.map(tab => {
+            const isChat = tab.id === "Chat"
+            const unreadChatsCount = isChat ? tickets.reduce((sum, t) => sum + Math.max(0, (t._count?.comments||0) - (readCounts[t.id]||0)), 0) : 0
+            
+            return (
+              <button key={tab.id} onClick={() => setActiveTab(tab.id)}
+                className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-[14px] font-bold transition-all relative ${activeTab === tab.id ? "bg-white/20 text-white shadow-inner" : "text-white/60 hover:bg-white/10 hover:text-white"}`}>
+                <tab.icon className="w-[20px] h-[20px]" />
+                {tab.label}
+                {isChat && unreadChatsCount > 0 && (
+                  <span className="ml-auto bg-red-500 text-white text-[10px] font-bold rounded-full px-2 py-0.5 shadow-sm">
+                    {unreadChatsCount} Baru
+                  </span>
+                )}
+              </button>
+            )
+          })}
+        </div>
+        <div className="p-4 border-t border-white/10">
+          <div className="flex items-center gap-3 p-3 bg-black/10 rounded-xl hover:bg-black/20 transition-colors cursor-pointer" onClick={() => setActiveTab("Akun")}>
+             <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/30">
+                <span className="text-white font-black">{(session?.user?.name ?? "U")[0].toUpperCase()}</span>
+             </div>
+             <div className="min-w-0 flex-1 text-left">
+                <p className="text-white font-bold text-sm truncate">{session?.user?.name ?? "Pengguna"}</p>
+                <p className="text-white/60 text-[10px] font-mono truncate">{session?.user?.email ?? ""}</p>
+             </div>
+          </div>
+        </div>
+      </aside>
+
+      {/* ══ HEADER (MOBILE) ══ */}
+      <header className="relative z-20 w-full bg-gradient-to-r from-[#155f7a] to-[#1e92bf] shadow-lg overflow-hidden md:hidden">
         <svg className="absolute -bottom-5 left-0 w-full h-6 z-10" viewBox="0 0 1440 60" preserveAspectRatio="none">
           <path fill="white" d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" />
         </svg>
@@ -606,14 +646,14 @@ export default function UserPortal() {
         </div>
       </header>
 
-      {/* ══ HERO ══ */}
-      <div className="relative z-10 w-full h-[175px] sm:h-[230px] overflow-hidden">
+      {/* ══ HERO (MOBILE) ══ */}
+      <div className="relative z-10 w-full h-[175px] sm:h-[230px] overflow-hidden md:hidden">
         <Image src="/PdamBG.jpg" alt="Gedung PDAM" fill className="object-cover object-center" priority />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/20" />
       </div>
 
-      {/* ══ NAV ══ */}
-      <nav className="relative z-20 w-full bg-[#2496bb] shadow-md sticky top-0">
+      {/* ══ NAV (MOBILE) ══ */}
+      <nav className="relative z-20 w-full bg-[#2496bb] shadow-md sticky top-0 md:hidden">
         <div className="flex items-stretch justify-around">
           {TABS.map(tab => {
             const isChat = tab.id === "Chat"
@@ -642,17 +682,29 @@ export default function UserPortal() {
         </div>
       </nav>
 
-      {/* ══ CONTENT ══ */}
-      <main className="relative z-10 w-full max-w-xl mx-auto px-4 pt-5 pb-24 flex flex-col gap-4">
+      {/* ══ CONTENT AREA (RIGHT ON DESKTOP) ══ */}
+      <div className="flex-1 flex flex-col min-w-0 relative z-10">
+        
+        {/* Desktop Topbar */}
+        <div className="hidden md:flex items-center justify-between px-8 py-5 bg-white/70 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-20">
+          <h1 className="text-[#155f7a] font-black text-2xl tracking-tight">
+            {TABS.find(t => t.id === activeTab)?.label}
+          </h1>
+          <div className="flex items-center gap-3">
+             <span className="text-slate-500 text-sm font-medium">{new Date().toLocaleDateString("id-ID", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+          </div>
+        </div>
 
-        {/* ── BERANDA ── */}
-        {activeTab === "Beranda" && (
-          <>
-            {/* CTA */}
-            <button onClick={() => setCreateOpen(true)}
-              className="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-[#1e7fa8] to-[#2196c4] text-white font-bold text-[14px] rounded-full shadow-[0_4px_22px_rgba(30,127,168,0.5)] hover:shadow-[0_6px_30px_rgba(30,127,168,0.6)] active:scale-[0.97] transition-all">
-              <Plus className="w-5 h-5" /> Laporkan Masalah / Buat Tiket
-            </button>
+        <main className="flex-1 w-full max-w-xl md:max-w-6xl mx-auto px-4 md:px-8 pt-5 md:pt-8 pb-24 md:pb-12 flex flex-col gap-4 md:gap-6">
+          
+          {/* ── BERANDA ── */}
+          {activeTab === "Beranda" && (
+            <>
+              {/* CTA */}
+              <button onClick={() => setCreateOpen(true)}
+                className="w-full md:max-w-md md:mx-auto flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-[#1e7fa8] to-[#2196c4] text-white font-bold text-[14px] rounded-full shadow-[0_4px_22px_rgba(30,127,168,0.5)] hover:shadow-[0_6px_30px_rgba(30,127,168,0.6)] active:scale-[0.97] transition-all">
+                <Plus className="w-5 h-5" /> Laporkan Masalah / Buat Tiket
+              </button>
 
             {/* Stat chips */}
             {!loading && tickets.length > 0 && (
@@ -773,40 +825,41 @@ export default function UserPortal() {
 
         {/* ── AKUN ── */}
         {activeTab === "Akun" && (
-          <div className="flex flex-col gap-4">
-            <div className="w-full bg-gradient-to-br from-[#155f7a] to-[#2196c4] rounded-2xl p-5 shadow-xl flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center shrink-0 border-2 border-white/30">
-                <span className="text-white font-black text-2xl">{(session?.user?.name ?? "U")[0].toUpperCase()}</span>
+          <div className="flex flex-col gap-4 md:max-w-2xl md:mx-auto w-full">
+            <div className="w-full bg-gradient-to-br from-[#155f7a] to-[#2196c4] rounded-2xl p-6 md:p-8 shadow-xl flex items-center gap-5 md:gap-6">
+              <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/20 flex items-center justify-center shrink-0 border-2 border-white/30 shadow-inner">
+                <span className="text-white font-black text-3xl md:text-4xl">{(session?.user?.name ?? "U")[0].toUpperCase()}</span>
               </div>
               <div className="min-w-0">
-                <p className="text-white font-bold text-base truncate">{session?.user?.name ?? "Pengguna"}</p>
-                <p className="text-white/70 text-xs truncate">{session?.user?.email ?? ""}</p>
-                <span className="inline-block mt-1.5 px-2.5 py-0.5 bg-white/20 rounded-full text-white text-[10px] font-semibold uppercase tracking-wider">
+                <p className="text-white font-bold text-lg md:text-2xl truncate">{session?.user?.name ?? "Pengguna"}</p>
+                <p className="text-white/80 text-sm md:text-base font-mono mt-1 truncate">{session?.user?.email ?? ""}</p>
+                <span className="inline-block mt-3 px-3 py-1 bg-white/20 rounded-full text-white text-[11px] font-bold uppercase tracking-widest shadow-sm">
                   {(session?.user as any)?.role ?? "user"}
                 </span>
               </div>
             </div>
             {!loading && (
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-3 md:gap-4 mt-2">
                 {[
                   { label:"Total Tiket", count:tickets.length,                     color:"text-[#1e7fa8]" },
                   { label:"Aktif",       count:openCount+inprogCount+pendingCount, color:"text-[#f59e0b]" },
                   { label:"Selesai",     count:resolvedCount,                      color:"text-[#22c55e]" },
                 ].map(s => (
-                  <div key={s.label} className="flex flex-col items-center py-4 rounded-2xl bg-white border border-slate-100 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
-                    <span className={`text-2xl font-black ${s.color} leading-none mb-1`}>{s.count}</span>
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider text-center">{s.label}</span>
+                  <div key={s.label} className="flex flex-col items-center py-5 md:py-6 rounded-2xl bg-white border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all">
+                    <span className={`text-3xl md:text-4xl font-black ${s.color} leading-none mb-1.5`}>{s.count}</span>
+                    <span className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider text-center">{s.label}</span>
                   </div>
                 ))}
               </div>
             )}
             <button onClick={() => signOut({ callbackUrl: "/login" })}
-              className="w-full flex items-center justify-center gap-2 py-3.5 bg-red-500/90 hover:bg-red-600 text-white font-bold text-sm rounded-2xl shadow-lg active:scale-[0.97] transition-all mt-2">
-              <LogOut className="w-4 h-4" /> Keluar dari Akun
+              className="w-full flex items-center justify-center gap-2 py-4 bg-red-500/90 hover:bg-red-600 text-white font-bold text-sm md:text-base rounded-2xl shadow-lg active:scale-[0.98] transition-all mt-4">
+              <LogOut className="w-5 h-5" /> Keluar dari Akun
             </button>
           </div>
         )}
-      </main>
+        </main>
+      </div>
 
       {/* ══ MODALS ══ */}
       <CreateTicketSheet open={createOpen} onClose={() => setCreateOpen(false)} onSuccess={fetchTickets} />
