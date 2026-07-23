@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Helpdesk MIS - Perumda Air Minum Tirta Kahuripan 💧
 
-## Getting Started
+Helpdesk MIS adalah sistem informasi manajemen layanan IT (IT Service Management) yang dirancang khusus untuk memfasilitasi komunikasi dan pelaporan masalah teknis antara karyawan dan tim IT di Perumda Air Minum Tirta Kahuripan Kabupaten Bogor.
 
-First, run the development server:
+## 🚀 Fungsi & Keunggulan Utama
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+*   **⚡ Realtime & Cepat:** Semua pelaporan tiket dan percakapan (chat) terjadi secara instan tanpa perlu memuat ulang halaman (*real-time*). Tim IT dapat merespons masalah dengan sangat cepat.
+*   **📱 Desain Responsif & Modern:** Mengusung antarmuka (*User Interface*) yang sangat premium, *clean*, dan modern layaknya aplikasi kelas atas. Berjalan sangat mulus baik di layar Komputer/Laptop maupun *Smartphone*.
+*   **🎫 Sistem Ticketing Terpusat:** Karyawan dapat membuat laporan (tiket) terkait masalah Jaringan, Komputer, Printer, Software, hingga Sistem GIS dengan mudah, lengkap dengan prioritas masalah.
+*   **💬 Live Chat Terintegrasi:** Memiliki fitur obrolan dua arah langsung di dalam detail tiket, memudahkan pengguna berkomunikasi dengan staf IT yang menangani.
+*   **📊 Dashboard Pantauan Admin:** Tim IT dan Admin memiliki panel *Dashboard* khusus untuk memantau beban kerja, tiket yang *Open*, *Pending*, hingga *Resolved* secara komprehensif.
+*   **🔒 Aman & Terstruktur:** Menggunakan sistem *Role-Based Access Control* (User, Staff, Admin) sehingga setiap pengguna hanya bisa mengakses menu dan data sesuai haknya.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Teknologi yang Digunakan (Tech Stack)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Aplikasi ini dibangun menggunakan arsitektur modern (*Modern Web Development*) untuk memastikan performa yang luar biasa dan skalabilitas tinggi:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+*   **Framework Utama:** [Next.js](https://nextjs.org/) (React)
+*   **Tampilan & Desain:** [Tailwind CSS](https://tailwindcss.com/) & [Framer Motion](https://www.framer.com/motion/) (Animasi)
+*   **Database:** PostgreSQL (Di-hosting di [Supabase](https://supabase.com/))
+*   **ORM:** [Prisma](https://www.prisma.io/)
+*   **Autentikasi:** [NextAuth.js](https://next-auth.js.org/) v5
+*   **Realtime Engine:** [Pusher](https://pusher.com/) (WebSockets)
+*   **Komponen UI:** [Radix UI](https://www.radix-ui.com/) / shadcn/ui & Lucide React
+*   **Deployment:** [Vercel](https://vercel.com)
 
-## Learn More
+## 👨‍💻 Dikembangkan Oleh
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Sistem ini dirancang dan dikembangkan secara khusus oleh **Fakhri Sidqi** untuk kebutuhan internal Perumda Air Minum Tirta Kahuripan.
