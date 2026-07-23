@@ -599,7 +599,7 @@ function FaqTab() {
   )
 
   return (
-    <div className="flex flex-col gap-4 md:max-w-2xl md:mx-auto w-full animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out pb-6">
+    <div className="flex flex-col gap-4 w-full animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out pb-2">
 
       {/* ── HERO ── */}
       <div className="relative overflow-hidden rounded-3xl shadow-[0_16px_50px_rgba(21,95,122,0.22)]">
@@ -1153,7 +1153,7 @@ export default function UserPortal() {
       </div>
 
       {/* ══ SIDEBAR (DESKTOP) ══ */}
-      <aside className="hidden md:flex flex-col w-[280px] h-[100dvh] sticky top-0 bg-gradient-to-b from-[#155f7a] to-[#2496bb] shadow-xl shrink-0 z-30 relative">
+      <aside className="hidden md:flex flex-col w-[280px] h-screen fixed top-0 left-0 bg-gradient-to-b from-[#155f7a] to-[#2496bb] shadow-xl shrink-0 z-40">
         {/* Subtle dot-grid texture */}
         <div
           className="absolute inset-0 opacity-[0.05] pointer-events-none"
@@ -1327,7 +1327,7 @@ export default function UserPortal() {
       </nav>
 
       {/* ══ CONTENT AREA (RIGHT ON DESKTOP) ══ */}
-      <div className="flex-1 flex flex-col min-w-0 relative z-10">
+      <div className="flex-1 flex flex-col min-w-0 relative z-10 md:ml-[280px]">
         
         {/* Desktop Topbar */}
         <div className="hidden md:flex items-center justify-between px-8 py-5 bg-white/70 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-20">
@@ -1339,7 +1339,7 @@ export default function UserPortal() {
           </div>
         </div>
 
-        <main className="flex-1 w-full max-w-xl md:max-w-6xl mx-auto px-4 md:px-8 pt-5 md:pt-8 pb-24 md:pb-12 flex flex-col gap-4 md:gap-6">
+        <main className="flex-1 w-full max-w-xl md:max-w-6xl mx-auto px-4 md:px-8 pt-4 md:pt-6 pb-24 md:pb-8 flex flex-col gap-4 md:gap-5">
           
           {/* ── BERANDA ── */}
           {activeTab === "Beranda" && (
