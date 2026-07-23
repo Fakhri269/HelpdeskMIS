@@ -28,19 +28,19 @@ const DEFAULT_CATEGORIES = [
 ]
 
 const SHEET_PRIORITIES = [
-  { id: "Low", label: "Low", sublabel: "Tidak mendesak", icon: <Info className="w-5 h-5 text-white" />, gradient: "from-slate-500 to-slate-400", badge: "bg-slate-100 text-slate-500", sla: "72 Jam" },
-  { id: "Medium", label: "Medium", sublabel: "Perlu diperhatikan", icon: <AlertTriangle className="w-5 h-5 text-white" />, gradient: "from-amber-500 to-yellow-400", badge: "bg-amber-100 text-amber-600", sla: "24 Jam" },
-  { id: "High", label: "High", sublabel: "Segera ditangani", icon: <Zap className="w-5 h-5 text-white" />, gradient: "from-orange-500 to-orange-400", badge: "bg-orange-100 text-orange-600", sla: "4 Jam" },
-  { id: "Critical", label: "Critical", sublabel: "Darurat!", icon: <Flame className="w-5 h-5 text-white" />, gradient: "from-red-600 to-rose-500", badge: "bg-red-100 text-red-600", sla: "1 Jam" }
+  { id: "Low", label: "Low", sublabel: "Tidak mendesak", icon: <Info className="w-5 h-5" />, gradient: "from-slate-500 to-slate-400", badge: "bg-slate-100 text-slate-500", sla: "72 Jam" },
+  { id: "Medium", label: "Medium", sublabel: "Perlu diperhatikan", icon: <AlertTriangle className="w-5 h-5" />, gradient: "from-amber-500 to-yellow-400", badge: "bg-amber-100 text-amber-600", sla: "24 Jam" },
+  { id: "High", label: "High", sublabel: "Segera ditangani", icon: <Zap className="w-5 h-5" />, gradient: "from-orange-500 to-orange-400", badge: "bg-orange-100 text-orange-600", sla: "4 Jam" },
+  { id: "Critical", label: "Critical", sublabel: "Darurat!", icon: <Flame className="w-5 h-5" />, gradient: "from-red-600 to-rose-500", badge: "bg-red-100 text-red-600", sla: "1 Jam" }
 ]
 
 const SHEET_CATEGORIES = [
-  { name: "Jaringan & Internet", icon: <Wifi className="w-4 h-4 text-white" />, color: "from-blue-500 to-cyan-400" },
-  { name: "Hardware (PC/Laptop)", icon: <Monitor className="w-4 h-4 text-white" />, color: "from-slate-600 to-slate-400" },
-  { name: "Aplikasi MIS", icon: <AppWindow className="w-4 h-4 text-white" />, color: "from-violet-500 to-purple-400" },
-  { name: "Email & Akun", icon: <Mail className="w-4 h-4 text-white" />, color: "from-green-500 to-emerald-400" },
-  { name: "Printer & Scanner", icon: <Printer className="w-4 h-4 text-white" />, color: "from-orange-500 to-amber-400" },
-  { name: "Lainnya", icon: <MoreHorizontal className="w-4 h-4 text-white" />, color: "from-pink-500 to-rose-400" },
+  { name: "Jaringan & Internet", icon: <Wifi className="w-4 h-4" />, color: "from-blue-500 to-cyan-400" },
+  { name: "Hardware (PC/Laptop)", icon: <Monitor className="w-4 h-4" />, color: "from-slate-600 to-slate-400" },
+  { name: "Aplikasi MIS", icon: <AppWindow className="w-4 h-4" />, color: "from-violet-500 to-purple-400" },
+  { name: "Email & Akun", icon: <Mail className="w-4 h-4" />, color: "from-green-500 to-emerald-400" },
+  { name: "Printer & Scanner", icon: <Printer className="w-4 h-4" />, color: "from-orange-500 to-amber-400" },
+  { name: "Lainnya", icon: <MoreHorizontal className="w-4 h-4" />, color: "from-pink-500 to-rose-400" },
 ]
 
 const TABS = [
@@ -108,7 +108,12 @@ function CreateTicketSheet({ open, onClose, onSuccess }: { open: boolean; onClos
     if (!open) { setForm({ title: "", description: "", priority: "Medium", category: "", unitKerjaId: "", subUnitKerjaId: "" }); setSubmitted(false); setStep(1) }
   }, [open])
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (step < 3) {
+      setStep(step + 1)
+      return
+    }
     setIsSubmitting(true)
     try {
       const unitKerjaId = form.unitKerjaId || refs.units[0]?.id || ""
@@ -127,12 +132,6 @@ function CreateTicketSheet({ open, onClose, onSuccess }: { open: boolean; onClos
     } catch { alert("Terjadi kesalahan sistem"); setIsSubmitting(false) }
   }
 
-  const steps = [
-    { title: "Kategori", fields: ["category"] },
-    { title: "Detail Masalah", fields: ["title", "description"] },
-    { title: "Konfirmasi", fields: [] }
-  ]
-
   const isStepValid = () => {
     if (step === 1) return !!form.category
     if (step === 2) return !!form.title.trim() && !!form.description.trim()
@@ -145,7 +144,7 @@ function CreateTicketSheet({ open, onClose, onSuccess }: { open: boolean; onClos
         <>
           <motion.div 
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm" 
+            className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm" 
             onClick={onClose} 
           />
           <motion.div 
@@ -156,37 +155,36 @@ function CreateTicketSheet({ open, onClose, onSuccess }: { open: boolean; onClos
             {/* Wave (Mobile only) */}
             <div className="w-full overflow-hidden leading-none md:hidden shrink-0 translate-y-[1px]">
               <svg viewBox="0 0 1440 90" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="w-full h-10 block">
-                <path d="M0,40 C180,90 360,0 540,45 C720,90 900,10 1080,50 C1260,85 1380,20 1440,40 L1440,90 L0,90 Z" fill="#0d5f82" />
-                <path d="M0,60 C200,20 400,80 600,55 C800,30 1000,75 1200,50 C1320,35 1400,65 1440,60 L1440,90 L0,90 Z" fill="#0b5270" opacity="0.6" />
+                <path d="M0,40 C180,90 360,0 540,45 C720,90 900,10 1080,50 C1260,85 1380,20 1440,40 L1440,90 L0,90 Z" fill="#ffffff" />
+                <path d="M0,60 C200,20 400,80 600,55 C800,30 1000,75 1200,50 C1320,35 1400,65 1440,60 L1440,90 L0,90 Z" fill="#f8fafc" opacity="0.8" />
               </svg>
             </div>
 
-            <div className="flex-1 flex flex-col max-h-[92dvh] md:max-h-[88vh] overflow-hidden md:rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
-                 style={{ background: "linear-gradient(160deg,#0d5f82 0%,#1a8fba 60%,#2ba8d4 100%)" }}>
+            <div className="flex-1 flex flex-col max-h-[92dvh] md:max-h-[88vh] overflow-hidden md:rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] bg-white border border-slate-200">
 
               {/* Handle */}
-              <div className="flex md:hidden justify-center pt-3 pb-1 shrink-0">
-                <div className="w-10 h-1 rounded-full bg-white/30" />
+              <div className="flex md:hidden justify-center pt-3 pb-1 shrink-0 bg-white">
+                <div className="w-10 h-1.5 rounded-full bg-slate-200" />
               </div>
 
               {/* Header */}
-              <div className="shrink-0 px-5 py-3.5 flex items-center justify-between border-b border-white/10">
+              <div className="shrink-0 px-5 py-4 flex items-center justify-between border-b border-slate-100 bg-white">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center">
-                    <FileText className="w-4 h-4 text-white" />
+                  <div className="w-10 h-10 rounded-xl bg-cyan-50 flex items-center justify-center border border-cyan-100">
+                    <FileText className="w-5 h-5 text-cyan-600" />
                   </div>
                   <div>
-                    <h2 className="text-white font-bold text-sm">Buat Laporan Masalah</h2>
-                    <p className="text-white/50 text-[10px]">Langkah {step} dari 3</p>
+                    <h2 className="text-slate-800 font-extrabold text-[15px]">Buat Laporan Masalah</h2>
+                    <p className="text-slate-500 font-medium text-[11px] mt-0.5">Langkah {step} dari 3</p>
                   </div>
                 </div>
-                <button onClick={onClose} className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-all">
-                  <X className="w-4 h-4 text-white" />
+                <button type="button" onClick={onClose} className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-all text-slate-500">
+                  <X className="w-4 h-4" />
                 </button>
               </div>
 
               {/* Stepper */}
-              <div className="shrink-0 px-5 pt-3 pb-2">
+              <div className="shrink-0 px-5 pt-3 pb-2 bg-slate-50/50">
                 <div className="flex items-center gap-1.5">
                   {["Kategori", "Detail", "Prioritas"].map((label, i) => {
                     const n = i + 1
@@ -195,14 +193,14 @@ function CreateTicketSheet({ open, onClose, onSuccess }: { open: boolean; onClos
                     return (
                       <div key={label} className="flex items-center gap-1.5 flex-1 last:flex-none">
                         <div className={`flex items-center gap-1.5`}>
-                          <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 transition-all ${
-                            done ? "bg-cyan-400 text-[#0a4f6e]" : active ? "bg-white text-[#0a4f6e]" : "bg-white/15 text-white/35"
+                          <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 transition-all shadow-sm border ${
+                            done ? "bg-cyan-500 border-cyan-500 text-white" : active ? "bg-white border-slate-300 text-slate-700 shadow-sm" : "bg-slate-100 border-slate-200 text-slate-400"
                           }`}>
                             {done ? "✓" : n}
                           </div>
-                          <span className={`text-[10px] font-bold hidden sm:block transition-all ${active ? "text-white" : done ? "text-cyan-300" : "text-white/30"}`}>{label}</span>
+                          <span className={`text-[10px] font-bold hidden sm:block transition-all ${active ? "text-slate-700" : done ? "text-cyan-600" : "text-slate-400"}`}>{label}</span>
                         </div>
-                        {i < 2 && <div className={`flex-1 h-[2px] rounded-full transition-all duration-500 ${step > n ? "bg-cyan-400" : "bg-white/15"}`} />}
+                        {i < 2 && <div className={`flex-1 h-[3px] rounded-full transition-all duration-500 ${step > n ? "bg-cyan-400" : "bg-slate-200"}`} />}
                       </div>
                     )
                   })}
@@ -210,26 +208,24 @@ function CreateTicketSheet({ open, onClose, onSuccess }: { open: boolean; onClos
               </div>
 
               {submitted ? (
-                <div className="flex-1 flex flex-col items-center justify-center gap-4 pb-10">
-                  <div className="w-16 h-16 rounded-2xl bg-green-500 flex items-center justify-center shadow-[0_0_40px_rgba(34,197,94,0.5)]">
-                    <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
+                <div className="flex-1 flex flex-col items-center justify-center gap-4 pb-10 bg-white">
+                  <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center shadow-[0_10px_30px_rgba(34,197,94,0.3)] border border-green-300">
+                    <CheckCheck className="w-10 h-10 text-white" />
                   </div>
-                  <div className="text-center">
-                    <p className="text-white font-bold text-lg">Tiket Terkirim!</p>
-                    <p className="text-white/70 text-sm mt-1">Laporan Anda berhasil dibuat.</p>
+                  <div className="text-center px-6">
+                    <p className="text-slate-800 font-extrabold text-xl">Tiket Berhasil Dikirim!</p>
+                    <p className="text-slate-500 text-sm mt-2 font-medium">Laporan Anda telah masuk ke sistem dan akan segera ditangani.</p>
                   </div>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
-                  <div className="flex-1 overflow-y-auto px-5 py-3 space-y-3">
+                <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 bg-white">
+                  <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
 
                     {/* ── STEP 1: KATEGORI ── */}
                     {step === 1 && (
                       <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-                        <p className="text-white/60 text-xs mb-3">Apa jenis kendala yang Anda alami?</p>
-                        <div className="grid grid-cols-2 gap-2.5">
+                        <p className="text-slate-600 font-medium text-xs mb-3 px-1">Pilih jenis masalah yang Anda alami:</p>
+                        <div className="grid grid-cols-2 gap-3">
                           {(categories.length > 0 ? categories : DEFAULT_CATEGORIES).map(catName => {
                             const meta = SHEET_CATEGORIES.find(c => c.name === catName) || SHEET_CATEGORIES[5]
                             const selected = form.category === catName
@@ -238,23 +234,23 @@ function CreateTicketSheet({ open, onClose, onSuccess }: { open: boolean; onClos
                                 key={catName}
                                 type="button"
                                 onClick={() => setForm({ ...form, category: catName })}
-                                className={`relative flex items-center gap-3 p-3.5 rounded-2xl border transition-all duration-200 text-left overflow-hidden ${
+                                className={`relative flex flex-col gap-2.5 p-4 rounded-2xl border transition-all duration-200 text-left overflow-hidden ${
                                   selected
-                                    ? "bg-white border-white shadow-[0_6px_20px_rgba(255,255,255,0.15)] scale-[1.02]"
-                                    : "bg-white/8 border-white/15 hover:bg-white/15 active:scale-[0.98]"
+                                    ? "bg-cyan-50 border-cyan-400 shadow-[0_4px_15px_rgba(6,182,212,0.15)] ring-1 ring-cyan-400 scale-[1.02]"
+                                    : "bg-white border-slate-200 hover:border-cyan-300 hover:bg-slate-50 hover:shadow-sm active:scale-[0.98]"
                                 }`}
                               >
-                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-base transition-all ${
-                                  selected ? `bg-gradient-to-br ${meta.color} shadow-md` : "bg-white/10"
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-base transition-all ${
+                                  selected ? `bg-gradient-to-br ${meta.color} text-white shadow-md` : "bg-slate-100 text-slate-500"
                                 }`}>
                                   {meta.icon}
                                 </div>
-                                <span className={`text-[11px] font-bold leading-tight flex-1 ${selected ? "text-[#0a4f6e]" : "text-white/80"}`}>
+                                <span className={`text-[12px] font-extrabold leading-snug ${selected ? "text-cyan-800" : "text-slate-700"}`}>
                                   {catName}
                                 </span>
                                 {selected && (
-                                  <div className="absolute top-2 right-2 w-4 h-4 rounded-full bg-cyan-400 flex items-center justify-center">
-                                    <span className="text-[8px] text-white font-black">✓</span>
+                                  <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center shadow-sm">
+                                    <Check className="w-3 h-3 text-white stroke-[4]" />
                                   </div>
                                 )}
                               </button>
@@ -266,71 +262,71 @@ function CreateTicketSheet({ open, onClose, onSuccess }: { open: boolean; onClos
 
                     {/* ── STEP 2: DETAIL ── */}
                     {step === 2 && (
-                      <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-3">
-                        {/* Kategori pill */}
-                        <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/12 border border-white/15 w-fit">
-                          <span className="text-base">{selectedCat?.icon ?? "📋"}</span>
-                          <span className="text-white text-[11px] font-bold">{form.category}</span>
+                      <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-4">
+                        <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-cyan-50 border border-cyan-100 w-fit shadow-sm">
+                          <div className={`w-6 h-6 rounded-md bg-gradient-to-br ${selectedCat.color} flex items-center justify-center shadow-sm text-white`}>{selectedCat.icon}</div>
+                          <span className="text-cyan-800 text-[12px] font-extrabold">{form.category}</span>
                         </div>
 
-                        {/* Judul */}
-                        <div className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4">
-                          <label className="text-[10px] font-bold text-cyan-200/70 uppercase tracking-widest">
-                            Judul Singkat <span className="text-red-400">*</span>
-                          </label>
-                          <input
-                            type="text"
-                            value={form.title}
-                            onChange={e => setForm({ ...form, title: e.target.value })}
-                            placeholder="Contoh: Printer tidak bisa print..."
-                            maxLength={100}
-                            className="w-full mt-2 bg-transparent text-white text-sm placeholder:text-white/30 outline-none"
-                            required
-                          />
-                          <div className="flex justify-between mt-2">
-                            <span className={`text-[10px] font-semibold ${form.title.length > 3 ? "text-emerald-300" : "text-white/30"}`}>
-                              {form.title.length > 3 ? "✓ Judul valid" : "Minimal 4 karakter"}
-                            </span>
-                            <span className={`text-[10px] ${form.title.length > 80 ? "text-orange-300" : "text-white/25"}`}>{form.title.length}/100</span>
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                              Judul Masalah <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              value={form.title}
+                              onChange={e => setForm({ ...form, title: e.target.value })}
+                              placeholder="Misal: Internet terputus di lantai 2"
+                              maxLength={100}
+                              className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 text-sm placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all"
+                              required
+                            />
+                            <div className="flex justify-between mt-1.5 px-1">
+                              <span className={`text-[10px] font-semibold ${form.title.trim().length > 0 ? "text-emerald-500" : "text-slate-400"}`}>
+                                {form.title.trim().length > 0 ? "✓ Terisi" : "Wajib diisi"}
+                              </span>
+                              <span className="text-[10px] text-slate-400 font-medium">{form.title.length}/100</span>
+                            </div>
                           </div>
-                        </div>
 
-                        {/* Deskripsi */}
-                        <div className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4">
-                          <label className="text-[10px] font-bold text-cyan-200/70 uppercase tracking-widest">
-                            Detail Kendala <span className="text-red-400">*</span>
-                          </label>
-                          <textarea
-                            value={form.description}
-                            onChange={e => setForm({ ...form, description: e.target.value })}
-                            placeholder="Jelaskan masalah: kapan terjadi, pesan error, langkah yang sudah dicoba..."
-                            className="w-full mt-2 min-h-[110px] bg-transparent text-white text-sm placeholder:text-white/30 outline-none resize-none leading-relaxed"
-                            required
-                          />
-                          <span className={`text-[10px] font-semibold transition-colors ${form.description.length >= 10 ? "text-emerald-300" : "text-white/30"}`}>
-                            {form.description.length >= 10 ? "✓ Deskripsi cukup" : `Minimal 10 karakter (${10 - form.description.length} lagi)`}
-                          </span>
-                        </div>
-
-                        {/* Unit Kerja */}
-                        {!(session?.user as any)?.unitKerjaId && (
-                          <div className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4">
-                            <label className="text-[10px] font-bold text-cyan-200/70 uppercase tracking-widest">Unit Kerja</label>
-                            <select value={form.unitKerjaId} onChange={e => setForm({ ...form, unitKerjaId: e.target.value, subUnitKerjaId: "" })}
-                              className="w-full mt-2 bg-transparent text-white text-sm outline-none appearance-none">
-                              <option value="" disabled className="text-slate-800">Pilih unit kerja...</option>
-                              {refs.units.map(u => <option key={u.id} value={u.id} className="text-slate-800">{u.name}</option>)}
-                            </select>
+                          <div>
+                            <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                              Detail Kendala <span className="text-red-500">*</span>
+                            </label>
+                            <textarea
+                              value={form.description}
+                              onChange={e => setForm({ ...form, description: e.target.value })}
+                              placeholder="Jelaskan masalahnya secara lengkap..."
+                              className="w-full p-3.5 min-h-[120px] rounded-xl border border-slate-200 bg-slate-50 text-slate-800 text-sm placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none resize-none transition-all leading-relaxed"
+                              required
+                            />
+                            <div className="mt-1.5 px-1">
+                              <span className={`text-[10px] font-semibold ${form.description.trim().length > 0 ? "text-emerald-500" : "text-slate-400"}`}>
+                                {form.description.trim().length > 0 ? "✓ Terisi" : "Wajib diisi"}
+                              </span>
+                            </div>
                           </div>
-                        )}
+
+                          {!(session?.user as any)?.unitKerjaId && (
+                            <div>
+                              <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Unit Kerja <span className="text-red-500">*</span></label>
+                              <select value={form.unitKerjaId} onChange={e => setForm({ ...form, unitKerjaId: e.target.value, subUnitKerjaId: "" })}
+                                className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 text-sm focus:bg-white focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none appearance-none transition-all">
+                                <option value="" disabled>Pilih unit kerja Anda...</option>
+                                {refs.units.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                              </select>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     )}
 
                     {/* ── STEP 3: PRIORITAS ── */}
                     {step === 3 && (
-                      <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-3">
-                        <p className="text-white/60 text-xs">Seberapa mendesak masalah ini?</p>
-                        <div className="space-y-2">
+                      <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-4">
+                        <p className="text-slate-600 font-medium text-xs px-1 mb-1">Seberapa mendesak masalah ini untuk ditangani?</p>
+                        <div className="space-y-2.5">
                           {SHEET_PRIORITIES.map(p => {
                             const selected = form.priority === p.id
                             return (
@@ -338,42 +334,46 @@ function CreateTicketSheet({ open, onClose, onSuccess }: { open: boolean; onClos
                                 key={p.id}
                                 type="button"
                                 onClick={() => setForm({ ...form, priority: p.id })}
-                                className={`w-full flex items-center gap-3 p-3.5 rounded-2xl border transition-all duration-200 text-left ${
+                                className={`w-full flex items-center gap-3 p-3.5 rounded-2xl border transition-all duration-200 text-left overflow-hidden ${
                                   selected
-                                    ? "bg-white border-white shadow-[0_6px_20px_rgba(255,255,255,0.1)] scale-[1.01]"
-                                    : "bg-white/8 border-white/15 hover:bg-white/12 active:scale-[0.99]"
+                                    ? "bg-slate-50 border-cyan-300 shadow-sm ring-1 ring-cyan-200 scale-[1.01]"
+                                    : "bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50 active:scale-[0.99]"
                                 }`}
                               >
-                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 transition-all ${
-                                  selected ? `bg-gradient-to-br ${p.gradient} shadow-lg` : "bg-white/10"
+                                <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-lg shrink-0 transition-all shadow-sm ${
+                                  selected ? `bg-gradient-to-br ${p.gradient} text-white` : "bg-slate-100 text-slate-500"
                                 }`}>
                                   {p.icon}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                  <div className="flex items-center gap-2">
-                                    <span className={`text-sm font-black ${selected ? "text-slate-800" : "text-white"}`}>{p.label}</span>
-                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${selected ? p.badge : "bg-white/10 text-white/40"}`}>{p.sublabel}</span>
+                                  <div className="flex items-center gap-2 mb-0.5">
+                                    <span className={`text-[13px] font-extrabold ${selected ? "text-slate-800" : "text-slate-700"}`}>{p.label}</span>
+                                    <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${selected ? p.badge : "bg-slate-100 text-slate-500 border border-slate-200"}`}>{p.sublabel}</span>
                                   </div>
+                                  <div className="text-[10px] text-slate-500 font-medium truncate">Maks. penyelesaian: <span className="font-bold text-slate-700">{p.sla}</span></div>
                                 </div>
-                                <div className={`shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-lg transition-all ${
-                                  selected ? `bg-gradient-to-br ${p.gradient} text-white shadow` : "bg-white/10 text-white/40"
-                                }`}>≤ {p.sla}</div>
+                                {selected && (
+                                  <div className="shrink-0 w-6 h-6 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center shadow-sm">
+                                    <Check className="w-3.5 h-3.5 text-white stroke-[3]" />
+                                  </div>
+                                )}
                               </button>
                             )
                           })}
                         </div>
 
                         {/* Summary */}
-                        <div className="bg-white/10 border border-white/15 rounded-2xl p-4 space-y-2">
-                          <p className="text-[10px] font-bold text-cyan-200/70 uppercase tracking-widest mb-3">Ringkasan</p>
+                        <div className="mt-6 bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2.5 relative overflow-hidden shadow-sm">
+                          <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-100 rounded-full blur-2xl -mr-10 -mt-10 opacity-60"></div>
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Ringkasan Laporan</p>
                           {[
                             { label: "Kategori", val: form.category },
                             { label: "Judul", val: form.title },
-                            { label: "Prioritas", val: `${selectedPri?.icon} ${form.priority} (≤ ${selectedPri?.sla})` },
+                            { label: "Prioritas", val: `${form.priority} (Maks. ${selectedPri?.sla})` },
                           ].map(r => (
-                            <div key={r.label} className="flex items-start gap-3">
-                              <span className="text-white/40 text-[11px] w-16 shrink-0">{r.label}</span>
-                              <span className="text-white text-[11px] font-semibold flex-1 min-w-0 truncate">{r.val}</span>
+                            <div key={r.label} className="flex items-start gap-3 relative z-10">
+                              <span className="text-slate-500 text-[11px] font-medium w-16 shrink-0">{r.label}</span>
+                              <span className="text-slate-800 text-[11px] font-bold flex-1 min-w-0 truncate">{r.val}</span>
                             </div>
                           ))}
                         </div>
@@ -383,22 +383,22 @@ function CreateTicketSheet({ open, onClose, onSuccess }: { open: boolean; onClos
                   </div>
 
                   {/* Navigation */}
-                  <div className="shrink-0 px-5 py-4 border-t border-white/10 flex gap-3">
+                  <div className="shrink-0 px-5 py-4 border-t border-slate-100 flex gap-3 bg-white">
                     {step > 1 && (
                       <button type="button" onClick={() => setStep(step - 1)}
-                        className="h-12 px-5 rounded-xl bg-white/10 border border-white/15 text-white font-bold text-sm hover:bg-white/20 active:scale-95 transition-all">
-                        ← Kembali
+                        className="h-12 px-5 rounded-xl bg-white border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 hover:text-slate-800 active:scale-95 transition-all shadow-sm">
+                        Kembali
                       </button>
                     )}
                     {step < 3 ? (
-                      <button type="button" disabled={!isStepValid()} onClick={() => setStep(step + 1)}
-                        className="flex-1 h-12 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(6,182,212,0.4)] disabled:opacity-30 disabled:cursor-not-allowed active:scale-[0.98] transition-all hover:-translate-y-0.5">
-                        Lanjut →
+                      <button type="submit" disabled={!isStepValid()}
+                        className="flex-1 h-12 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(6,182,212,0.3)] disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] transition-all hover:shadow-[0_8px_25px_rgba(6,182,212,0.4)]">
+                        Lanjut <ChevronRight className="w-4 h-4" />
                       </button>
                     ) : (
                       <button type="submit" disabled={isSubmitting}
-                        className="flex-1 h-12 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(6,182,212,0.4)] disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] transition-all">
-                        {isSubmitting ? <><Loader2 className="w-5 h-5 animate-spin" /> Mengirim...</> : <><Send className="w-5 h-5" /> Kirim Laporan</>}
+                        className="flex-1 h-12 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(6,182,212,0.3)] disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] transition-all hover:shadow-[0_8px_25px_rgba(6,182,212,0.4)]">
+                        {isSubmitting ? <><Loader2 className="w-5 h-5 animate-spin" /> Mengirim...</> : <><Send className="w-4 h-4" /> Kirim Laporan</>}
                       </button>
                     )}
                   </div>
