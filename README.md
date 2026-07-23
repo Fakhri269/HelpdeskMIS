@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>Helpdesk MIS</h1>
+  <h1><img src="public/PdamLogo.svg" alt="PDAM Logo" width="32" height="32" style="vertical-align: middle; margin-right: 8px;" /> Helpdesk MIS</h1>
   <p><strong>Perumda Air Minum Tirta Kahuripan</strong></p>
   <p>Sistem Informasi Manajemen Layanan IT (IT Service Management) yang dirancang khusus untuk memfasilitasi komunikasi dan pelaporan masalah teknis antara karyawan dan tim IT di Perumda Air Minum Tirta Kahuripan Kabupaten Bogor.</p>
 </div>
