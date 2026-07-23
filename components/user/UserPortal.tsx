@@ -974,35 +974,30 @@ function AkunTab({ session, tickets, loading, openCount, inprogCount, pendingCou
   const pwStrengthColor = ["", "bg-red-400", "bg-amber-400", "bg-emerald-400"][pwStrength]
 
   return (
-    <div className="flex flex-col gap-5 md:max-w-2xl md:mx-auto w-full animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out pb-6">
+    <div className="flex flex-col gap-4 md:max-w-2xl md:mx-auto w-full animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out pb-6">
 
-      {/* ── PROFILE HERO CARD ── */}
-      <div className="relative overflow-hidden rounded-3xl shadow-[0_16px_50px_rgba(21,95,122,0.28)]">
-        {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0d5f82] via-[#1481a8] to-[#2ba8d4]" />
-        {/* Decorative circles */}
-        <div className="absolute -top-10 -right-10 w-52 h-52 rounded-full bg-white/5" />
-        <div className="absolute -bottom-16 -left-10 w-64 h-64 rounded-full bg-white/5" />
-
-        <div className="relative z-10 p-6 md:p-8">
-          <div className="flex items-center gap-5">
+      {/* ── PROFILE HEADER CARD ── */}
+      <div className="relative overflow-hidden rounded-2xl border border-slate-200/70 bg-white shadow-[0_2px_12px_rgba(15,54,68,0.05)]">
+        <div className="h-[3px] w-full bg-gradient-to-r from-[#0d5f82] via-[#00acc1] to-[#4dd0e1]" />
+        <div className="px-5 py-5 md:px-6 md:py-6">
+          <div className="flex items-center gap-4">
             {/* Avatar */}
             <div className="relative shrink-0">
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border-[3px] border-white/30 shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
-                <span className="text-white font-black text-3xl md:text-4xl">{initials}</span>
+              <div className="w-16 h-16 md:w-[72px] md:h-[72px] rounded-full bg-[#e8f7fc] border border-[#00acc1]/20 flex items-center justify-center">
+                <span className="text-[#0d5f82] font-bold text-2xl md:text-[26px]">{initials}</span>
               </div>
-              <div className="absolute bottom-1 right-1 w-4 h-4 bg-emerald-400 rounded-full border-2 border-[#0d5f82]" />
+              <div className="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-white" />
             </div>
             {/* Name & meta */}
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1">
-                <BadgeCheck className="w-4 h-4 text-cyan-300 shrink-0" />
-                <span className="px-2.5 py-0.5 bg-white/15 rounded-full text-white text-[10px] font-bold uppercase tracking-widest">
+              <div className="flex items-center gap-2 flex-wrap mb-1">
+                <p className="text-[#0f3644] font-bold text-lg md:text-xl truncate leading-tight">{session?.user?.name ?? "Pengguna"}</p>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#e8f7fc] rounded-md text-[#00838f] text-[10px] font-bold uppercase tracking-wider border border-[#00acc1]/15">
+                  <BadgeCheck className="w-3 h-3" />
                   {role.replace("_", " ")}
                 </span>
               </div>
-              <p className="text-white font-black text-xl md:text-2xl truncate leading-tight">{session?.user?.name ?? "Pengguna"}</p>
-              <p className="text-white/70 text-sm mt-1 truncate font-mono">{session?.user?.email ?? ""}</p>
+              <p className="text-slate-500 text-[13px] truncate">{session?.user?.email ?? ""}</p>
             </div>
           </div>
         </div>
@@ -1012,31 +1007,30 @@ function AkunTab({ session, tickets, loading, openCount, inprogCount, pendingCou
       {!loading && (
         <div className="grid grid-cols-3 gap-3">
           {[
-            { label: "Total", count: tickets.length,                    color: "text-[#1e7fa8]", bg: "from-[#e8f7fc] to-white" },
-            { label: "Aktif",  count: openCount+inprogCount+pendingCount, color: "text-amber-500", bg: "from-amber-50 to-white" },
-            { label: "Selesai",count: resolvedCount,                     color: "text-emerald-500",bg: "from-emerald-50 to-white" },
-          ].map((s, i) => (
-            <div key={s.label} className={`flex flex-col items-center py-5 rounded-2xl bg-gradient-to-b ${s.bg} border border-white/80 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300`}
-              style={{ animationDelay: `${i * 80}ms` }}>
-              <span className={`text-3xl font-black ${s.color} leading-none mb-1`}>{s.count}</span>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{s.label}</span>
+            { label: "Total Tiket", count: tickets.length,                    color: "text-[#0d5f82]" },
+            { label: "Aktif",       count: openCount+inprogCount+pendingCount, color: "text-amber-600" },
+            { label: "Selesai",     count: resolvedCount,                     color: "text-emerald-600" },
+          ].map((s) => (
+            <div key={s.label} className="flex flex-col items-center py-4 rounded-xl bg-white border border-slate-200/70 shadow-[0_2px_10px_rgba(15,54,68,0.04)]">
+              <span className={`text-2xl font-bold ${s.color} leading-none mb-1`}>{s.count}</span>
+              <span className="text-[10.5px] font-semibold text-slate-400 uppercase tracking-wide text-center">{s.label}</span>
             </div>
           ))}
         </div>
       )}
 
       {/* ── EDIT PROFILE CARD ── */}
-      <div className="bg-white/90 backdrop-blur-xl rounded-3xl border border-white/60 shadow-[0_8px_30px_rgba(0,0,0,0.06)] overflow-hidden">
+      <div className="bg-white rounded-2xl border border-slate-200/70 shadow-[0_2px_12px_rgba(15,54,68,0.05)] overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#e8f7fc] flex items-center justify-center">
-              <User className="w-4 h-4 text-[#1e7fa8]" />
+            <div className="w-8 h-8 rounded-lg bg-[#e8f7fc] flex items-center justify-center">
+              <User className="w-4 h-4 text-[#00838f]" />
             </div>
-            <span className="text-slate-800 font-bold text-[14px]">Informasi Profil</span>
+            <span className="text-[#0f3644] font-bold text-[13.5px]">Informasi Profil</span>
           </div>
           <button onClick={() => { setEditMode(!editMode); setSaveError(null) }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[12px] font-bold transition-all ${editMode ? "bg-slate-100 text-slate-500" : "bg-[#e8f7fc] text-[#1e7fa8] hover:bg-[#d0eef8]"}`}>
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${editMode ? "bg-slate-100 text-slate-500 hover:bg-slate-200" : "border border-[#00acc1]/30 text-[#00838f] hover:bg-[#e8f7fc]"}`}>
             {editMode ? <X className="w-3.5 h-3.5" /> : <Edit3 className="w-3.5 h-3.5" />}
             {editMode ? "Batal" : "Edit"}
           </button>
@@ -1045,26 +1039,26 @@ function AkunTab({ session, tickets, loading, openCount, inprogCount, pendingCou
         <div className="p-5 space-y-4">
           {/* Name field */}
           <div>
-            <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Nama Lengkap</label>
+            <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wide mb-1.5">Nama Lengkap</label>
             {editMode ? (
               <input value={name} onChange={e => setName(e.target.value)}
-                className="w-full h-11 rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 font-medium focus:ring-2 focus:ring-[#2ba8d4]/40 focus:border-[#2ba8d4] outline-none transition-all" />
+                className="w-full h-11 rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-800 font-medium focus:ring-2 focus:ring-[#00acc1]/25 focus:border-[#00acc1] outline-none transition-all" />
             ) : (
-              <div className="h-11 rounded-xl bg-slate-50 px-3.5 flex items-center">
-                <span className="text-slate-800 text-sm font-semibold">{session?.user?.name}</span>
+              <div className="h-11 rounded-xl bg-slate-50 border border-slate-100 px-3.5 flex items-center">
+                <span className="text-slate-800 text-sm font-medium">{session?.user?.name}</span>
               </div>
             )}
           </div>
           {/* Email field */}
           <div>
-            <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Email</label>
+            <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wide mb-1.5">Email</label>
             {editMode ? (
               <input type="email" value={email} onChange={e => setEmail(e.target.value)}
-                className="w-full h-11 rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 font-medium focus:ring-2 focus:ring-[#2ba8d4]/40 focus:border-[#2ba8d4] outline-none transition-all" />
+                className="w-full h-11 rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-800 font-medium focus:ring-2 focus:ring-[#00acc1]/25 focus:border-[#00acc1] outline-none transition-all" />
             ) : (
-              <div className="h-11 rounded-xl bg-slate-50 px-3.5 flex items-center gap-2">
+              <div className="h-11 rounded-xl bg-slate-50 border border-slate-100 px-3.5 flex items-center gap-2">
                 <Mail className="w-4 h-4 text-slate-400 shrink-0" />
-                <span className="text-slate-600 text-sm font-mono">{session?.user?.email}</span>
+                <span className="text-slate-600 text-sm">{session?.user?.email}</span>
               </div>
             )}
           </div>
@@ -1072,24 +1066,24 @@ function AkunTab({ session, tickets, loading, openCount, inprogCount, pendingCou
           {/* Unit Kerja (Read Only) */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest">Unit Kerja</label>
-              <span className="text-[9px] font-bold text-slate-300 uppercase flex items-center gap-1"><Lock className="w-3 h-3" /> Hanya Admin</span>
+              <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wide">Unit Kerja</label>
+              <span className="text-[9.5px] font-semibold text-slate-300 uppercase flex items-center gap-1"><Lock className="w-3 h-3" /> Hanya Admin</span>
             </div>
             <div className="h-11 rounded-xl bg-slate-50 border border-slate-100 px-3.5 flex items-center gap-2 opacity-80 cursor-not-allowed">
               <Building2 className="w-4 h-4 text-slate-400 shrink-0" />
-              <span className="text-slate-600 text-sm font-semibold truncate">{profileData.unitKerja ?? "-"}</span>
+              <span className="text-slate-600 text-sm font-medium truncate">{profileData.unitKerja ?? "-"}</span>
             </div>
           </div>
 
           {/* Jabatan (Read Only) */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest">Jabatan</label>
-              <span className="text-[9px] font-bold text-slate-300 uppercase flex items-center gap-1"><Lock className="w-3 h-3" /> Hanya Admin</span>
+              <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wide">Jabatan</label>
+              <span className="text-[9.5px] font-semibold text-slate-300 uppercase flex items-center gap-1"><Lock className="w-3 h-3" /> Hanya Admin</span>
             </div>
             <div className="h-11 rounded-xl bg-slate-50 border border-slate-100 px-3.5 flex items-center gap-2 opacity-80 cursor-not-allowed">
               <Briefcase className="w-4 h-4 text-slate-400 shrink-0" />
-              <span className="text-slate-600 text-sm font-semibold truncate">{profileData.position ?? "-"}</span>
+              <span className="text-slate-600 text-sm font-medium truncate">{profileData.position ?? "-"}</span>
             </div>
           </div>
 
@@ -1112,7 +1106,7 @@ function AkunTab({ session, tickets, loading, openCount, inprogCount, pendingCou
           {/* Save button */}
           {editMode && (
             <button onClick={handleSaveProfile} disabled={saving}
-              className="w-full h-11 rounded-xl bg-gradient-to-r from-[#1e7fa8] to-[#2ba8d4] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(43,168,212,0.35)] hover:shadow-[0_6px_24px_rgba(43,168,212,0.45)] active:scale-[0.98] transition-all disabled:opacity-60">
+              className="w-full h-11 rounded-xl bg-[#0d5f82] hover:bg-[#0a4d6a] text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all disabled:opacity-60">
               {saving ? <><Loader2 className="w-4 h-4 animate-spin" /> Menyimpan...</> : <><Check className="w-4 h-4" /> Simpan Perubahan</>}
             </button>
           )}
@@ -1120,18 +1114,18 @@ function AkunTab({ session, tickets, loading, openCount, inprogCount, pendingCou
       </div>
 
       {/* ── CHANGE PASSWORD CARD ── */}
-      <div className="bg-white/90 backdrop-blur-xl rounded-3xl border border-white/60 shadow-[0_8px_30px_rgba(0,0,0,0.06)] overflow-hidden">
+      <div className="bg-white rounded-2xl border border-slate-200/70 shadow-[0_2px_12px_rgba(15,54,68,0.05)] overflow-hidden">
         {/* Header toggle */}
         <button onClick={() => { setShowPwSection(!showPwSection); setPwError(null); setPwMsg(null) }}
-          className="w-full flex items-center justify-between px-5 py-4 hover:bg-slate-50/80 transition-colors">
+          className="w-full flex items-center justify-between px-5 py-4 hover:bg-slate-50/70 transition-colors">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-amber-50 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
               <KeyRound className="w-4 h-4 text-amber-500" />
             </div>
-            <span className="text-slate-800 font-bold text-[14px]">Ganti Password</span>
+            <span className="text-[#0f3644] font-bold text-[13.5px]">Ganti Password</span>
           </div>
           <motion.div animate={{ rotate: showPwSection ? 180 : 0 }} transition={{ duration: 0.25 }}>
-            <ChevronRight className={`w-4 h-4 text-slate-400 rotate-90`} />
+            <ChevronDown className="w-4 h-4 text-slate-400" />
           </motion.div>
         </button>
 
@@ -1144,12 +1138,12 @@ function AkunTab({ session, tickets, loading, openCount, inprogCount, pendingCou
               <form onSubmit={handleChangePassword} className="px-5 pb-5 space-y-4 border-t border-slate-100 pt-4">
                 {/* Current password */}
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Password Saat Ini</label>
+                  <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wide mb-1.5">Password Saat Ini</label>
                   <div className="relative">
                     <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                     <input type={showCurrent ? "text" : "password"} value={currentPw} onChange={e => setCurrentPw(e.target.value)}
                       placeholder="Masukkan password saat ini"
-                      className="w-full h-11 rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-10 text-sm text-slate-800 focus:ring-2 focus:ring-amber-300/60 focus:border-amber-400 outline-none transition-all" required />
+                      className="w-full h-11 rounded-xl border border-slate-200 bg-white pl-10 pr-10 text-sm text-slate-800 focus:ring-2 focus:ring-[#00acc1]/25 focus:border-[#00acc1] outline-none transition-all" required />
                     <button type="button" onClick={() => setShowCurrent(!showCurrent)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
                       {showCurrent ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -1158,12 +1152,12 @@ function AkunTab({ session, tickets, loading, openCount, inprogCount, pendingCou
                 </div>
                 {/* New password */}
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Password Baru</label>
+                  <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wide mb-1.5">Password Baru</label>
                   <div className="relative">
                     <Shield className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                     <input type={showNew ? "text" : "password"} value={newPw} onChange={e => setNewPw(e.target.value)}
                       placeholder="Minimal 6 karakter"
-                      className="w-full h-11 rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-10 text-sm text-slate-800 focus:ring-2 focus:ring-amber-300/60 focus:border-amber-400 outline-none transition-all" required />
+                      className="w-full h-11 rounded-xl border border-slate-200 bg-white pl-10 pr-10 text-sm text-slate-800 focus:ring-2 focus:ring-[#00acc1]/25 focus:border-[#00acc1] outline-none transition-all" required />
                     <button type="button" onClick={() => setShowNew(!showNew)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
                       {showNew ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -1185,13 +1179,13 @@ function AkunTab({ session, tickets, loading, openCount, inprogCount, pendingCou
                 </div>
                 {/* Confirm password */}
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Konfirmasi Password Baru</label>
+                  <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wide mb-1.5">Konfirmasi Password Baru</label>
                   <div className="relative">
                     <Shield className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                     <input type={showConfirm ? "text" : "password"} value={confirmPw} onChange={e => setConfirmPw(e.target.value)}
                       placeholder="Ulangi password baru"
-                      className={`w-full h-11 rounded-xl border bg-slate-50 pl-10 pr-10 text-sm text-slate-800 focus:ring-2 outline-none transition-all ${
-                        confirmPw && confirmPw !== newPw ? "border-red-300 focus:ring-red-200" : "border-slate-200 focus:ring-amber-300/60 focus:border-amber-400"
+                      className={`w-full h-11 rounded-xl border bg-white pl-10 pr-10 text-sm text-slate-800 focus:ring-2 outline-none transition-all ${
+                        confirmPw && confirmPw !== newPw ? "border-red-300 focus:ring-red-200" : "border-slate-200 focus:ring-[#00acc1]/25 focus:border-[#00acc1]"
                       }`} required />
                     <button type="button" onClick={() => setShowConfirm(!showConfirm)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
@@ -1220,7 +1214,7 @@ function AkunTab({ session, tickets, loading, openCount, inprogCount, pendingCou
                 </AnimatePresence>
 
                 <button type="submit" disabled={pwSaving}
-                  className="w-full h-11 rounded-xl bg-gradient-to-r from-amber-500 to-orange-400 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(245,158,11,0.35)] hover:shadow-[0_6px_24px_rgba(245,158,11,0.45)] active:scale-[0.98] transition-all disabled:opacity-60">
+                  className="w-full h-11 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all disabled:opacity-60">
                   {pwSaving ? <><Loader2 className="w-4 h-4 animate-spin" /> Mengganti...</> : <><KeyRound className="w-4 h-4" /> Ganti Password</>}
                 </button>
               </form>
@@ -1230,13 +1224,13 @@ function AkunTab({ session, tickets, loading, openCount, inprogCount, pendingCou
       </div>
 
       {/* ── DANGER ZONE ── */}
-      <div className="bg-white/90 backdrop-blur-xl rounded-3xl border border-red-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)] overflow-hidden">
-        <div className="px-5 py-4 border-b border-red-50">
-          <p className="text-[11px] font-bold text-red-400 uppercase tracking-widest">Zona Bahaya</p>
+      <div className="bg-white rounded-2xl border border-slate-200/70 shadow-[0_2px_12px_rgba(15,54,68,0.05)] overflow-hidden">
+        <div className="px-5 py-4 border-b border-slate-100">
+          <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">Zona Bahaya</p>
         </div>
         <div className="p-5">
           <button onClick={() => signOut({ callbackUrl: "/login" })}
-            className="w-full flex items-center justify-center gap-2.5 h-12 bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 font-bold text-sm rounded-2xl active:scale-[0.98] transition-all duration-300 group">
+            className="w-full flex items-center justify-center gap-2.5 h-11 bg-white hover:bg-red-50 border border-red-200 text-red-600 font-semibold text-sm rounded-xl transition-all duration-200 group">
             <LogOut className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             Keluar dari Akun
           </button>
