@@ -19,6 +19,12 @@ Helpdesk MIS hadir sebagai solusi digital untuk menyederhanakan proses pelaporan
 - **Dashboard Analitik:** Panel khusus bagi tim IT dan Administrator untuk memantau metrik beban kerja, status tiket (Open, Pending, Resolved), dan performa penanganan.
 - **Role-Based Access Control (RBAC):** Sistem keamanan berlapis yang membatasi hak akses berdasarkan peran pengguna (User, Staff IT, Administrator).
 
+## Filosofi Desain
+
+Tampilan antarmuka Helpdesk MIS dibangun dengan konsep ***Fluid Design***. Elemen visual dan latar belakang aplikasi didominasi oleh bentuk lekuk yang mengalir bebas (ombak/gelombang) dipadukan dengan gradasi warna *cyan*, *teal*, dan biru cerah. 
+
+Filosofi ini secara langsung merepresentasikan identitas perusahaan air minum (PDAM) — melambangkan kejernihan, kesegaran, aliran komunikasi yang lancar, serta pelayanan IT yang transparan dan selalu mengalir tanpa henti untuk menyelesaikan setiap kendala teknis.
+
 ## Arsitektur Teknologi
 
 Sistem ini dibangun dengan stack teknologi modern untuk menjamin kecepatan, keamanan, dan skalabilitas jangka panjang:
