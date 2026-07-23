@@ -1340,7 +1340,7 @@ export default function UserPortal() {
           </div>
         )}
 
-        <main className={`flex-1 w-full flex flex-col ${activeTab === "Chat" ? "p-0" : "max-w-xl md:max-w-6xl mx-auto px-4 md:px-8 pt-4 md:pt-6 pb-24 md:pb-8 gap-4 md:gap-5"}`}>
+        <main className={`flex-1 w-full flex flex-col ${activeTab === "Chat" ? "p-0 md:pl-6" : "max-w-xl md:max-w-6xl mx-auto px-4 md:px-8 pt-4 md:pt-6 pb-24 md:pb-8 gap-4 md:gap-5"}`}>
           
           {/* ── BERANDA ── */}
           {activeTab === "Beranda" && (
