@@ -1,29 +1,43 @@
-# Helpdesk MIS - Perumda Air Minum Tirta Kahuripan 💧
+<div align="center">
+  <h1>Helpdesk MIS</h1>
+  <p><strong>Perumda Air Minum Tirta Kahuripan</strong></p>
+  <p>Sistem Informasi Manajemen Layanan IT (IT Service Management) yang dirancang khusus untuk memfasilitasi komunikasi dan pelaporan masalah teknis antara karyawan dan tim IT di Perumda Air Minum Tirta Kahuripan Kabupaten Bogor.</p>
+</div>
 
-Helpdesk MIS adalah sistem informasi manajemen layanan IT (IT Service Management) yang dirancang khusus untuk memfasilitasi komunikasi dan pelaporan masalah teknis antara karyawan dan tim IT di Perumda Air Minum Tirta Kahuripan Kabupaten Bogor.
+<hr />
 
-## 🚀 Fungsi & Keunggulan Utama
+## Deskripsi Sistem
 
-*   **⚡ Realtime & Cepat:** Semua pelaporan tiket dan percakapan (chat) terjadi secara instan tanpa perlu memuat ulang halaman (*real-time*). Tim IT dapat merespons masalah dengan sangat cepat.
-*   **📱 Desain Responsif & Modern:** Mengusung antarmuka (*User Interface*) yang sangat premium, *clean*, dan modern layaknya aplikasi kelas atas. Berjalan sangat mulus baik di layar Komputer/Laptop maupun *Smartphone*.
-*   **🎫 Sistem Ticketing Terpusat:** Karyawan dapat membuat laporan (tiket) terkait masalah Jaringan, Komputer, Printer, Software, hingga Sistem GIS dengan mudah, lengkap dengan prioritas masalah.
-*   **💬 Live Chat Terintegrasi:** Memiliki fitur obrolan dua arah langsung di dalam detail tiket, memudahkan pengguna berkomunikasi dengan staf IT yang menangani.
-*   **📊 Dashboard Pantauan Admin:** Tim IT dan Admin memiliki panel *Dashboard* khusus untuk memantau beban kerja, tiket yang *Open*, *Pending*, hingga *Resolved* secara komprehensif.
-*   **🔒 Aman & Terstruktur:** Menggunakan sistem *Role-Based Access Control* (User, Staff, Admin) sehingga setiap pengguna hanya bisa mengakses menu dan data sesuai haknya.
+Helpdesk MIS hadir sebagai solusi digital untuk menyederhanakan proses pelaporan gangguan (ticketing system). Dengan arsitektur yang modern, sistem ini memungkinkan staf IT untuk memberikan dukungan yang responsif, terstruktur, dan terukur secara instan.
 
-## 🛠️ Teknologi yang Digunakan (Tech Stack)
+## Fitur Utama
 
-Aplikasi ini dibangun menggunakan arsitektur modern (*Modern Web Development*) untuk memastikan performa yang luar biasa dan skalabilitas tinggi:
+- **Sistem Real-Time:** Pelaporan tiket dan komunikasi pesan terjadi secara instan menggunakan protokol WebSocket, tanpa perlu memuat ulang halaman.
+- **Desain Responsif:** Antarmuka (User Interface) dirancang sangat bersih dan modern, mendukung penggunaan lintas perangkat (Desktop, Tablet, dan Smartphone).
+- **Manajemen Tiket Terpusat:** Pengguna dapat melaporkan kendala pada Jaringan, Komputer, Printer, Software, hingga Sistem GIS dengan tingkat prioritas yang jelas.
+- **Integrasi Live Chat:** Komunikasi dua arah secara langsung antara pelapor dan tim IT di dalam detail tiket yang sedang ditangani.
+- **Dashboard Analitik:** Panel khusus bagi tim IT dan Administrator untuk memantau metrik beban kerja, status tiket (Open, Pending, Resolved), dan performa penanganan.
+- **Role-Based Access Control (RBAC):** Sistem keamanan berlapis yang membatasi hak akses berdasarkan peran pengguna (User, Staff IT, Administrator).
 
-*   **Framework Utama:** [Next.js](https://nextjs.org/) (React)
-*   **Tampilan & Desain:** [Tailwind CSS](https://tailwindcss.com/) & [Framer Motion](https://www.framer.com/motion/) (Animasi)
-*   **Database:** PostgreSQL (Di-hosting di [Supabase](https://supabase.com/))
-*   **ORM:** [Prisma](https://www.prisma.io/)
-*   **Autentikasi:** [NextAuth.js](https://next-auth.js.org/) v5
-*   **Realtime Engine:** [Pusher](https://pusher.com/) (WebSockets)
-*   **Komponen UI:** [Radix UI](https://www.radix-ui.com/) / shadcn/ui & Lucide React
-*   **Deployment:** [Vercel](https://vercel.com)
+## Arsitektur Teknologi
 
-## 👨‍💻 Dikembangkan Oleh
+Sistem ini dibangun dengan stack teknologi modern untuk menjamin kecepatan, keamanan, dan skalabilitas jangka panjang:
 
-Sistem ini dirancang dan dikembangkan secara khusus oleh **Fakhri Sidqi** untuk kebutuhan internal Perumda Air Minum Tirta Kahuripan.
+**Frontend & Backend (Fullstack)**
+- Next.js (React)
+- Tailwind CSS (Styling)
+- Framer Motion (Animasi UI)
+- Radix UI & Lucide React (Komponen)
+
+**Data & Infrastruktur**
+- Supabase (PostgreSQL Database)
+- Prisma (Object-Relational Mapping)
+- NextAuth.js v5 (Autentikasi & Sesi)
+- Pusher (Real-time WebSockets)
+- Vercel (Deployment & Hosting)
+
+<hr />
+
+<div align="center">
+  <p>Dikembangkan secara khusus oleh <strong>Fakhri Sidqi</strong> untuk Perumda Air Minum Tirta Kahuripan.</p>
+</div>
