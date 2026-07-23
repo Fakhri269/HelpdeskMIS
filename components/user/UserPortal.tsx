@@ -585,7 +585,8 @@ function ChatRoom({ session, ticket, onBack }: { session: any, ticket: any, onBa
   }
 
   return (
-    <div className="-mx-4 -mt-5 -mb-24 md:mx-0 md:mt-0 md:mb-0 flex flex-col h-[calc(100dvh-115px)] md:h-[100dvh] bg-[#f4f9fb] relative z-50 animate-in slide-in-from-right-4 duration-300 overflow-hidden">
+    <div className="flex flex-col w-full bg-[#f4f9fb] relative animate-in slide-in-from-right-4 duration-300 overflow-hidden"
+         style={{ height: 'calc(100dvh - 52px)', minHeight: 0 }}>
       
       {/* Background Decor */}
       <div className="absolute inset-0 pointer-events-none z-0">
@@ -677,7 +678,8 @@ function ChatTab({ session, tickets, readCounts, markAsRead }: { session: any, t
   }
 
   return (
-    <div className="flex flex-col flex-1 min-h-0 bg-[#f4f9fb] md:h-[100dvh] animate-in fade-in duration-300">
+    <div className="flex flex-col w-full bg-[#f4f9fb] animate-in fade-in duration-300"
+         style={{ minHeight: 'calc(100dvh - 52px)' }}>
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-4 bg-white/90 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.04)] border-b border-white/50 shrink-0">
         <div>
