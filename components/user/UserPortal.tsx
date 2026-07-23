@@ -677,7 +677,7 @@ function ChatTab({ session, tickets, readCounts, markAsRead }: { session: any, t
   }
 
   return (
-    <div className="fixed inset-0 md:static md:inset-auto top-[52px] md:top-auto flex flex-col bg-[#f4f9fb] z-10 animate-in fade-in duration-300">
+    <div className="flex flex-col flex-1 min-h-0 bg-[#f4f9fb] md:h-[100dvh] animate-in fade-in duration-300">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-4 bg-white/90 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.04)] border-b border-white/50 shrink-0">
         <div>
@@ -1459,12 +1459,10 @@ export default function UserPortal() {
       </header>
 
       {/* ══ HERO (MOBILE) ══ */}
-      {activeTab !== "Chat" && (
       <div className="relative z-10 w-full h-[175px] sm:h-[230px] overflow-hidden md:hidden">
         <Image src="/PdamBG.jpg" alt="Gedung PDAM" fill className="object-cover object-center" priority />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/20" />
       </div>
-      )}
 
       {/* ══ NAV (MOBILE) ══ */}
       <nav className="relative z-20 w-full bg-[#2496bb] shadow-md sticky top-0 md:hidden">
