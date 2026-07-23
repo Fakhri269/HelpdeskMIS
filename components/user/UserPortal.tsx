@@ -415,9 +415,8 @@ function ChatRoom({ session, ticket, onBack }: { session: any, ticket: any, onBa
     }
   }
 
-  // Negative margins to break out of the main container's padding and fill the white area completely.
   return (
-    <div className="-mx-4 -mt-5 -mb-24 md:mx-0 md:mt-0 md:mb-0 flex flex-col h-[calc(100dvh-115px)] md:h-[calc(100vh-140px)] md:min-h-[500px] md:rounded-3xl md:shadow-2xl md:border md:border-white/50 bg-[#f4f9fb] relative z-50 animate-in slide-in-from-right-4 duration-300 overflow-hidden">
+    <div className="-mx-4 -mt-5 -mb-24 md:mx-0 md:mt-0 md:mb-0 flex flex-col h-[calc(100dvh-115px)] md:h-[100dvh] bg-[#f4f9fb] relative z-50 animate-in slide-in-from-right-4 duration-300 overflow-hidden">
       
       {/* Background Decor */}
       <div className="absolute inset-0 pointer-events-none z-0">
@@ -509,7 +508,7 @@ function ChatTab({ session, tickets, readCounts, markAsRead }: { session: any, t
   }
 
   return (
-    <div className="-mx-4 -mt-5 -mb-24 md:mx-0 md:mt-0 md:mb-0 flex flex-col min-h-[calc(100dvh-115px)] md:min-h-[calc(100vh-140px)] bg-[#f4f9fb] animate-in fade-in duration-300">
+    <div className="-mx-4 -mt-5 -mb-24 md:mx-0 md:mt-0 md:mb-0 flex flex-col min-h-[calc(100dvh-115px)] md:h-[100dvh] bg-[#f4f9fb] animate-in fade-in duration-300">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-4 bg-white/90 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.04)] border-b border-white/50 shrink-0">
         <div>
@@ -1330,16 +1329,18 @@ export default function UserPortal() {
       <div className="flex-1 flex flex-col min-w-0 relative z-10 md:ml-[280px]">
         
         {/* Desktop Topbar */}
-        <div className="hidden md:flex items-center justify-between px-8 py-5 bg-white/70 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-20">
-          <h1 className="text-[#155f7a] font-black text-2xl tracking-tight">
-            {TABS.find(t => t.id === activeTab)?.label}
-          </h1>
-          <div className="flex items-center gap-3">
-             <span className="text-slate-500 text-sm font-medium">{new Date().toLocaleDateString("id-ID", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+        {activeTab !== "Chat" && (
+          <div className="hidden md:flex items-center justify-between px-8 py-5 bg-white/70 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-20">
+            <h1 className="text-[#155f7a] font-black text-2xl tracking-tight">
+              {TABS.find(t => t.id === activeTab)?.label}
+            </h1>
+            <div className="flex items-center gap-3">
+               <span className="text-slate-500 text-sm font-medium">{new Date().toLocaleDateString("id-ID", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+            </div>
           </div>
-        </div>
+        )}
 
-        <main className="flex-1 w-full max-w-xl md:max-w-6xl mx-auto px-4 md:px-8 pt-4 md:pt-6 pb-24 md:pb-8 flex flex-col gap-4 md:gap-5">
+        <main className={`flex-1 w-full flex flex-col ${activeTab === "Chat" ? "p-0" : "max-w-xl md:max-w-6xl mx-auto px-4 md:px-8 pt-4 md:pt-6 pb-24 md:pb-8 gap-4 md:gap-5"}`}>
           
           {/* ── BERANDA ── */}
           {activeTab === "Beranda" && (
