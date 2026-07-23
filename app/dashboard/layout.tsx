@@ -6,6 +6,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
+import { getGreeting } from "@/lib/utils"
 import { signOut, useSession } from "next-auth/react"
 import { 
   LayoutDashboard, 
@@ -427,6 +428,7 @@ export default function DashboardLayout({
                   </AvatarFallback>
                 </Avatar>
                 <div className="hidden sm:block text-left mr-1">
+                  <p className="text-[10px] font-medium text-slate-400 leading-tight mb-0.5">{getGreeting()},</p>
                   <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 leading-tight">{session?.user?.name?.split(' ')[0]}</p>
                 </div>
                 <ChevronDown className="w-4 h-4 text-slate-400 hidden sm:block" />

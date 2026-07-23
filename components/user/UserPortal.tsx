@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react"
 import { useSession, signOut } from "next-auth/react"
 import { Loader2, Plus, ChevronRight, LogOut, User, Ticket, MessageSquare, Home, AlertCircle, X, Send, FileText, CheckCheck, Clock, ChevronLeft, Eye, EyeOff, Lock, Shield, Edit3, Check, KeyRound, Mail, BadgeCheck, Building2, Briefcase, HelpCircle, ChevronDown, Search, Info, AlertTriangle, Zap, Flame, Wifi, Monitor, AppWindow, Printer, MoreHorizontal } from "lucide-react"
 import Image from "next/image"
+import { getGreeting } from "@/lib/utils"
 import { motion, AnimatePresence } from "framer-motion"
 import { getPusherClient } from "@/lib/pusher-client"
 
@@ -1484,6 +1485,7 @@ export default function UserPortal() {
                 <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-white/20"></div>
               </div>
               <div className="flex-1 min-w-0 text-left">
+                <p className="text-[10px] font-medium text-white/70 leading-tight mb-0.5">{getGreeting()},</p>
                 <p className="text-sm font-bold text-white truncate">
                   {session?.user?.name}
                 </p>
