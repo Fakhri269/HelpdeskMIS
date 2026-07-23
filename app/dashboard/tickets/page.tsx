@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Sheet, SheetContent, SheetClose } from "@/components/ui/sheet"
+import { getPusherClient } from "@/lib/pusher-client"
 
 // ─── Configs ──────────────────────────────────────────────────────────────────
 const STATUS_CONFIG: Record<string, { label: string; className: string; icon: React.ElementType }> = {
@@ -92,7 +93,32 @@ export default function TicketsPage() {
     finally { setLoading(false) }
   }, [activeTab, search])
 
-  useEffect(() => { fetchTickets() }, [fetchTickets])
+  useEffect(() => { 
+    fetchTickets() 
+    
+    const pusher = getPusherClient()
+    const channel = pusher.subscribe("helpdesk-tickets")
+    
+    channel.bind("ticket.created", (data: any) => {
+      setTickets(prev => {
+        // Jika sedang memfilter dan status/search ga match, bisa aja ga ditambahkan.
+        // Tapi untuk simplifikasi kita tambah saja di paling atas.
+        if (prev.find(t => t.id === data.id)) return prev
+        return [data, ...prev]
+      })
+    })
+
+    channel.bind("ticket.updated", (data: any) => {
+      setTickets(prev => prev.map(t => 
+        t.id === data.id ? { ...t, status: data.status, priority: data.priority, assignee: data.assignee } : t
+      ))
+    })
+
+    return () => {
+      channel.unbind_all()
+      pusher.unsubscribe("helpdesk-tickets")
+    }
+  }, [fetchTickets])
 
   // ─── Load reference data ────────────────────────────────────────────────────
   useEffect(() => {

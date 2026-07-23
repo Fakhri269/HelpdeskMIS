@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import prisma from "@/lib/prisma"
+import pusherServer from "@/lib/pusher"
 
 // POST /api/tickets/[id]/comments - add a comment
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -23,6 +24,18 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     },
     include: {
       user: { select: { id: true, name: true, role: true } },
+    },
+  })
+
+  // Broadcast new comment realtime
+  await pusherServer.trigger(`ticket-${id}`, "comment.created", {
+    id: comment.id,
+    content: comment.content,
+    isSystem: comment.isSystem,
+    createdAt: comment.createdAt,
+    user: {
+      id: comment.user.id,
+      name: comment.user.name,
     },
   })
 

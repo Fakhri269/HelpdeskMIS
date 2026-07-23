@@ -5,6 +5,7 @@ import { useSession, signOut } from "next-auth/react"
 import { Loader2, Plus, ChevronRight, LogOut, User, Ticket, MessageSquare, Home, AlertCircle, X, Send, FileText, CheckCheck, Clock, ChevronLeft, Eye, EyeOff, Lock, Shield, Edit3, Check, KeyRound, Mail, BadgeCheck, Building2, Briefcase, HelpCircle, ChevronDown, Search, Info, AlertTriangle, Zap, Flame, Wifi, Monitor, AppWindow, Printer, MoreHorizontal } from "lucide-react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
+import { getPusherClient } from "@/lib/pusher-client"
 
 /* ─────────────────────── CONFIG ─────────────────────── */
 const STATUS_CONFIG: Record<string, { label: string; dot: string; bg: string; text: string }> = {
@@ -555,11 +556,27 @@ function ChatRoom({ session, ticket, onBack }: { session: any, ticket: any, onBa
     }
   }, [ticket.id])
 
+  // Initial fetch + Pusher subscription for realtime messages
   useEffect(() => {
     fetchChat()
-    const interval = setInterval(fetchChat, 5000)
-    return () => clearInterval(interval)
-  }, [fetchChat])
+
+    const pusher = getPusherClient()
+    const channel = pusher.subscribe(`ticket-${ticket.id}`)
+
+    // New comment from IT staff → append immediately
+    channel.bind("comment.created", (data: any) => {
+      setMessages(prev => {
+        // avoid duplicate if own message already added optimistically
+        if (prev.find(m => m.id === data.id)) return prev
+        return [...prev, data]
+      })
+    })
+
+    return () => {
+      channel.unbind_all()
+      pusher.unsubscribe(`ticket-${ticket.id}`)
+    }
+  }, [ticket.id, fetchChat])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -571,14 +588,23 @@ function ChatRoom({ session, ticket, onBack }: { session: any, ticket: any, onBa
     const msg = input.trim()
     setInput("")
     setSending(true)
+    // Optimistic update
+    const tempMsg = { id: `temp-${Date.now()}`, content: msg, isSystem: false, createdAt: new Date().toISOString(), user: { id: session?.user?.id, name: session?.user?.name } }
+    setMessages(prev => [...prev, tempMsg])
     try {
       const res = await fetch(`/api/tickets/${ticket.id}/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: msg }),
       })
-      if (res.ok) await fetchChat()
+      if (res.ok) {
+        const saved = await res.json()
+        // Replace temp message with real one
+        setMessages(prev => prev.map(m => m.id === tempMsg.id ? saved : m))
+      }
     } catch {
+      // Revert optimistic update on error
+      setMessages(prev => prev.filter(m => m.id !== tempMsg.id))
     } finally {
       setSending(false)
     }
@@ -1276,7 +1302,38 @@ export default function UserPortal() {
     finally { setLoading(false) }
   }, [])
 
-  useEffect(() => { fetchTickets() }, [fetchTickets])
+  useEffect(() => { 
+    fetchTickets() 
+    
+    // Subscribe to realtime tickets
+    const pusher = getPusherClient()
+    const channel = pusher.subscribe("helpdesk-tickets")
+    
+    channel.bind("ticket.created", (data: any) => {
+      setTickets(prev => {
+        if (prev.find(t => t.id === data.id)) return prev
+        return [data, ...prev]
+      })
+    })
+
+    channel.bind("ticket.updated", (data: any) => {
+      setTickets(prev => prev.map(t => 
+        t.id === data.id ? { ...t, status: data.status, priority: data.priority, assignee: data.assignee } : t
+      ))
+      // Update selected ticket detail if it's currently open
+      setSelectedTicket((prev: any) => {
+        if (prev?.id === data.id) {
+          return { ...prev, status: data.status, priority: data.priority, assignee: data.assignee }
+        }
+        return prev
+      })
+    })
+
+    return () => {
+      channel.unbind_all()
+      pusher.unsubscribe("helpdesk-tickets")
+    }
+  }, [fetchTickets])
 
   const handleTicketClick = async (ticket: any) => {
     setLoadingDetail(true)

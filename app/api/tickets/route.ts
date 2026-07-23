@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import prisma from "@/lib/prisma"
+import pusherServer from "@/lib/pusher"
 
 // GET /api/tickets - fetch list of tickets based on role
 export async function GET(req: Request) {
@@ -95,6 +96,19 @@ export async function POST(req: Request) {
         creator: { select: { id: true, name: true } },
         unitKerja: { select: { id: true, name: true } },
       },
+    })
+
+    // Broadcast realtime event
+    await pusherServer.trigger("helpdesk-tickets", "ticket.created", {
+      id: ticket.id,
+      ticketNumber: ticket.ticketNumber,
+      title: ticket.title,
+      status: ticket.status,
+      priority: ticket.priority,
+      category: ticket.category,
+      creator: ticket.creator,
+      unitKerja: ticket.unitKerja,
+      createdAt: ticket.createdAt,
     })
 
     return NextResponse.json(ticket)
