@@ -753,6 +753,7 @@ function FaqTab() {
   const [loading, setLoading]       = useState(true)
   const [search, setSearch]         = useState("")
   const [openId, setOpenId]         = useState<string | null>(null)
+  const [activeTag, setActiveTag]   = useState<string | null>(null)
 
   useEffect(() => {
     fetch("/api/faq")
@@ -762,11 +763,19 @@ function FaqTab() {
       .finally(() => setLoading(false))
   }, [])
 
-  const filtered = faqs.filter(f =>
-    f.question.toLowerCase().includes(search.toLowerCase()) ||
-    f.answer.toLowerCase().includes(search.toLowerCase()) ||
-    (f.tags || "").toLowerCase().includes(search.toLowerCase())
-  )
+  const allTags = Array.from(new Set(
+    faqs.flatMap(f => (f.tags ? f.tags.split(",").map((t: string) => t.trim()).filter(Boolean) : []))
+  )).slice(0, 8)
+
+  const filtered = faqs.filter(f => {
+    const matchesSearch =
+      f.question.toLowerCase().includes(search.toLowerCase()) ||
+      f.answer.toLowerCase().includes(search.toLowerCase()) ||
+      (f.tags || "").toLowerCase().includes(search.toLowerCase())
+    const faqTags = f.tags ? f.tags.split(",").map((t: string) => t.trim()) : []
+    const matchesTag = !activeTag || faqTags.includes(activeTag)
+    return matchesSearch && matchesTag
+  })
 
   return (
     <div className="flex flex-col gap-4 w-full animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out pb-2">
@@ -776,15 +785,27 @@ function FaqTab() {
         <div className="absolute inset-0 bg-gradient-to-br from-[#0097a7] via-[#00acc1] to-[#4dd0e1]" />
         <div className="absolute -top-8 -right-8 w-44 h-44 rounded-full bg-white/10" />
         <div className="absolute -bottom-12 -left-8 w-56 h-56 rounded-full bg-white/5" />
+        {/* Ripple motif — echoes the water theme used elsewhere in the app */}
+        <svg className="absolute -right-2 -bottom-8 w-36 h-36 opacity-[0.18] pointer-events-none" viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="46" stroke="white" strokeWidth="1.4" />
+          <circle cx="50" cy="50" r="32" stroke="white" strokeWidth="1.4" />
+          <circle cx="50" cy="50" r="18" stroke="white" strokeWidth="1.4" />
+        </svg>
         <div className="relative z-10 px-6 py-6 flex items-center gap-4">
           <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center shrink-0 shadow-lg">
             <HelpCircle className="w-7 h-7 text-white" />
           </div>
-          <div>
+          <div className="flex-1 min-w-0">
             <p className="text-white/70 text-xs font-semibold uppercase tracking-widest mb-0.5">Pusat Bantuan</p>
             <h2 className="text-white font-black text-xl leading-tight">FAQ</h2>
             <p className="text-white/65 text-sm mt-0.5">Pertanyaan yang sering ditanyakan</p>
           </div>
+          {!loading && faqs.length > 0 && (
+            <div className="hidden sm:flex flex-col items-end shrink-0">
+              <span className="text-white font-black text-2xl leading-none">{faqs.length}</span>
+              <span className="text-white/60 text-[10px] font-bold uppercase tracking-wider mt-0.5">Topik</span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -794,9 +815,50 @@ function FaqTab() {
         <input
           value={search} onChange={e => setSearch(e.target.value)}
           placeholder="Cari pertanyaan..."
-          className="w-full h-11 pl-10 pr-4 rounded-2xl border border-slate-200 bg-white text-sm text-slate-700 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-[#00acc1]/40 focus:border-[#00acc1] transition-all shadow-sm"
+          className="w-full h-11 pl-10 pr-10 rounded-2xl border border-slate-200 bg-white text-sm text-slate-700 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-[#00acc1]/40 focus:border-[#00acc1] transition-all shadow-sm"
         />
+        {search && (
+          <button
+            onClick={() => setSearch("")}
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors"
+            aria-label="Hapus pencarian"
+          >
+            <X className="w-3 h-3 text-slate-600" />
+          </button>
+        )}
       </div>
+
+      {/* ── TAG FILTERS ── */}
+      {!loading && allTags.length > 0 && (
+        <div className="flex gap-2 overflow-x-auto pb-1 -mx-0.5 px-0.5 scrollbar-hide">
+          <button
+            onClick={() => setActiveTag(null)}
+            className={`shrink-0 px-3.5 py-1.5 rounded-full text-[11px] font-bold border transition-all ${
+              !activeTag ? "bg-[#00acc1] border-[#00acc1] text-white shadow-sm" : "bg-white border-slate-200 text-slate-500 hover:border-[#00acc1]/40"
+            }`}
+          >
+            Semua
+          </button>
+          {allTags.map(tag => (
+            <button
+              key={tag}
+              onClick={() => setActiveTag(activeTag === tag ? null : tag)}
+              className={`shrink-0 px-3.5 py-1.5 rounded-full text-[11px] font-bold border transition-all ${
+                activeTag === tag ? "bg-[#00acc1] border-[#00acc1] text-white shadow-sm" : "bg-white border-slate-200 text-slate-500 hover:border-[#00acc1]/40"
+              }`}
+            >
+              #{tag}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* ── RESULT COUNT ── */}
+      {!loading && faqs.length > 0 && (search || activeTag) && (
+        <p className="text-slate-400 text-[11px] font-semibold px-1 -mt-1">
+          {filtered.length} hasil ditemukan
+        </p>
+      )}
 
       {/* ── LIST ── */}
       {loading ? (
@@ -806,8 +868,18 @@ function FaqTab() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 gap-3 text-slate-400">
-          <HelpCircle className="w-12 h-12 opacity-30" />
-          <p className="font-semibold text-sm">{search ? "Tidak ada hasil pencarian" : "Belum ada FAQ"}</p>
+          <div className="w-16 h-16 rounded-full bg-[#e0f7fa] flex items-center justify-center">
+            <HelpCircle className="w-8 h-8 text-[#00acc1]/50" />
+          </div>
+          <p className="font-semibold text-sm text-slate-500">{search || activeTag ? "Tidak ada hasil yang cocok" : "Belum ada FAQ"}</p>
+          {(search || activeTag) && (
+            <button
+              onClick={() => { setSearch(""); setActiveTag(null) }}
+              className="text-[11px] font-bold text-[#00838f] hover:text-[#00acc1] underline underline-offset-2"
+            >
+              Reset pencarian
+            </button>
+          )}
         </div>
       ) : (
         <div className="space-y-3">
@@ -815,14 +887,16 @@ function FaqTab() {
             const isOpen = openId === faq.id
             const tags = faq.tags ? faq.tags.split(",").map((t: string) => t.trim()).filter(Boolean) : []
             return (
-              <div
+              <motion.div
                 key={faq.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: Math.min(i * 0.04, 0.3) }}
                 className={`rounded-2xl border transition-all duration-300 overflow-hidden shadow-sm ${
                   isOpen
                     ? "border-[#00acc1]/40 bg-white shadow-[0_4px_24px_rgba(0,172,193,0.12)]"
                     : "border-slate-100 bg-white/80 hover:border-[#00acc1]/30 hover:shadow-md"
                 }`}
-                style={{ animationDelay: `${i * 40}ms` }}
               >
                 {/* Question row */}
                 <button
@@ -837,7 +911,7 @@ function FaqTab() {
                   <p className={`flex-1 text-sm font-semibold leading-snug pr-2 ${
                     isOpen ? "text-[#004d5e]" : "text-slate-700"
                   }`}>{faq.question}</p>
-                  <ChevronDown className={`shrink-0 w-4 h-4 text-[#00acc1] transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown className={`shrink-0 w-4 h-4 text-[#00acc1] transition-transform duration-300 mt-0.5 ${isOpen ? "rotate-180" : ""}`} />
                 </button>
 
                 {/* Answer */}
@@ -855,9 +929,13 @@ function FaqTab() {
                           {tags.length > 0 && (
                             <div className="flex flex-wrap gap-1.5 mt-3">
                               {tags.map((tag: string) => (
-                                <span key={tag} className="px-2.5 py-0.5 rounded-full bg-[#e0f7fa] text-[#00838f] text-[10px] font-bold">
+                                <button
+                                  key={tag}
+                                  onClick={(e) => { e.stopPropagation(); setActiveTag(tag) }}
+                                  className="px-2.5 py-0.5 rounded-full bg-[#e0f7fa] hover:bg-[#00acc1]/20 text-[#00838f] text-[10px] font-bold transition-colors"
+                                >
                                   #{tag}
-                                </span>
+                                </button>
                               ))}
                             </div>
                           )}
@@ -866,7 +944,7 @@ function FaqTab() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
+              </motion.div>
             )
           })}
         </div>
