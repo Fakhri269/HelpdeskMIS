@@ -4,18 +4,26 @@ import { useState, useEffect, useRef, useCallback } from "react"
 import { useSession } from "next-auth/react"
 import {
   MessageSquare, Send, Loader2, Circle, ArrowLeft,
-  Ticket, Clock, CheckCircle2, AlertCircle, User, Building2
+  Ticket, Clock, CheckCircle2, AlertCircle, RefreshCw,
+  ChevronDown
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { getPusherClient } from "@/lib/pusher-client"
 
 const statusConfig: Record<string, { label: string; className: string; icon: React.ElementType }> = {
-  Open:          { label: "Open",        className: "bg-blue-100 text-blue-700",   icon: Circle },
+  Open:          { label: "Open",        className: "bg-blue-100 text-blue-700",    icon: Circle },
   "In Progress": { label: "In Progress", className: "bg-yellow-100 text-yellow-700", icon: Clock },
   Pending:       { label: "Pending",     className: "bg-orange-100 text-orange-700", icon: AlertCircle },
-  Resolved:      { label: "Resolved",    className: "bg-green-100 text-green-700",  icon: CheckCircle2 },
-  Closed:        { label: "Closed",      className: "bg-slate-100 text-slate-600",  icon: CheckCircle2 },
+  Resolved:      { label: "Resolved",    className: "bg-green-100 text-green-700",   icon: CheckCircle2 },
+  Closed:        { label: "Closed",      className: "bg-slate-100 text-slate-600",   icon: CheckCircle2 },
+}
+
+const NEXT_STATUS: Record<string, string> = {
+  "Open": "In Progress",
+  "In Progress": "Resolved",
+  "Pending": "In Progress",
 }
 
 export default function ChatPage() {
@@ -26,31 +34,31 @@ export default function ChatPage() {
   const [loadingDetail, setLoadingDetail] = useState(false)
   const [comment, setComment] = useState("")
   const [sending, setSending] = useState(false)
+  const [updatingStatus, setUpdatingStatus] = useState(false)
   const [mobileView, setMobileView] = useState<"list" | "chat">("list")
+  const [unreadIds, setUnreadIds] = useState<Set<string>>(new Set())
   const bottomRef = useRef<HTMLDivElement>(null)
   const selectedIdRef = useRef<string | null>(null)
 
   const fetchTickets = useCallback(async () => {
-    setLoading(true)
     try {
       const res = await fetch("/api/tickets")
       const data = await res.json()
       if (Array.isArray(data)) {
-        const active = data.filter(t => !["Resolved", "Closed"].includes(t.status))
+        const active = data.filter((t: any) => !["Resolved", "Closed"].includes(t.status))
         setTickets(active)
       }
-    } finally {
-      setLoading(false)
-    }
+    } catch {}
+    finally { setLoading(false) }
   }, [])
 
-  const fetchDetail = useCallback(async (id: string) => {
-    setLoadingDetail(true)
+  const fetchDetail = useCallback(async (id: string, silent = false) => {
+    if (!silent) setLoadingDetail(true)
     try {
       const res = await fetch(`/api/tickets/${id}`)
       if (res.ok) setSelected(await res.json())
     } finally {
-      setLoadingDetail(false)
+      if (!silent) setLoadingDetail(false)
     }
   }, [])
 
@@ -60,36 +68,54 @@ export default function ChatPage() {
     selectedIdRef.current = selected?.id || null
   }, [selected?.id])
 
+  // Pusher realtime subscription
   useEffect(() => {
-    // Polling setiap 3 detik untuk efek "Live"
-    const interval = setInterval(() => {
-      // 1. Fetch daftar tiket aktif (tanpa merubah state loading)
-      fetch("/api/tickets")
-        .then(res => res.json())
-        .then(data => {
-          if (Array.isArray(data)) {
-            const active = data.filter((t: any) => !["Resolved", "Closed"].includes(t.status))
-            setTickets(active)
-          }
-        }).catch(() => {})
+    const pusher = getPusherClient()
+    const channel = pusher.subscribe("helpdesk-tickets")
 
-      // 2. Fetch detail percakapan jika ada yang dipilih
-      if (selectedIdRef.current) {
-        fetch(`/api/tickets/${selectedIdRef.current}`)
-          .then(res => res.json())
-          .then(data => {
-            if (data && !data.error) setSelected(data)
-          }).catch(() => {})
+    channel.bind("ticket.created", (data: any) => {
+      setTickets(prev => {
+        if (prev.find((t: any) => t.id === data.id)) return prev
+        return [data, ...prev]
+      })
+      if (selectedIdRef.current !== data.id) {
+        setUnreadIds(prev => new Set([...prev, data.id]))
       }
-    }, 3000)
-    return () => clearInterval(interval)
-  }, [])
+    })
+
+    channel.bind("ticket.updated", (data: any) => {
+      setTickets(prev => prev.map((t: any) =>
+        t.id === data.id ? { ...t, status: data.status, priority: data.priority } : t
+      ))
+      if (selectedIdRef.current === data.id) {
+        fetchDetail(data.id, true)
+      }
+    })
+
+    channel.bind("ticket.comment", (data: any) => {
+      if (selectedIdRef.current === data.ticketId) {
+        fetchDetail(data.ticketId, true)
+      } else {
+        setUnreadIds(prev => new Set([...prev, data.ticketId]))
+      }
+    })
+
+    return () => {
+      channel.unbind_all()
+      pusher.unsubscribe("helpdesk-tickets")
+    }
+  }, [fetchDetail])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [selected?.comments])
+  }, [selected?.comments?.length])
 
   const handleSelectTicket = (ticket: any) => {
+    setUnreadIds(prev => {
+      const next = new Set(prev)
+      next.delete(ticket.id)
+      return next
+    })
     fetchDetail(ticket.id)
     setMobileView("chat")
   }
@@ -106,8 +132,7 @@ export default function ChatPage() {
       })
       if (res.ok) {
         setComment("")
-        fetchDetail(selected.id)
-        // refresh ticket list
+        fetchDetail(selected.id, true)
         fetchTickets()
       }
     } finally {
@@ -115,7 +140,28 @@ export default function ChatPage() {
     }
   }
 
-  const isHelpdesk = session?.user?.role === "superadmin" || session?.user?.role?.startsWith("helpdesk_")
+  const handleUpdateStatus = async () => {
+    if (!selected) return
+    const nextStatus = NEXT_STATUS[selected.status]
+    if (!nextStatus) return
+    setUpdatingStatus(true)
+    try {
+      const res = await fetch(`/api/tickets/${selected.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: nextStatus }),
+      })
+      if (res.ok) {
+        fetchDetail(selected.id, true)
+        fetchTickets()
+      }
+    } finally {
+      setUpdatingStatus(false)
+    }
+  }
+
+  const isHelpdesk = ["superadmin", "admin"].includes(session?.user?.role ?? "") || 
+    session?.user?.role?.startsWith("helpdesk_")
 
   return (
     <div className="h-[calc(100vh-10rem)] flex flex-col">
@@ -125,7 +171,7 @@ export default function ChatPage() {
           Live Chat Tiket
         </h1>
         <p className="text-sm text-slate-500 mt-1">
-          {isHelpdesk ? "Tangani tiket aktif dari pengguna" : "Lihat update tiket Anda"}
+          {isHelpdesk ? "Tangani tiket aktif dari pengguna secara realtime" : "Lihat update tiket Anda"}
         </p>
       </div>
 
@@ -136,7 +182,14 @@ export default function ChatPage() {
           <div className="p-4 border-b border-slate-100 dark:border-zinc-800">
             <div className="flex items-center justify-between">
               <p className="font-semibold text-slate-700 dark:text-white text-sm">Tiket Aktif</p>
-              <Badge className="bg-blue-600 text-white text-xs">{tickets.length}</Badge>
+              <div className="flex items-center gap-2">
+                {unreadIds.size > 0 && (
+                  <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
+                    {unreadIds.size} baru
+                  </span>
+                )}
+                <Badge className="bg-blue-600 text-white text-xs">{tickets.length}</Badge>
+              </div>
             </div>
             <p className="text-xs text-slate-400 mt-1">Klik tiket untuk melihat percakapan</p>
           </div>
@@ -155,14 +208,22 @@ export default function ChatPage() {
               const status = statusConfig[t.status] ?? statusConfig["Open"]
               const StatusIcon = status.icon
               const isActive = selected?.id === t.id
+              const hasUnread = unreadIds.has(t.id)
               return (
                 <button
                   key={t.id}
                   onClick={() => handleSelectTicket(t)}
-                  className={`w-full text-left p-4 transition-colors ${
-                    isActive ? "bg-blue-50 dark:bg-blue-900/20" : "hover:bg-slate-50 dark:hover:bg-zinc-800"
+                  className={`w-full text-left p-4 transition-colors relative ${
+                    isActive
+                      ? "bg-blue-50 dark:bg-blue-900/20"
+                      : hasUnread
+                      ? "bg-red-50 dark:bg-red-950/20 hover:bg-red-100"
+                      : "hover:bg-slate-50 dark:hover:bg-zinc-800"
                   }`}
                 >
+                  {hasUnread && (
+                    <span className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
+                  )}
                   <div className="flex items-start gap-3">
                     <Avatar className="h-9 w-9 shrink-0">
                       <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white text-xs font-bold">
@@ -170,11 +231,13 @@ export default function ChatPage() {
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-1">
-                        <p className={`text-sm font-semibold truncate ${isActive ? "text-blue-700 dark:text-blue-400" : "text-slate-800 dark:text-white"}`}>
-                          {t.creator?.name}
-                        </p>
-                      </div>
+                      <p className={`text-sm font-semibold truncate ${
+                        isActive ? "text-blue-700 dark:text-blue-400"
+                        : hasUnread ? "text-red-700"
+                        : "text-slate-800 dark:text-white"
+                      }`}>
+                        {t.creator?.name}
+                      </p>
                       <p className="text-xs text-slate-500 truncate mt-0.5">{t.title}</p>
                       <div className="flex items-center gap-1.5 mt-1.5">
                         <Badge className={`text-xs px-2 py-0 ${status.className}`}>
@@ -221,7 +284,7 @@ export default function ChatPage() {
                     <Ticket className="w-3 h-3" /> {selected.ticketNumber} · {selected.title}
                   </p>
                 </div>
-                <div className="hidden sm:flex items-center gap-2 shrink-0">
+                <div className="flex items-center gap-2 shrink-0">
                   {(() => {
                     const s = statusConfig[selected.status] ?? statusConfig["Open"]
                     const SIcon = s.icon
@@ -231,6 +294,29 @@ export default function ChatPage() {
                       </Badge>
                     )
                   })()}
+                  {isHelpdesk && NEXT_STATUS[selected.status] && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-xs h-7 gap-1 rounded-lg"
+                      disabled={updatingStatus}
+                      onClick={handleUpdateStatus}
+                    >
+                      {updatingStatus
+                        ? <Loader2 className="w-3 h-3 animate-spin" />
+                        : <ChevronDown className="w-3 h-3" />
+                      }
+                      {NEXT_STATUS[selected.status]}
+                    </Button>
+                  )}
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="h-8 w-8 rounded-lg"
+                    onClick={() => fetchDetail(selected.id)}
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                  </Button>
                 </div>
               </div>
 
@@ -284,7 +370,7 @@ export default function ChatPage() {
                 <form onSubmit={handleSend} className="flex items-end gap-2">
                   <textarea
                     rows={2}
-                    placeholder="Ketik pesan atau update tiket..."
+                    placeholder={isHelpdesk ? "Ketik balasan untuk pengguna..." : "Ketik pesan..."}
                     className="flex-1 rounded-2xl border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-800 px-4 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={comment}
                     onChange={e => setComment(e.target.value)}

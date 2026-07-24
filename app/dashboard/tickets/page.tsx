@@ -68,6 +68,7 @@ export default function TicketsPage() {
   const [activeTab, setActiveTab]     = useState("Semua")
   const [createOpen, setCreateOpen]   = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [seenTicketIds, setSeenTicketIds] = useState<Set<string>>(new Set())
 
   // Reference data
   const [refs, setRefs]               = useState<{ units: any[]; subUnits: any[] }>({ units: [], subUnits: [] })
@@ -101,8 +102,6 @@ export default function TicketsPage() {
     
     channel.bind("ticket.created", (data: any) => {
       setTickets(prev => {
-        // Jika sedang memfilter dan status/search ga match, bisa aja ga ditambahkan.
-        // Tapi untuk simplifikasi kita tambah saja di paling atas.
         if (prev.find(t => t.id === data.id)) return prev
         return [data, ...prev]
       })
@@ -243,11 +242,32 @@ export default function TicketsPage() {
                 const status = STATUS_CONFIG[ticket.status] ?? STATUS_CONFIG["Open"]
                 const priority = PRIORITY_CONFIG[ticket.priority] ?? PRIORITY_CONFIG["Low"]
                 const StatusIcon = status.icon
+                // Tiket dianggap "baru" jika dibuat dalam 10 menit terakhir dan belum pernah dibuka
+                const isNew = !seenTicketIds.has(ticket.id) && 
+                  (new Date().getTime() - new Date(ticket.createdAt).getTime()) < 10 * 60 * 1000
                 return (
-                  <tr key={ticket.id} className="hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-colors group">
-                    <td className="px-4 py-3.5 font-mono text-xs text-slate-500 font-medium whitespace-nowrap">{ticket.ticketNumber}</td>
+                  <tr 
+                    key={ticket.id} 
+                    className={`transition-colors group cursor-pointer ${
+                      isNew 
+                        ? "bg-red-50 hover:bg-red-100 dark:bg-red-950/20 dark:hover:bg-red-950/30" 
+                        : "hover:bg-slate-50 dark:hover:bg-zinc-800/50"
+                    }`}
+                  >
+                    <td className="px-4 py-3.5 font-mono text-xs text-slate-500 font-medium whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        {ticket.ticketNumber}
+                        {isNew && (
+                          <span className="inline-flex items-center gap-1 bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full animate-pulse">
+                            NEW
+                          </span>
+                        )}
+                      </div>
+                    </td>
                     <td className="px-4 py-3.5">
-                      <p className="font-semibold text-slate-800 dark:text-white group-hover:text-blue-600 transition-colors line-clamp-1">{ticket.title}</p>
+                      <p className={`font-semibold dark:text-white group-hover:text-blue-600 transition-colors line-clamp-1 ${
+                        isNew ? "text-red-700" : "text-slate-800"
+                      }`}>{ticket.title}</p>
                       <p className="text-xs text-slate-400 mt-0.5">{ticket.category}</p>
                     </td>
                     <td className="px-4 py-3.5 hidden md:table-cell">
@@ -258,7 +278,10 @@ export default function TicketsPage() {
                     </td>
                     <td className="px-4 py-3.5 hidden lg:table-cell text-slate-600 dark:text-slate-300 text-xs">{ticket.creator?.name ?? "-"}</td>
                     <td className="px-4 py-3.5 text-right">
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-lg hover:bg-blue-50 hover:text-blue-600" onClick={() => router.push(`/dashboard/tickets/${ticket.id}`)}>
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-lg hover:bg-blue-50 hover:text-blue-600" onClick={() => {
+                        setSeenTicketIds(prev => new Set([...prev, ticket.id]))
+                        router.push(`/dashboard/tickets/${ticket.id}`)
+                      }}>
                         <Eye className="w-4 h-4" />
                       </Button>
                     </td>
