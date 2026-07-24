@@ -18,14 +18,14 @@ export default function WelcomeToast() {
       const showTimer = setTimeout(() => {
         setIsVisible(true)
         sessionStorage.setItem("hasSeenGreeting", "true")
-      }, 500) // slight delay before showing
+      }, 500)
       return () => clearTimeout(showTimer)
     }
   }, [session])
 
   useEffect(() => {
     if (!isVisible) return
-    const duration = 4000 // 4 seconds duration
+    const duration = 4000
     const interval = 40
     const step = (interval / duration) * 100
     
@@ -43,7 +43,6 @@ export default function WelcomeToast() {
     return () => clearInterval(timer)
   }, [isVisible])
 
-  // Prevent scroll when modal is open
   useEffect(() => {
     if (isVisible) {
       document.body.style.overflow = "hidden"
@@ -54,14 +53,6 @@ export default function WelcomeToast() {
       document.body.style.overflow = "unset"
     }
   }, [isVisible])
-
-  const firstName = session?.user?.name?.split(" ")[0] ?? "Pengguna"
-  const role = (session?.user as any)?.role ?? "user"
-  const roleLabel: Record<string, string> = {
-    admin: "Administrator",
-    staff_it: "Staff IT",
-    user: "Pengguna",
-  }
 
   return (
     <AnimatePresence>
@@ -74,7 +65,7 @@ export default function WelcomeToast() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm"
-            onClick={() => setIsVisible(false)} // Close when clicking outside
+            onClick={() => setIsVisible(false)}
           />
 
           {/* Modal Content */}
@@ -88,7 +79,7 @@ export default function WelcomeToast() {
             {/* Top accent bar */}
             <div className="h-1.5 w-full bg-[#1e7fa8]" />
 
-            <div className="p-6">
+            <div className="p-7">
               <button
                 onClick={() => setIsVisible(false)}
                 className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors"
@@ -97,27 +88,20 @@ export default function WelcomeToast() {
                 <X className="w-5 h-5" />
               </button>
 
-              <div className="flex flex-col items-center text-center mt-2">
-                {/* Avatar / Initial */}
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 border border-slate-200 flex items-center justify-center mb-4 shadow-sm">
-                  <span className="text-[#1e7fa8] font-bold text-2xl">
-                    {firstName.charAt(0).toUpperCase()}
-                  </span>
-                </div>
-
+              <div className="flex flex-col items-center text-center mt-1">
                 <p className="text-slate-500 font-medium text-sm mb-1">{getGreeting()},</p>
-                <h3 className="text-slate-800 font-bold text-xl leading-tight mb-2">
+                <h3 className="text-[#1e7fa8] font-bold text-2xl leading-tight mb-3">
                   {session?.user?.name}
                 </h3>
                 
-                <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold border border-slate-200">
-                  {roleLabel[role]}
-                </span>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  Selamat datang di <strong>Helpdesk MIS</strong>. Kami siap membantu menyelesaikan kendala IT Anda hari ini.
+                </p>
               </div>
             </div>
 
             {/* Progress bar to indicate auto-close */}
-            <div className="h-1 bg-slate-100 w-full mt-2">
+            <div className="h-1 bg-slate-100 w-full mt-1">
               <div
                 className="h-full bg-slate-300 transition-none"
                 style={{ width: `${progress}%` }}
