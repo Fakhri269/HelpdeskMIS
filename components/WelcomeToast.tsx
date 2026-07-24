@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { getGreeting } from "@/lib/utils"
-import { X } from "lucide-react"
 import { useSession } from "next-auth/react"
+import { X } from "lucide-react"
 
 export default function WelcomeToast() {
   const { data: session } = useSession()
@@ -15,26 +15,44 @@ export default function WelcomeToast() {
     if (!session?.user) return
     const hasSeenGreeting = sessionStorage.getItem("hasSeenGreeting")
     if (!hasSeenGreeting) {
-      const t = setTimeout(() => {
+      const showTimer = setTimeout(() => {
         setIsVisible(true)
         sessionStorage.setItem("hasSeenGreeting", "true")
-      }, 700)
-      return () => clearTimeout(t)
+      }, 500) // slight delay before showing
+      return () => clearTimeout(showTimer)
     }
   }, [session])
 
   useEffect(() => {
     if (!isVisible) return
-    const duration = 5000
+    const duration = 4000 // 4 seconds duration
     const interval = 40
     const step = (interval / duration) * 100
+    
     const timer = setInterval(() => {
       setProgress(prev => {
-        if (prev <= 0) { clearInterval(timer); setIsVisible(false); return 0 }
+        if (prev <= 0) { 
+          clearInterval(timer)
+          setIsVisible(false)
+          return 0 
+        }
         return prev - step
       })
     }, interval)
+    
     return () => clearInterval(timer)
+  }, [isVisible])
+
+  // Prevent scroll when modal is open
+  useEffect(() => {
+    if (isVisible) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = "unset"
+    }
+    return () => {
+      document.body.style.overflow = "unset"
+    }
   }, [isVisible])
 
   const firstName = session?.user?.name?.split(" ")[0] ?? "Pengguna"
@@ -48,53 +66,65 @@ export default function WelcomeToast() {
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.div
-          initial={{ opacity: 0, y: -16 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className="fixed top-5 right-5 z-[9999] w-[300px]"
-        >
-          <div className="bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-0">
+          {/* Backdrop Blur */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm"
+            onClick={() => setIsVisible(false)} // Close when clicking outside
+          />
 
-            {/* Top accent line */}
-            <div className="h-[3px] w-full bg-gradient-to-r from-[#1e7fa8] to-[#38bdf8]" />
+          {/* Modal Content */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="relative w-full max-w-[360px] bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden"
+          >
+            {/* Top accent bar */}
+            <div className="h-1.5 w-full bg-[#1e7fa8]" />
 
-            <div className="px-4 py-3.5">
-              <div className="flex items-start gap-3">
-                {/* Avatar */}
-                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#1e7fa8] to-[#2496bb] flex items-center justify-center shrink-0">
-                  <span className="text-white font-bold text-sm">
+            <div className="p-6">
+              <button
+                onClick={() => setIsVisible(false)}
+                className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors"
+                aria-label="Tutup"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="flex flex-col items-center text-center mt-2">
+                {/* Avatar / Initial */}
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 border border-slate-200 flex items-center justify-center mb-4 shadow-sm">
+                  <span className="text-[#1e7fa8] font-bold text-2xl">
                     {firstName.charAt(0).toUpperCase()}
                   </span>
                 </div>
 
-                {/* Text */}
-                <div className="flex-1 min-w-0">
-                  <p className="text-[11px] text-slate-400 font-medium">{getGreeting()}</p>
-                  <p className="text-slate-800 font-semibold text-[14px] leading-snug truncate">{firstName}</p>
-                  <p className="text-slate-400 text-[11px] mt-0.5">{roleLabel[role]} &mdash; Helpdesk MIS</p>
-                </div>
-
-                {/* Close */}
-                <button
-                  onClick={() => setIsVisible(false)}
-                  className="text-slate-300 hover:text-slate-500 transition-colors mt-0.5"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
+                <p className="text-slate-500 font-medium text-sm mb-1">{getGreeting()},</p>
+                <h3 className="text-slate-800 font-bold text-xl leading-tight mb-2">
+                  {session?.user?.name}
+                </h3>
+                
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold border border-slate-200">
+                  {roleLabel[role]}
+                </span>
               </div>
             </div>
 
-            {/* Progress bar */}
-            <div className="h-[2px] bg-slate-100">
+            {/* Progress bar to indicate auto-close */}
+            <div className="h-1 bg-slate-100 w-full mt-2">
               <div
-                className="h-full bg-[#1e7fa8] transition-none"
+                className="h-full bg-slate-300 transition-none"
                 style={{ width: `${progress}%` }}
               />
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       )}
     </AnimatePresence>
   )
