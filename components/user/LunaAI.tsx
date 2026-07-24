@@ -337,6 +337,9 @@ export default function LunaAI() {
                   {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4 ml-0.5" />}
                 </button>
               </div>
+              <p className="text-center text-[10px] text-slate-400 mt-2 mb-0.5">
+                AI dapat membuat kesalahan. Verifikasi informasi penting.
+              </p>
             </div>
           </motion.div>
         )}
