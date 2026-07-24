@@ -79,6 +79,7 @@ export default function LunaAI() {
   ])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [appContext, setAppContext] = useState<string>("")
   
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -91,6 +92,11 @@ export default function LunaAI() {
     if (isOpen) {
       scrollToBottom()
       inputRef.current?.focus()
+      // Fetch realtime context setiap kali chat dibuka
+      fetch("/api/ai-context")
+        .then(r => r.ok ? r.json() : null)
+        .then(data => { if (data?.context) setAppContext(data.context) })
+        .catch(() => {})
     }
   }, [messages, isOpen])
 
@@ -131,12 +137,20 @@ export default function LunaAI() {
     setIsLoading(true)
 
     try {
+      // Inject data realtime ke system message sebelum dikirim ke AI
+      const messagesWithContext = newMessages.map((msg, idx) => {
+        if (idx === 0 && msg.role === "system" && appContext) {
+          return { ...msg, content: msg.content + "\n\n" + appContext }
+        }
+        return msg
+      })
+
       const response = await fetch("https://luna-ai.helpdesk-mis-tirtakahuripan.workers.dev/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ messages: newMessages }),
+        body: JSON.stringify({ messages: messagesWithContext }),
       })
 
       if (!response.ok) {
