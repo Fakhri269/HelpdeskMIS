@@ -83,7 +83,7 @@ export function TicketTrendsChart({ initialData, initialMonth, initialYear }: {
         </div>
         
         <div className="flex items-center gap-2">
-          <Select value={selectedMonth} onValueChange={setSelectedMonth} disabled={isLoading}>
+          <Select value={selectedMonth} onValueChange={(val) => val && setSelectedMonth(val)} disabled={isLoading}>
             <SelectTrigger className="w-[130px] h-9 text-xs bg-slate-50">
               <SelectValue placeholder="Bulan" />
             </SelectTrigger>
@@ -94,7 +94,7 @@ export function TicketTrendsChart({ initialData, initialMonth, initialYear }: {
             </SelectContent>
           </Select>
 
-          <Select value={selectedYear} onValueChange={setSelectedYear} disabled={isLoading}>
+          <Select value={selectedYear} onValueChange={(val) => val && setSelectedYear(val)} disabled={isLoading}>
             <SelectTrigger className="w-[90px] h-9 text-xs bg-slate-50">
               <SelectValue placeholder="Tahun" />
             </SelectTrigger>
