@@ -12,29 +12,35 @@ type Message = {
   content: string
 }
 
-// Fungsi untuk format teks (bolding)
+// Fungsi untuk format teks (bolding) dengan penanganan yang aman terhadap HTML tags
 const formatMessageText = (raw: string) => {
-  let formatted = raw
-  
-  // Tangani single quotes 'Teks'
-  const sqCount = (formatted.match(/'/g) || []).length
-  if (sqCount % 2 !== 0) formatted += "'"
-  formatted = formatted.replace(/'([^']+)'/g, '<strong class="text-[#1e7fa8] font-bold">$1</strong>')
+  const escapeHtml = (unsafe: string) => {
+    return unsafe
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;")
+  }
 
-  // Tangani double quotes "Teks"
-  const dqCount = (formatted.match(/"/g) || []).length
-  if (dqCount % 2 !== 0) formatted += '"'
-  formatted = formatted.replace(/"([^"]+)"/g, '<strong class="text-[#1e7fa8] font-bold">$1</strong>')
+  // Identifikasi dan proses marker markdown/quotes ke format sementara
+  let processed = raw
+    .replace(/\*\*(.*?)\*\*/g, '___BOLD___$1___END___')
+    .replace(/'(.*?)'/g, '___BOLD___$1___END___')
+    .replace(/"(.*?)"/g, '___BOLD___$1___END___')
 
-  // Tangani markdown bold **Teks**
-  const astCount = (formatted.match(/\*\*/g) || []).length
-  if (astCount % 2 !== 0) formatted += '**'
-  formatted = formatted.replace(/\*\*([^*]+)\*\*/g, '<strong class="text-[#1e7fa8] font-bold">$1</strong>')
+  // Escape sisa teks
+  processed = escapeHtml(processed)
+
+  // Konversi marker sementara ke tag HTML
+  processed = processed
+    .replace(/___BOLD___/g, '<strong class="text-[#1e7fa8] font-bold">')
+    .replace(/___END___/g, '</strong>')
 
   // Tangani newline
-  formatted = formatted.replace(/\n/g, '<br />')
+  processed = processed.replace(/\n/g, '<br />')
 
-  return { __html: formatted }
+  return { __html: processed }
 }
 
 const TypewriterText = ({ text, delay = 25 }: { text: string, delay?: number }) => {
