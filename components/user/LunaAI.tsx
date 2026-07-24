@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, Send, Bot, Loader2 } from "lucide-react"
+import { X, Send, Loader2 } from "lucide-react"
+import Image from "next/image"
 
 type Message = {
   role: "system" | "user" | "assistant"
@@ -125,9 +126,15 @@ export default function LunaAI() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-6 right-6 z-[9000] w-14 h-14 bg-gradient-to-br from-[#1e7fa8] to-[#38bdf8] rounded-full shadow-2xl flex items-center justify-center text-white border-4 border-white/20"
+            className="fixed bottom-6 right-6 z-[9000] w-14 h-14 bg-gradient-to-br from-[#1e7fa8] to-[#38bdf8] rounded-full shadow-2xl flex items-center justify-center text-white border-4 border-white overflow-hidden"
           >
-            <Bot className="w-7 h-7" />
+            <Image 
+              src="/ai-logo.jpg" 
+              alt="AI Logo" 
+              width={56} 
+              height={56} 
+              className="w-full h-full object-cover scale-110" 
+            />
           </motion.button>
         )}
       </AnimatePresence>
@@ -180,8 +187,13 @@ export default function LunaAI() {
               <div className="absolute top-10 -left-10 w-24 h-24 bg-cyan-300/20 rounded-full blur-lg pointer-events-none"></div>
 
               <div className="flex items-center gap-3 relative z-10">
-                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm border border-white/10 shadow-inner">
-                  <Bot className="w-5 h-5" />
+                <div className="w-11 h-11 rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-white/20 shadow-sm relative">
+                  <Image 
+                    src="/ai-logo.jpg" 
+                    alt="AI Logo" 
+                    fill 
+                    className="object-cover scale-110" 
+                  />
                 </div>
                 <div>
                   <h3 className="font-bold text-white text-[15px] tracking-wide">Helpdesk AI</h3>
