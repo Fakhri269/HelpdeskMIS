@@ -1285,6 +1285,19 @@ export default function UserPortal() {
     }
   }, [])
 
+  useEffect(() => {
+    const isModalOrChatOpen = createOpen || !!selectedTicket || activeTab === "Chat"
+    if (isModalOrChatOpen) {
+      document.dispatchEvent(new CustomEvent('hide-ai-widget'))
+    } else {
+      document.dispatchEvent(new CustomEvent('show-ai-widget'))
+    }
+    
+    return () => {
+      document.dispatchEvent(new CustomEvent('show-ai-widget'))
+    }
+  }, [createOpen, selectedTicket, activeTab])
+
   const markAsRead = (ticketId: string, count: number) => {
     setReadCounts(prev => {
       const next = { ...prev, [ticketId]: count }

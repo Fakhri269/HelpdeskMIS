@@ -60,6 +60,7 @@ export default function LunaAI() {
   const pathname = usePathname()
   const { status } = useSession()
   const [isOpen, setIsOpen] = useState(false)
+  const [isForceHidden, setIsForceHidden] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     { 
       role: "system", 
@@ -74,6 +75,7 @@ export default function LunaAI() {
   const [isLoading, setIsLoading] = useState(false)
   
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -82,8 +84,23 @@ export default function LunaAI() {
   useEffect(() => {
     if (isOpen) {
       scrollToBottom()
+      inputRef.current?.focus()
     }
   }, [messages, isOpen])
+
+  // Listener untuk menyembunyikan AI ketika modal/sheet terbuka di UserPortal
+  useEffect(() => {
+    const handleHide = () => setIsForceHidden(true)
+    const handleShow = () => setIsForceHidden(false)
+    
+    document.addEventListener('hide-ai-widget', handleHide)
+    document.addEventListener('show-ai-widget', handleShow)
+    
+    return () => {
+      document.removeEventListener('hide-ai-widget', handleHide)
+      document.removeEventListener('show-ai-widget', handleShow)
+    }
+  }, [])
 
   // Cek apakah widget harus disembunyikan
   const hiddenRoutes = ["/", "/login", "/forgot-password", "/reset-password"]
@@ -92,7 +109,8 @@ export default function LunaAI() {
   const isHidden = 
     status === "unauthenticated" || 
     hiddenRoutes.includes(pathname ?? "") || 
-    hiddenPrefixes.some(prefix => pathname?.startsWith(prefix))
+    hiddenPrefixes.some(prefix => pathname?.startsWith(prefix)) ||
+    isForceHidden
 
   if (isHidden) return null
 
@@ -175,7 +193,7 @@ export default function LunaAI() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed bottom-0 right-0 sm:bottom-8 sm:right-8 z-[9999] w-full sm:w-[380px] h-[85vh] sm:h-[550px] sm:max-h-[calc(100vh-64px)] flex flex-col drop-shadow-[0_-10px_40px_rgba(0,0,0,0.15)] sm:drop-shadow-[0_20px_60px_rgba(30,127,168,0.2)] border border-slate-100 rounded-t-[32px] sm:rounded-b-[24px] sm:rounded-tl-[40px] sm:rounded-tr-[12px] sm:rounded-br-[24px] sm:rounded-bl-[40px] bg-white overflow-hidden"
+            className="fixed bottom-0 right-0 sm:bottom-8 sm:right-8 z-[9999] w-full sm:w-[380px] h-[85vh] sm:h-[550px] sm:max-h-[calc(100vh-64px)] flex flex-col drop-shadow-[0_-10px_40px_rgba(0,0,0,0.15)] sm:drop-shadow-[0_20px_60px_rgba(30,127,168,0.2)]"
           >
             {/* Wavy Top Edge SVG */}
             <svg 
