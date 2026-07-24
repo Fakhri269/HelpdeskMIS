@@ -140,14 +140,10 @@ export default function LunaAI() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            style={{
-              // Bentuk keseluruhan form bergelombang / organik yang ekstrem melambangkan air
-              borderRadius: "40px 4px 40px 24px",
-            }}
-            className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-[9999] w-[calc(100vw-32px)] sm:w-[380px] h-[550px] max-h-[calc(100vh-64px)] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.15)] overflow-hidden flex flex-col border border-slate-100"
+            className="fixed bottom-0 right-0 sm:bottom-8 sm:right-8 z-[9999] w-full sm:w-[380px] h-[85vh] sm:h-[550px] sm:max-h-[calc(100vh-64px)] bg-white shadow-[0_-10px_60px_rgba(0,0,0,0.15)] sm:shadow-[0_20px_60px_rgba(0,0,0,0.15)] overflow-hidden flex flex-col border border-slate-100 rounded-t-[32px] rounded-b-none sm:rounded-b-[24px] sm:rounded-tl-[40px] sm:rounded-tr-[12px] sm:rounded-br-[24px] sm:rounded-bl-[40px]"
           >
             {/* Header */}
-            <div className="relative flex-shrink-0 bg-gradient-to-br from-[#1e7fa8] to-[#2496bb] pt-6 pb-6 px-6 flex items-start justify-between overflow-hidden">
+            <div className="relative flex-shrink-0 bg-gradient-to-br from-[#1e7fa8] to-[#2496bb] pt-6 pb-7 px-6 flex items-start justify-between overflow-hidden">
               {/* Gelombang air abstrak di background header */}
               <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
               <div className="absolute top-10 -left-10 w-24 h-24 bg-cyan-300/20 rounded-full blur-lg pointer-events-none"></div>
@@ -171,16 +167,15 @@ export default function LunaAI() {
                 <X className="w-4 h-4" />
               </button>
               
-              {/* Gelombang air dekoratif di header */}
+              {/* Gelombang dangkal yang sangat halus / shallow wave */}
               <svg 
-                className="absolute -bottom-[1px] left-0 w-full h-[24px] z-0" 
-                viewBox="0 0 1440 320" 
+                className="absolute -bottom-[1px] left-0 w-full h-[16px] sm:h-[20px] z-0" 
+                viewBox="0 0 1440 100" 
                 preserveAspectRatio="none"
               >
                 <path 
                   fill="#f8fafc" 
-                  fillOpacity="1" 
-                  d="M0,192L48,197.3C96,203,192,213,288,202.7C384,192,480,160,576,149.3C672,139,768,149,864,165.3C960,181,1056,203,1152,197.3C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+                  d="M0,40 C360,100 1080,0 1440,40 L1440,100 L0,100 Z"
                 ></path>
               </svg>
             </div>
