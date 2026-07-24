@@ -283,7 +283,7 @@ export default function DashboardLayout({
       {/* Mobile sidebar */}
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
         <SheetContent side="left" className="p-0 w-[280px] border-none bg-transparent shadow-none overflow-visible">
-          <SidebarContent />
+          {SidebarContent()}
           {/* Wave SVG for mobile */}
           <svg
             className="absolute top-0 h-full pointer-events-none"
@@ -311,7 +311,7 @@ export default function DashboardLayout({
 
       {/* Desktop sidebar */}
       <div className={`hidden lg:flex flex-col flex-shrink-0 transition-all duration-300 ease-in-out ${desktopCollapsed ? "w-[88px]" : "w-[280px]"} relative`} style={{zIndex: 30}}>
-        <SidebarContent />
+        {SidebarContent()}
 
         {/* Wave SVG rendered at sidebar wrapper level so it's not clipped */}
         <svg
