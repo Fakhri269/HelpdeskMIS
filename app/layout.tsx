@@ -4,6 +4,7 @@ import "./globals.css";
 import "./hand-loader.css";
 import NextAuthSessionProvider from "@/components/providers/session-provider";
 import WelcomeToast from "@/components/WelcomeToast";
+import LunaAI from "@/components/user/LunaAI";
 
 const fontSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -69,6 +70,7 @@ export default function RootLayout({
         <NextAuthSessionProvider>
           {children}
           <WelcomeToast />
+          <LunaAI />
         </NextAuthSessionProvider>
       </body>
     </html>
