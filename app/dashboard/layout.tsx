@@ -153,7 +153,7 @@ export default function DashboardLayout({
       />
 
       {/* Logo */}
-      <div className={`flex h-20 items-center px-6 font-bold text-2xl tracking-tight z-10 transition-all ${desktopCollapsed ? "justify-center px-0" : ""}`}>
+      <Link href="/dashboard" className={`flex h-20 items-center px-6 font-bold text-2xl tracking-tight z-10 transition-all hover:opacity-80 ${desktopCollapsed ? "justify-center px-0" : ""}`}>
         <div className={`transition-all flex items-center justify-center ${desktopCollapsed ? "mr-0" : "mr-3"}`}>
           <Image src="../../PdamLogo.svg" alt="PDAM Logo" width={36} height={36} className="drop-shadow-md brightness-0 invert" />
         </div>
@@ -163,7 +163,7 @@ export default function DashboardLayout({
             <span className="text-cyan-300 ml-1">.</span>
           </div>
         )}
-      </div>
+      </Link>
 
       {/* Nav */}
       <div className="flex-1 overflow-y-auto py-6 px-3 z-10 scrollbar-hide space-y-6">
@@ -178,6 +178,7 @@ export default function DashboardLayout({
                 <Link
                   key={route.path}
                   href={route.path}
+                  onClick={() => setSidebarOpen(false)}
                   title={desktopCollapsed ? route.name : undefined}
                   className={`group flex items-center ${desktopCollapsed ? "justify-center" : "justify-between"} rounded-xl p-2.5 text-sm font-medium transition-all duration-200 ${
                     active
@@ -216,6 +217,7 @@ export default function DashboardLayout({
                   <Link
                     key={route.path}
                     href={route.path}
+                    onClick={() => setSidebarOpen(false)}
                     title={desktopCollapsed ? route.name : undefined}
                     className={`group flex items-center ${desktopCollapsed ? "justify-center" : "justify-between"} rounded-xl p-2.5 text-sm font-medium transition-all duration-200 ${
                       active
