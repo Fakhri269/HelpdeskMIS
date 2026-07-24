@@ -9,13 +9,37 @@ type Message = {
   content: string
 }
 
-// Komponen untuk animasi efek mengetik (Typewriter)
-const TypewriterText = ({ text, delay = 30 }: { text: string, delay?: number }) => {
+// Fungsi untuk format teks (bolding)
+const formatMessageText = (raw: string) => {
+  let formatted = raw
+  
+  // Tangani single quotes 'Teks'
+  const sqCount = (formatted.match(/'/g) || []).length
+  if (sqCount % 2 !== 0) formatted += "'"
+  formatted = formatted.replace(/'([^']+)'/g, '<strong class="text-[#1e7fa8] font-bold">$1</strong>')
+
+  // Tangani double quotes "Teks"
+  const dqCount = (formatted.match(/"/g) || []).length
+  if (dqCount % 2 !== 0) formatted += '"'
+  formatted = formatted.replace(/"([^"]+)"/g, '<strong class="text-[#1e7fa8] font-bold">$1</strong>')
+
+  // Tangani markdown bold **Teks**
+  const astCount = (formatted.match(/\*\*/g) || []).length
+  if (astCount % 2 !== 0) formatted += '**'
+  formatted = formatted.replace(/\*\*([^*]+)\*\*/g, '<strong class="text-[#1e7fa8] font-bold">$1</strong>')
+
+  // Tangani newline
+  formatted = formatted.replace(/\n/g, '<br />')
+
+  return { __html: formatted }
+}
+
+const TypewriterText = ({ text, delay = 25 }: { text: string, delay?: number }) => {
   const [displayedText, setDisplayedText] = useState("")
 
   useEffect(() => {
     let i = 0
-    setDisplayedText("") // Reset teks saat mulai
+    setDisplayedText("") 
     const timer = setInterval(() => {
       setDisplayedText(text.substring(0, i + 1))
       i++
@@ -26,7 +50,7 @@ const TypewriterText = ({ text, delay = 30 }: { text: string, delay?: number }) 
     return () => clearInterval(timer)
   }, [text, delay])
 
-  return <span>{displayedText}</span>
+  return <span dangerouslySetInnerHTML={formatMessageText(displayedText)} />
 }
 
 export default function LunaAI() {
@@ -34,7 +58,7 @@ export default function LunaAI() {
   const [messages, setMessages] = useState<Message[]>([
     { 
       role: "system", 
-      content: "Kamu adalah Helpdesk AI, asisten pintar untuk aplikasi MIS Helpdesk PDAM Tirta Kahuripan Kabupaten Bogor. Tugasmu membantu menjawab pertanyaan pengguna seputar IT dan memandu mereka menggunakan aplikasi ini. Alur aplikasi: 1) Jika ada masalah IT, pengguna harus membuat tiket. 2) Caranya klik tombol 'Buat Tiket Baru' di halaman utama. 3) Pilih kategori masalah (Hardware, Software, Jaringan, atau Lainnya). 4) Isi judul dan deskripsi masalah dengan jelas. 5) Klik 'Kirim Tiket'. 6) Setelah dikirim, Staff IT akan merespons tiket tersebut. 7) Pengguna dapat memantau status tiket di menu 'Riwayat Laporan' dan bisa melakukan chat langsung dengan IT di dalam detail tiket tersebut. Jawab pertanyaan dengan sangat singkat, jelas, ramah, dan gunakan bahasa Indonesia yang baik." 
+      content: "Kamu adalah Helpdesk AI, asisten pintar untuk aplikasi MIS Helpdesk PDAM Tirta Kahuripan Kabupaten Bogor. Tugasmu membantu menjawab pertanyaan pengguna seputar IT dan memandu mereka menggunakan aplikasi ini. Alur aplikasi: 1) Jika ada masalah IT, pengguna harus membuat tiket. 2) Caranya klik tombol 'Buat Tiket Baru' di halaman utama. 3) Pilih kategori masalah (Hardware, Software, Jaringan, atau Lainnya). 4) Isi judul dan deskripsi masalah dengan jelas. 5) Klik 'Kirim Tiket'. 6) Setelah dikirim, Staff IT akan merespons tiket tersebut. 7) Pengguna dapat memantau status tiket di menu 'Riwayat Laporan' dan bisa melakukan chat langsung dengan IT di dalam detail tiket tersebut. Jawab pertanyaan dengan sangat singkat, jelas, ramah, dan gunakan bahasa Indonesia yang baik. Gunakan tanda kutip tunggal ('...') untuk menyebut nama menu atau tombol." 
     },
     { 
       role: "assistant", 
@@ -117,13 +141,17 @@ export default function LunaAI() {
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
             style={{
-              // Bentuk keseluruhan form bergelombang / organik seperti tetesan air
-              borderRadius: "40px 40px 12px 40px",
+              // Bentuk keseluruhan form bergelombang / organik yang ekstrem melambangkan air
+              borderRadius: "40px 4px 40px 24px",
             }}
             className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-[9999] w-[calc(100vw-32px)] sm:w-[380px] h-[550px] max-h-[calc(100vh-64px)] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.15)] overflow-hidden flex flex-col border border-slate-100"
           >
             {/* Header */}
-            <div className="relative flex-shrink-0 bg-gradient-to-br from-[#1e7fa8] to-[#2496bb] pt-6 pb-6 px-6 flex items-start justify-between">
+            <div className="relative flex-shrink-0 bg-gradient-to-br from-[#1e7fa8] to-[#2496bb] pt-6 pb-6 px-6 flex items-start justify-between overflow-hidden">
+              {/* Gelombang air abstrak di background header */}
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+              <div className="absolute top-10 -left-10 w-24 h-24 bg-cyan-300/20 rounded-full blur-lg pointer-events-none"></div>
+
               <div className="flex items-center gap-3 relative z-10">
                 <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm border border-white/10 shadow-inner">
                   <Bot className="w-5 h-5" />
@@ -145,14 +173,14 @@ export default function LunaAI() {
               
               {/* Gelombang air dekoratif di header */}
               <svg 
-                className="absolute -bottom-[1px] left-0 w-full h-[20px] z-0" 
+                className="absolute -bottom-[1px] left-0 w-full h-[24px] z-0" 
                 viewBox="0 0 1440 320" 
                 preserveAspectRatio="none"
               >
                 <path 
                   fill="#f8fafc" 
                   fillOpacity="1" 
-                  d="M0,224L80,213.3C160,203,320,181,480,181.3C640,181,800,203,960,213.3C1120,224,1280,224,1360,224L1440,224L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"
+                  d="M0,192L48,197.3C96,203,192,213,288,202.7C384,192,480,160,576,149.3C672,139,768,149,864,165.3C960,181,1056,203,1152,197.3C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
                 ></path>
               </svg>
             </div>
@@ -183,10 +211,12 @@ export default function LunaAI() {
                             : "bg-white text-slate-700 border border-slate-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)]"
                         }`}
                       >
-                        {isLatestAssistantMessage ? (
-                          <TypewriterText text={msg.content} delay={30} />
-                        ) : (
+                        {!isAssistant ? (
                           msg.content
+                        ) : isLatestAssistantMessage ? (
+                          <TypewriterText text={msg.content} delay={25} />
+                        ) : (
+                          <span dangerouslySetInnerHTML={formatMessageText(msg.content)} />
                         )}
                       </div>
                     </div>
