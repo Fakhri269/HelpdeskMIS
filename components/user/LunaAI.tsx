@@ -10,16 +10,16 @@ type Message = {
 }
 
 // Komponen untuk animasi efek mengetik (Typewriter)
-const TypewriterText = ({ text, delay = 15 }: { text: string, delay?: number }) => {
+const TypewriterText = ({ text, delay = 30 }: { text: string, delay?: number }) => {
   const [displayedText, setDisplayedText] = useState("")
 
   useEffect(() => {
     let i = 0
+    setDisplayedText("") // Reset teks saat mulai
     const timer = setInterval(() => {
-      if (i <= text.length) {
-        setDisplayedText(text.slice(0, i))
-        i++
-      } else {
+      setDisplayedText(text.substring(0, i + 1))
+      i++
+      if (i >= text.length) {
         clearInterval(timer)
       }
     }, delay)
@@ -161,7 +161,7 @@ export default function LunaAI() {
             <div className="flex-1 overflow-y-auto p-5 bg-slate-50 space-y-4">
               {messages.filter(m => m.role !== "system").map((msg, index) => {
                 const isAssistant = msg.role === "assistant"
-                const isLatestAssistantMessage = isAssistant && index === messages.length - 1 && index !== 1
+                const isLatestAssistantMessage = isAssistant && index === messages.length - 1
 
                 return (
                   <div 
@@ -182,7 +182,7 @@ export default function LunaAI() {
                       }`}
                     >
                       {isLatestAssistantMessage ? (
-                        <TypewriterText text={msg.content} delay={20} />
+                        <TypewriterText text={msg.content} delay={30} />
                       ) : (
                         msg.content
                       )}
