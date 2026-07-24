@@ -159,37 +159,40 @@ export default function LunaAI() {
 
             {/* Messages Area */}
             <div className="flex-1 overflow-y-auto p-5 bg-slate-50 space-y-4">
-              {messages.filter(m => m.role !== "system").map((msg, index) => {
-                const isAssistant = msg.role === "assistant"
-                const isLatestAssistantMessage = isAssistant && index === messages.length - 1
+              {(() => {
+                const filteredMessages = messages.filter(m => m.role !== "system")
+                return filteredMessages.map((msg, index) => {
+                  const isAssistant = msg.role === "assistant"
+                  const isLatestAssistantMessage = isAssistant && index === filteredMessages.length - 1
 
-                return (
-                  <div 
-                    key={index} 
-                    className={`flex ${!isAssistant ? "justify-end" : "justify-start"}`}
-                  >
+                  return (
                     <div 
-                      style={{
-                        // Chat bubble bergelombang/organik
-                        borderRadius: !isAssistant 
-                          ? "24px 24px 4px 24px" 
-                          : "24px 24px 24px 4px"
-                      }}
-                      className={`max-w-[85%] px-5 py-3.5 text-[13.5px] leading-relaxed shadow-sm ${
-                        !isAssistant 
-                          ? "bg-gradient-to-br from-[#1e7fa8] to-[#2496bb] text-white" 
-                          : "bg-white text-slate-700 border border-slate-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)]"
-                      }`}
+                      key={index} 
+                      className={`flex ${!isAssistant ? "justify-end" : "justify-start"}`}
                     >
-                      {isLatestAssistantMessage ? (
-                        <TypewriterText text={msg.content} delay={30} />
-                      ) : (
-                        msg.content
-                      )}
+                      <div 
+                        style={{
+                          // Chat bubble bergelombang/organik
+                          borderRadius: !isAssistant 
+                            ? "24px 24px 4px 24px" 
+                            : "24px 24px 24px 4px"
+                        }}
+                        className={`max-w-[85%] px-5 py-3.5 text-[13.5px] leading-relaxed shadow-sm ${
+                          !isAssistant 
+                            ? "bg-gradient-to-br from-[#1e7fa8] to-[#2496bb] text-white" 
+                            : "bg-white text-slate-700 border border-slate-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)]"
+                        }`}
+                      >
+                        {isLatestAssistantMessage ? (
+                          <TypewriterText text={msg.content} delay={30} />
+                        ) : (
+                          msg.content
+                        )}
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                })
+              })()}
               
               {isLoading && (
                 <div className="flex justify-start flex-col gap-1">
