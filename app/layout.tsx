@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import "./hand-loader.css";
 import NextAuthSessionProvider from "@/components/providers/session-provider";
+import WelcomeToast from "@/components/WelcomeToast";
 
 const fontSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -67,6 +68,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col font-sans bg-slate-50 text-slate-900 selection:bg-blue-600 selection:text-white">
         <NextAuthSessionProvider>
           {children}
+          <WelcomeToast />
         </NextAuthSessionProvider>
       </body>
     </html>
