@@ -126,7 +126,7 @@ export default function LunaAI() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-6 right-6 z-[9000] w-14 h-14 bg-white rounded-full shadow-[0_8px_30px_rgba(30,127,168,0.3)] flex items-center justify-center border-2 border-[#1e7fa8] overflow-hidden hover:border-[#38bdf8] transition-colors"
+            className="fixed bottom-6 right-6 z-[9000] w-14 h-14 bg-white rounded-full shadow-[0_8px_30px_rgba(30,127,168,0.3)] flex items-center justify-center overflow-hidden hover:shadow-[0_8px_30px_rgba(30,127,168,0.5)] transition-shadow"
           >
             <Image 
               src="/ai-logo.jpg" 
@@ -160,7 +160,7 @@ export default function LunaAI() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed bottom-0 right-0 sm:bottom-8 sm:right-8 z-[9999] w-full sm:w-[380px] h-[85vh] sm:h-[550px] sm:max-h-[calc(100vh-64px)] flex flex-col drop-shadow-[0_-10px_40px_rgba(0,0,0,0.15)] sm:drop-shadow-[0_20px_60px_rgba(30,127,168,0.2)] border-t-2 sm:border-2 border-[#1e7fa8] rounded-t-[32px] sm:rounded-b-[24px] sm:rounded-tl-[40px] sm:rounded-tr-[12px] sm:rounded-br-[24px] sm:rounded-bl-[40px] bg-white overflow-hidden"
+            className="fixed bottom-0 right-0 sm:bottom-8 sm:right-8 z-[9999] w-full sm:w-[380px] h-[85vh] sm:h-[550px] sm:max-h-[calc(100vh-64px)] flex flex-col drop-shadow-[0_-10px_40px_rgba(0,0,0,0.15)] sm:drop-shadow-[0_20px_60px_rgba(30,127,168,0.2)] border border-slate-100 rounded-t-[32px] sm:rounded-b-[24px] sm:rounded-tl-[40px] sm:rounded-tr-[12px] sm:rounded-br-[24px] sm:rounded-bl-[40px] bg-white overflow-hidden"
           >
             {/* Wavy Top Edge SVG */}
             <svg 
