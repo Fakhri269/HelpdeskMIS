@@ -9,6 +9,26 @@ type Message = {
   content: string
 }
 
+// Komponen untuk animasi efek mengetik (Typewriter)
+const TypewriterText = ({ text, delay = 15 }: { text: string, delay?: number }) => {
+  const [displayedText, setDisplayedText] = useState("")
+
+  useEffect(() => {
+    let i = 0
+    const timer = setInterval(() => {
+      if (i <= text.length) {
+        setDisplayedText(text.slice(0, i))
+        i++
+      } else {
+        clearInterval(timer)
+      }
+    }, delay)
+    return () => clearInterval(timer)
+  }, [text, delay])
+
+  return <span>{displayedText}</span>
+}
+
 export default function LunaAI() {
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
@@ -96,10 +116,14 @@ export default function LunaAI() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-[9999] w-[calc(100vw-32px)] sm:w-[380px] h-[550px] max-h-[calc(100vh-64px)] bg-white rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] overflow-hidden flex flex-col border border-slate-100"
+            style={{
+              // Bentuk keseluruhan form bergelombang / organik seperti tetesan air
+              borderRadius: "40px 40px 12px 40px",
+            }}
+            className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-[9999] w-[calc(100vw-32px)] sm:w-[380px] h-[550px] max-h-[calc(100vh-64px)] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.15)] overflow-hidden flex flex-col border border-slate-100"
           >
-            {/* Header with Static Water Wave */}
-            <div className="relative flex-shrink-0 bg-gradient-to-br from-[#1e7fa8] to-[#2496bb] pt-5 pb-8 px-5 flex items-start justify-between">
+            {/* Header */}
+            <div className="relative flex-shrink-0 bg-gradient-to-br from-[#1e7fa8] to-[#2496bb] pt-6 pb-6 px-6 flex items-start justify-between">
               <div className="flex items-center gap-3 relative z-10">
                 <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm border border-white/10 shadow-inner">
                   <Bot className="w-5 h-5" />
@@ -118,10 +142,10 @@ export default function LunaAI() {
               >
                 <X className="w-4 h-4" />
               </button>
-
-              {/* Water Wave SVG at the bottom of header */}
+              
+              {/* Gelombang air dekoratif di header */}
               <svg 
-                className="absolute -bottom-[1px] left-0 w-full h-[30px] z-0" 
+                className="absolute -bottom-[1px] left-0 w-full h-[20px] z-0" 
                 viewBox="0 0 1440 320" 
                 preserveAspectRatio="none"
               >
@@ -135,31 +159,49 @@ export default function LunaAI() {
 
             {/* Messages Area */}
             <div className="flex-1 overflow-y-auto p-5 bg-slate-50 space-y-4">
-              {messages.filter(m => m.role !== "system").map((msg, index) => (
-                <div 
-                  key={index} 
-                  className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-                >
+              {messages.filter(m => m.role !== "system").map((msg, index) => {
+                const isAssistant = msg.role === "assistant"
+                const isLatestAssistantMessage = isAssistant && index === messages.length - 1 && index !== 1
+
+                return (
                   <div 
-                    className={`max-w-[85%] px-4 py-3 text-[13.5px] leading-relaxed shadow-sm ${
-                      msg.role === "user" 
-                        ? "bg-[#1e7fa8] text-white rounded-2xl rounded-tr-sm" 
-                        : "bg-white text-slate-700 border border-slate-200 rounded-2xl rounded-tl-sm"
-                    }`}
+                    key={index} 
+                    className={`flex ${!isAssistant ? "justify-end" : "justify-start"}`}
                   >
-                    {msg.content}
+                    <div 
+                      style={{
+                        // Chat bubble bergelombang/organik
+                        borderRadius: !isAssistant 
+                          ? "24px 24px 4px 24px" 
+                          : "24px 24px 24px 4px"
+                      }}
+                      className={`max-w-[85%] px-5 py-3.5 text-[13.5px] leading-relaxed shadow-sm ${
+                        !isAssistant 
+                          ? "bg-gradient-to-br from-[#1e7fa8] to-[#2496bb] text-white" 
+                          : "bg-white text-slate-700 border border-slate-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)]"
+                      }`}
+                    >
+                      {isLatestAssistantMessage ? (
+                        <TypewriterText text={msg.content} delay={20} />
+                      ) : (
+                        msg.content
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
               
               {isLoading && (
                 <div className="flex justify-start flex-col gap-1">
-                  <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-sm px-4 py-3.5 flex gap-1.5 items-center shadow-sm w-fit">
+                  <div 
+                    style={{ borderRadius: "24px 24px 24px 4px" }}
+                    className="bg-white border border-slate-100 px-5 py-4 flex gap-1.5 items-center shadow-[0_2px_10px_rgba(0,0,0,0.02)] w-fit"
+                  >
                     <span className="w-1.5 h-1.5 bg-[#1e7fa8]/60 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
                     <span className="w-1.5 h-1.5 bg-[#1e7fa8]/60 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
                     <span className="w-1.5 h-1.5 bg-[#1e7fa8]/60 rounded-full animate-bounce"></span>
                   </div>
-                  <span className="text-[10px] font-medium text-slate-400 ml-1">Helpdesk AI sedang mengetik...</span>
+                  <span className="text-[10px] font-medium text-slate-400 ml-2">Helpdesk AI sedang mengetik...</span>
                 </div>
               )}
               <div ref={messagesEndRef} />
@@ -175,12 +217,12 @@ export default function LunaAI() {
                   onKeyDown={(e) => e.key === "Enter" && handleSend()}
                   placeholder="Tanya seputar IT atau error..."
                   disabled={isLoading}
-                  className="w-full bg-slate-100 border-transparent focus:bg-slate-50 focus:border-[#1e7fa8] focus:ring-2 focus:ring-[#1e7fa8]/20 rounded-full pl-5 pr-14 py-3 text-[13px] text-slate-700 disabled:opacity-50 transition-all outline-none shadow-inner"
+                  className="w-full bg-slate-50 border border-slate-100 focus:bg-white focus:border-[#1e7fa8] focus:ring-2 focus:ring-[#1e7fa8]/20 rounded-full pl-5 pr-14 py-3.5 text-[13px] text-slate-700 disabled:opacity-50 transition-all outline-none shadow-inner"
                 />
                 <button
                   onClick={handleSend}
                   disabled={!input.trim() || isLoading}
-                  className="absolute right-1.5 w-9 h-9 flex items-center justify-center bg-gradient-to-br from-[#1e7fa8] to-[#2496bb] text-white rounded-full disabled:opacity-50 disabled:from-slate-300 disabled:to-slate-300 hover:shadow-md transition-all"
+                  className="absolute right-1.5 w-10 h-10 flex items-center justify-center bg-gradient-to-br from-[#1e7fa8] to-[#2496bb] text-white rounded-full disabled:opacity-50 disabled:from-slate-300 disabled:to-slate-300 hover:shadow-md transition-all"
                 >
                   {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4 ml-0.5" />}
                 </button>
