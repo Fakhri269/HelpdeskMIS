@@ -132,6 +132,19 @@ export default function LunaAI() {
         )}
       </AnimatePresence>
 
+      {/* Backdrop Overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsOpen(false)}
+            className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-[9998]"
+          />
+        )}
+      </AnimatePresence>
+
       {/* Chat Window */}
       <AnimatePresence>
         {isOpen && (
@@ -140,10 +153,28 @@ export default function LunaAI() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed bottom-0 right-0 sm:bottom-8 sm:right-8 z-[9999] w-full sm:w-[380px] h-[85vh] sm:h-[550px] sm:max-h-[calc(100vh-64px)] bg-white shadow-[0_-10px_60px_rgba(0,0,0,0.15)] sm:shadow-[0_20px_60px_rgba(0,0,0,0.15)] overflow-hidden flex flex-col border border-slate-100 rounded-t-[32px] rounded-b-none sm:rounded-b-[24px] sm:rounded-tl-[40px] sm:rounded-tr-[12px] sm:rounded-br-[24px] sm:rounded-bl-[40px]"
+            className="fixed bottom-0 right-0 sm:bottom-8 sm:right-8 z-[9999] w-full sm:w-[380px] h-[85vh] sm:h-[550px] sm:max-h-[calc(100vh-64px)] flex flex-col drop-shadow-[0_-10px_40px_rgba(0,0,0,0.15)] sm:drop-shadow-[0_20px_60px_rgba(0,0,0,0.15)]"
           >
+            {/* Wavy Top Edge SVG */}
+            <svg 
+              className="w-full h-[25px] sm:h-[30px] flex-shrink-0" 
+              viewBox="0 0 1440 100" 
+              preserveAspectRatio="none"
+            >
+              <defs>
+                <linearGradient id="header-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#1e7fa8" />
+                  <stop offset="100%" stopColor="#2496bb" />
+                </linearGradient>
+              </defs>
+              <path 
+                fill="url(#header-gradient)" 
+                d="M0,100 C360,0 1080,100 1440,0 L1440,100 L0,100 Z"
+              ></path>
+            </svg>
+
             {/* Header */}
-            <div className="relative flex-shrink-0 bg-gradient-to-br from-[#1e7fa8] to-[#2496bb] pt-6 pb-7 px-6 flex items-start justify-between overflow-hidden">
+            <div className="relative flex-shrink-0 bg-gradient-to-br from-[#1e7fa8] to-[#2496bb] pt-2 pb-7 px-6 flex items-start justify-between overflow-hidden">
               {/* Gelombang air abstrak di background header */}
               <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
               <div className="absolute top-10 -left-10 w-24 h-24 bg-cyan-300/20 rounded-full blur-lg pointer-events-none"></div>
@@ -236,7 +267,7 @@ export default function LunaAI() {
             </div>
 
             {/* Input Area */}
-            <div className="flex-shrink-0 p-3 bg-white border-t border-slate-100 z-10">
+            <div className="flex-shrink-0 p-3 bg-white border-t border-slate-100 z-10 rounded-b-none sm:rounded-b-[24px]">
               <div className="relative flex items-center">
                 <input
                   type="text"
