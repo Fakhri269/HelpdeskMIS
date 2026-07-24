@@ -132,7 +132,7 @@ export default function LunaAI() {
         )}
       </AnimatePresence>
 
-      {/* Backdrop Overlay */}
+      {/* Backdrop Overlay (Hanya di Mobile) */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -140,7 +140,7 @@ export default function LunaAI() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
-            className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-[9998]"
+            className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm sm:hidden z-[9998]"
           />
         )}
       </AnimatePresence>
@@ -157,12 +157,12 @@ export default function LunaAI() {
           >
             {/* Wavy Top Edge SVG */}
             <svg 
-              className="w-full h-[25px] sm:h-[30px] flex-shrink-0" 
+              className="block w-full h-[25px] sm:h-[30px] flex-shrink-0 -mb-[1px]" 
               viewBox="0 0 1440 100" 
               preserveAspectRatio="none"
             >
               <defs>
-                <linearGradient id="header-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <linearGradient id="header-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                   <stop offset="0%" stopColor="#1e7fa8" />
                   <stop offset="100%" stopColor="#2496bb" />
                 </linearGradient>
@@ -174,7 +174,7 @@ export default function LunaAI() {
             </svg>
 
             {/* Header */}
-            <div className="relative flex-shrink-0 bg-gradient-to-br from-[#1e7fa8] to-[#2496bb] pt-2 pb-7 px-6 flex items-start justify-between overflow-hidden">
+            <div className="relative flex-shrink-0 bg-gradient-to-r from-[#1e7fa8] to-[#2496bb] pt-2 pb-7 px-6 flex items-start justify-between overflow-hidden">
               {/* Gelombang air abstrak di background header */}
               <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
               <div className="absolute top-10 -left-10 w-24 h-24 bg-cyan-300/20 rounded-full blur-lg pointer-events-none"></div>
