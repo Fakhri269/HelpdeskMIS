@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, Send, Loader2 } from "lucide-react"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
+import { useSession } from "next-auth/react"
 
 type Message = {
   role: "system" | "user" | "assistant"
@@ -55,6 +57,8 @@ const TypewriterText = ({ text, delay = 25 }: { text: string, delay?: number }) 
 }
 
 export default function LunaAI() {
+  const pathname = usePathname()
+  const { status } = useSession()
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     { 
@@ -80,6 +84,17 @@ export default function LunaAI() {
       scrollToBottom()
     }
   }, [messages, isOpen])
+
+  // Cek apakah widget harus disembunyikan
+  const hiddenRoutes = ["/", "/login", "/forgot-password", "/reset-password"]
+  const hiddenPrefixes = ["/dashboard/tickets/", "/user/create-ticket", "/dashboard/chat", "/user-portal/tickets/"]
+  
+  const isHidden = 
+    status === "unauthenticated" || 
+    hiddenRoutes.includes(pathname ?? "") || 
+    hiddenPrefixes.some(prefix => pathname?.startsWith(prefix))
+
+  if (isHidden) return null
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return
