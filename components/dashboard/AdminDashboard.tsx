@@ -4,6 +4,8 @@ import {
   ArrowRight, AlertCircle, CheckCircle2, Clock 
 } from "lucide-react"
 import Link from "next/link"
+import { getTicketTrends } from "@/app/actions/dashboard"
+import { TicketTrendsChart } from "./TicketTrendsChart"
 
 export async function AdminDashboard() {
   // Fetch stats directly from DB
@@ -26,6 +28,9 @@ export async function AdminDashboard() {
     take: 5,
     include: { role: true, unitKerja: true }
   })
+
+  const now = new Date()
+  const initialTrendsData = await getTicketTrends(now.getMonth() + 1, now.getFullYear())
 
   return (
     <div className="space-y-6 animate-in fade-in zoom-in duration-500">
@@ -78,43 +83,12 @@ export async function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-        {/* System Health */}
-        <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-slate-100 dark:border-zinc-800 shadow-sm">
-          <h2 className="text-base font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-4">
-            <Server className="w-5 h-5 text-slate-400" />
-            Status Sistem
-          </h2>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-100 dark:border-zinc-800">
-              <div className="flex items-center gap-3">
-                <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></div>
-                <div>
-                  <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">Database Connection</p>
-                  <p className="text-xs text-slate-500">Operational</p>
-                </div>
-              </div>
-              <span className="text-xs font-mono text-slate-400">99.9% uptime</span>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-100 dark:border-zinc-800">
-              <div className="flex items-center gap-3">
-                <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></div>
-                <div>
-                  <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">Auth Service (NextAuth)</p>
-                  <p className="text-xs text-slate-500">Operational</p>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-100 dark:border-zinc-800">
-              <div className="flex items-center gap-3">
-                <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></div>
-                <div>
-                  <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">Pusher WebSocket</p>
-                  <p className="text-xs text-slate-500">Operational</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Ticket Trends Chart */}
+        <TicketTrendsChart 
+          initialData={initialTrendsData} 
+          initialMonth={new Date().getMonth() + 1} 
+          initialYear={new Date().getFullYear()} 
+        />
 
         {/* Recent Users */}
         <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-slate-100 dark:border-zinc-800 shadow-sm">
