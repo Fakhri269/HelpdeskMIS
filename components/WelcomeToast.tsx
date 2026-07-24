@@ -25,7 +25,7 @@ export default function WelcomeToast() {
 
   useEffect(() => {
     if (!isVisible) return
-    const duration = 4000
+    const duration = 5000
     const interval = 40
     const step = (interval / duration) * 100
     
@@ -74,36 +74,48 @@ export default function WelcomeToast() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="relative w-full max-w-[360px] bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden"
+            className="relative w-full max-w-[360px] bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100"
           >
-            {/* Top accent bar */}
-            <div className="h-1.5 w-full bg-[#1e7fa8]" />
-
-            <div className="p-7">
-              <button
-                onClick={() => setIsVisible(false)}
-                className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors"
-                aria-label="Tutup"
+            {/* Top Wave Background */}
+            <div className="absolute top-0 left-0 w-full h-[120px] bg-gradient-to-br from-[#155f7a] to-[#2496bb]">
+              <svg 
+                className="absolute bottom-0 w-full h-[40px]" 
+                viewBox="0 0 1440 320" 
+                preserveAspectRatio="none"
               >
-                <X className="w-5 h-5" />
-              </button>
+                <path 
+                  fill="#ffffff" 
+                  fillOpacity="1" 
+                  d="M0,160L48,170.7C96,181,192,203,288,197.3C384,192,480,160,576,165.3C672,171,768,213,864,224C960,235,1056,213,1152,192C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+                ></path>
+              </svg>
+            </div>
 
-              <div className="flex flex-col items-center text-center mt-1">
-                <p className="text-slate-500 font-medium text-sm mb-1">{getGreeting()},</p>
-                <h3 className="text-[#1e7fa8] font-bold text-2xl leading-tight mb-3">
+            <button
+              onClick={() => setIsVisible(false)}
+              className="absolute top-4 right-4 text-white/80 hover:text-white transition-colors z-10"
+              aria-label="Tutup"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="p-7 pt-24 relative z-10">
+              <div className="flex flex-col items-center text-center mt-2">
+                <p className="text-[#155f7a] font-medium text-sm mb-1">{getGreeting()},</p>
+                <h3 className="text-slate-800 font-bold text-2xl leading-tight mb-3">
                   {session?.user?.name}
                 </h3>
                 
-                <p className="text-slate-600 text-sm leading-relaxed">
+                <p className="text-slate-500 text-sm leading-relaxed">
                   Selamat datang di <strong>Helpdesk MIS</strong>. Kami siap membantu menyelesaikan kendala IT Anda hari ini.
                 </p>
               </div>
             </div>
 
             {/* Progress bar to indicate auto-close */}
-            <div className="h-1 bg-slate-100 w-full mt-1">
+            <div className="h-1.5 bg-slate-100 w-full mt-1">
               <div
-                className="h-full bg-slate-300 transition-none"
+                className="h-full bg-gradient-to-r from-[#155f7a] to-[#2496bb] transition-none rounded-r-full"
                 style={{ width: `${progress}%` }}
               />
             </div>
